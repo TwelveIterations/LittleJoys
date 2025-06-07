@@ -19,5 +19,5 @@ public class ForgeLittleJoys {
         Balm.initialize(LittleJoys.MOD_ID, loadContext, LittleJoys::initialize);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(LittleJoys.MOD_ID, loadContext, LittleJoysClient::initialize));
     }
-=
+
 }
