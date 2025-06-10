@@ -45,6 +45,10 @@ public class GoldRushHandler {
                 return;
             }
 
+            if (Balm.getHooks().isFakePlayer(event.getPlayer())) {
+                return;
+            }
+
             final var hasSilkTouch = event.getLevel().registryAccess().lookup(Registries.ENCHANTMENT)
                     .flatMap(it -> it.get(Enchantments.SILK_TOUCH))
                     .map(it -> EnchantmentHelper.getEnchantmentLevel(it, event.getPlayer()) > 0)
