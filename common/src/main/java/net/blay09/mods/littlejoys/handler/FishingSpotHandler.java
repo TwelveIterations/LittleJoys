@@ -135,7 +135,7 @@ public class FishingSpotHandler {
         return poiManager.findClosest(it -> it.is(ModPoiTypeTags.FISHING_SPOTS), pos, range, PoiManager.Occupancy.ANY);
     }
 
-    public static int claimFishingSpot(FishingHook fishingHook, ServerLevel level, BlockPos pos) {
+    public static int claimFishingSpot(ServerLevel level, BlockPos pos) {
         level.sendParticles(ModParticles.goldRush,
                 pos.getX() + 0.5f,
                 pos.getY() + 0.5f,
@@ -152,13 +152,12 @@ public class FishingSpotHandler {
         return Math.round(LittleJoysConfig.getActive().fishingSpots.secondsUntilLured * 20);
     }
 
-    public static void consumeFishingSpot(FishingHook fishingHook, ServerLevel level, BlockPos pos) {
+    public static void consumeFishingSpot(@Nullable Player player, ServerLevel level, BlockPos pos) {
         final var x = pos.getX() + 0.5f;
         final var y = pos.getY() + 0.5f;
         final var z = pos.getZ() + 0.5f;
         level.sendParticles(ParticleTypes.CLOUD, x, y, z, 8, 0.25f, 0.25f, 0.25f, 0f);
         level.destroyBlock(pos, false);
-        final var player = fishingHook.getPlayerOwner();
         if (player != null) {
             player.awardStat(ModStats.fishingSpotsFished);
 

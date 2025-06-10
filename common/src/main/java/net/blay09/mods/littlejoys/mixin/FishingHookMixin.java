@@ -42,7 +42,7 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
                 && timeUntilLured > 40) {
             FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
                 littlejoys_fishingSpot = fishingSpotPos;
-                int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot((FishingHook) (Object) this, serverLevel, fishingSpotPos);
+                int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
                 if (configuredTimeUntilLured >= 0) {
                     timeUntilLured = Math.max(1, configuredTimeUntilLured);
                 }
@@ -54,7 +54,7 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
     private void retrieve(ItemStack itemStack, CallbackInfoReturnable<Integer> ci) {
         if (level() instanceof ServerLevel serverLevel) {
             if (littlejoys_fishingSpot != null && nibble > 0) {
-                FishingSpotHandler.consumeFishingSpot(((FishingHook) (Object) this), serverLevel, littlejoys_fishingSpot);
+                FishingSpotHandler.consumeFishingSpot(((FishingHook) (Object) this).getPlayerOwner(), serverLevel, littlejoys_fishingSpot);
             }
         }
     }
