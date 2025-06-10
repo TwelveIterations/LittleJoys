@@ -46,6 +46,11 @@ public class DropRushHandler {
                 return;
             }
 
+            if (Balm.getHooks().isFakePlayer(event.getPlayer())) {
+                return;
+            }
+
+
             if (EnchantmentHelper.hasSilkTouch(event.getPlayer().getMainHandItem())) {
                 return;
             }
