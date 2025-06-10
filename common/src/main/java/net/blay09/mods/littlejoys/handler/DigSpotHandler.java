@@ -48,18 +48,22 @@ public class DigSpotHandler {
                 final var centerPos = getOriginForNextSpawn(player);
                 final var checkRange = LittleJoysConfig.getActive().digSpots.minimumDistanceBetween;
                 final var spawnRange = LittleJoysConfig.getActive().digSpots.spawnDistance;
-                final var closestDigSpot = poiManager.findClosest(it -> it.is(ModPoiTypeTags.DIG_SPOTS), centerPos, checkRange, PoiManager.Occupancy.ANY);
-                if (closestDigSpot.isEmpty()) {
+                final var digSpotInRange = poiManager.getInRange(it -> it.is(ModPoiTypeTags.DIG_SPOTS), centerPos, checkRange, PoiManager.Occupancy.ANY).findAny();
+                if (digSpotInRange.isEmpty()) {
                     final var surfacePos = getVerticallyNearRandomOffsetPos(level, centerPos, spawnRange);
                     final var aboveSurfacePos = surfacePos.above();
 
                     final var totalSpots = ChunkLimitManager.get(level).getTotalDigSpotsInChunk(aboveSurfacePos);
                     final var maxSpots = LittleJoysConfig.getActive().digSpots.totalLimitPerChunk;
                     if (maxSpots > 0 && totalSpots >= maxSpots) {
+                        // If we have exceeded the total, don't bother re-checking until 10 seconds have passed
+                        littleJoysData.putInt(DIG_SPOT_COOLDOWN, 200);
                         return;
                     }
 
                     if (!level.getBlockState(aboveSurfacePos).canBeReplaced()) {
+                        // If this position was bad, try again in a second
+                        littleJoysData.putInt(DIG_SPOT_COOLDOWN, 20);
                         return;
                     }
 
@@ -71,6 +75,9 @@ public class DigSpotHandler {
                         ChunkLimitManager.get(level).trackDigSpot(aboveSurfacePos);
                         littleJoysData.putInt(DIG_SPOT_COOLDOWN, Math.round(LittleJoysConfig.getActive().digSpots.spawnIntervalSeconds * 20));
                     }, () -> littleJoysData.putInt(DIG_SPOT_COOLDOWN, 20));
+                } else {
+                    // If we have one in range, don't bother re-checking until 10 seconds have passed
+                    littleJoysData.putInt(DIG_SPOT_COOLDOWN, 200);
                 }
             }
         });
