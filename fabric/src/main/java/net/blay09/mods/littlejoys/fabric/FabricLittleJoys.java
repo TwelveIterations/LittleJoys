@@ -8,6 +8,6 @@ import net.blay09.mods.littlejoys.LittleJoys;
 public class FabricLittleJoys implements ModInitializer {
     @Override
     public void onInitialize() {
-        Balm.initialize(LittleJoys.MOD_ID, EmptyLoadContext.INSTANCE, LittleJoys::initialize);
+        Balm.initializeMod(LittleJoys.MOD_ID, EmptyLoadContext.INSTANCE, LittleJoys::initialize);
     }
 }

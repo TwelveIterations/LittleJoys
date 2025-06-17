@@ -9,10 +9,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 
 @Mod(value = LittleJoys.MOD_ID, dist = Dist.CLIENT)
-public class NeoForgeYourModClient {
+public class NeoForgeLittleJoysClient {
 
-    public NeoForgeYourModClient(IEventBus modEventBus) {
+    public NeoForgeLittleJoysClient(IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modEventBus);
-        BalmClient.initialize(LittleJoys.MOD_ID, context, LittleJoysClient::initialize);
+        BalmClient.initializeMod(LittleJoys.MOD_ID, context, LittleJoysClient::initialize);
     }
 }

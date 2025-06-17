@@ -9,6 +9,6 @@ import net.blay09.mods.littlejoys.client.LittleJoysClient;
 public class FabricLittleJoysClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        BalmClient.initialize(LittleJoys.MOD_ID, EmptyLoadContext.INSTANCE, LittleJoysClient::initialize);
+        BalmClient.initializeMod(LittleJoys.MOD_ID, EmptyLoadContext.INSTANCE, LittleJoysClient::initialize);
     }
 }

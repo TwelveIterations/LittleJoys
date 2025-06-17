@@ -11,6 +11,6 @@ public class NeoForgeLittleJoys {
 
     public NeoForgeLittleJoys(IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modEventBus);
-        Balm.initialize(LittleJoys.MOD_ID, context, LittleJoys::initialize);
+        Balm.initializeMod(LittleJoys.MOD_ID, context, LittleJoys::initialize);
     }
 }
