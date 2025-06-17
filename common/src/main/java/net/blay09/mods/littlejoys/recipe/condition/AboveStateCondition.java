@@ -25,7 +25,7 @@ public record AboveStateCondition(BlockState state) implements EventCondition {
     }
 
     public static AboveStateCondition fromNetwork(FriendlyByteBuf buf) {
-        final var state = buf.readJsonWithCodec(BlockState.CODEC);
+        final var state = buf.readLenientJsonWithCodec(BlockState.CODEC);
         return new AboveStateCondition(state);
     }
 }

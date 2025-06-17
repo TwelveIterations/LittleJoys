@@ -1,6 +1,5 @@
 package net.blay09.mods.littlejoys.client.entity;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.blay09.mods.littlejoys.entity.DropRushItemEntity;
 import net.minecraft.client.Minecraft;
@@ -26,10 +25,9 @@ public class DropRushItemRenderer extends ItemEntityRenderer {
         if (mine) {
             super.render(renderState, poseStack, buffer, packedLight);
         } else {
-            RenderSystem.setShaderColor(1f, 1f, 1f, 0.25f);
+            // TODO RenderSystem.setShaderColor(1f, 1f, 1f, 0.25f);
             super.render(renderState, poseStack, buffer, packedLight);
-            Minecraft.getInstance().renderBuffers().bufferSource().endBatch();
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            // TODO Minecraft.getInstance().renderBuffers().bufferSource().endBatch();
         }
     }
 

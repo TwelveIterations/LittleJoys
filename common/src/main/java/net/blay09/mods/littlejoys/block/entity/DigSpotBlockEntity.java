@@ -9,6 +9,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public class DigSpotBlockEntity extends BalmBlockEntity implements OnLoadHandler {
 
@@ -31,13 +33,13 @@ public class DigSpotBlockEntity extends BalmBlockEntity implements OnLoadHandler
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        tag.storeNullable("recipe", ResourceKey.codec(Registries.RECIPE), recipeId);
+    protected void saveAdditional(ValueOutput output) {
+        output.storeNullable("recipe", ResourceKey.codec(Registries.RECIPE), recipeId);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        recipeId = tag.read("recipe", ResourceKey.codec(Registries.RECIPE)).orElse(null);
+    protected void loadAdditional(ValueInput input) {
+        recipeId = input.read("recipe", ResourceKey.codec(Registries.RECIPE)).orElse(null);
     }
 
     public ResourceKey<Recipe<?>> getRecipeId() {
