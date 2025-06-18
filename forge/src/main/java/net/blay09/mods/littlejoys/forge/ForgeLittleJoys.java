@@ -15,7 +15,7 @@ import net.blay09.mods.littlejoys.client.LittleJoysClient;
 public class ForgeLittleJoys {
 
     public ForgeLittleJoys(FMLJavaModLoadingContext context) {
-        final var loadContext = new ForgeLoadContext(context.getModEventBus());
+        final var loadContext = new ForgeLoadContext(context.getModBusGroup());
         Balm.initialize(LittleJoys.MOD_ID, loadContext, LittleJoys::initialize);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(LittleJoys.MOD_ID, loadContext, LittleJoysClient::initialize));
     }
