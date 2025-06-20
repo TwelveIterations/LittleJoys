@@ -3,7 +3,8 @@ dependencies {
         changing = balm_version.contains("SNAPSHOT")
     }
     implementation("net.blay09.mods:kuma-api-neoforge:${kuma_version}")
-    implementation("curse.maven:aquaculture-60028:6357106")
+    compileOnly("curse.maven:aquaculture-60028:6357106")
     //compileOnly("curse.maven:cloth-config-348521:5729127")
     compileOnly("curse.maven:tide-884685:6106866")
+    compileOnly("curse.maven:fishing-overhaul-491332:6297564")
 }
