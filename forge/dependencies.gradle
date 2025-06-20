@@ -7,4 +7,5 @@ dependencies {
     //modRuntimeOnly("curse.maven:cloth-config-348521:5729105")
     modCompileOnly("curse.maven:tide-884685:6106864")
     modCompileOnly("curse.maven:stardew-fishing-1066037:6434447")
+    modCompileOnly("curse.maven:fishing-overhaul-491332:6298057")
 }

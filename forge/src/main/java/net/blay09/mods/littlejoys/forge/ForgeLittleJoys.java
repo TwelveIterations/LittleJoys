@@ -15,6 +15,8 @@ public class ForgeLittleJoys {
     public ForgeLittleJoys(FMLJavaModLoadingContext context) {
         Balm.initialize(LittleJoys.MOD_ID, LittleJoys::initialize);
         DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(LittleJoys.MOD_ID, LittleJoysClient::initialize));
+
+        Balm.initializeIfLoaded("fishingoverhaul", "net.blay09.mods.littlejoys.forge.compat.FishingOverhaulSupport");
     }
 
 }
