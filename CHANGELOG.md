@@ -1,7 +1,3 @@
-- Fixed crash on NeoForge 1.21.1
-
----
-
-- Fixed performance of dig spots when failing to generate a dig spot
-- Fixed fake players being able to trigger a Gold Rush or Drop Rush
-- API: Added `findFishingSpot`, `claimFishingSpot` and `consumeFishingSpot`
+- Added `is_dimension` condition for events
+- Fixed fishing spots not disappearing when using Fishing Overhaul
+- Fixed performance of fishing spots when failing to generate a fishing spot
