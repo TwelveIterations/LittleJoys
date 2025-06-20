@@ -18,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
@@ -73,7 +74,7 @@ public class FishingSpotHandler {
                         return;
                     }
 
-                    resolveRecipe(level, aboveSurfacePos, null).ifPresentOrElse(recipeHolder -> {
+                    resolveRecipe(level, aboveSurfacePos, null, player).ifPresentOrElse(recipeHolder -> {
                         level.setBlock(aboveSurfacePos, ModBlocks.fishingSpot.defaultBlockState(), 3);
                         if (level.getBlockEntity(aboveSurfacePos) instanceof FishingSpotBlockEntity fishingSpot) {
                             fishingSpot.setRecipeId(recipeHolder.id());
@@ -95,20 +96,20 @@ public class FishingSpotHandler {
         return player.blockPosition().relative(forwardDirection, projectForwardDistance);
     }
 
-    private static Optional<RecipeHolder<FishingSpotRecipe>> findRecipe(ServerLevel level, BlockPos pos) {
+    private static Optional<RecipeHolder<FishingSpotRecipe>> findRecipe(ServerLevel level, BlockPos pos, ServerPlayer player) {
         final var recipeManager = level.getRecipeManager();
         final var recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.fishingSpotRecipeType);
         final var candidates = new ArrayList<WeightedRecipeHolder<FishingSpotRecipe>>();
         for (final var recipe : recipes) {
-            if (isValidRecipeFor(recipe, level, pos)) {
+            if (isValidRecipeFor(recipe, level, pos, player)) {
                 candidates.add(new WeightedRecipeHolder<>(recipe));
             }
         }
         return WeightedRandom.getRandomItem(random, candidates).map(WeightedRecipeHolder::recipeHolder);
     }
 
-    private static boolean isValidRecipeFor(RecipeHolder<FishingSpotRecipe> recipe, ServerLevel level, BlockPos pos) {
-        final var context = new EventContextImpl(level, pos, level.getBlockState(pos));
+    private static boolean isValidRecipeFor(RecipeHolder<FishingSpotRecipe> recipe, ServerLevel level, BlockPos pos, ServerPlayer player) {
+        final var context = new EventContextImpl(level, pos, level.getBlockState(pos), player);
         return recipe.value().eventCondition().test(context);
     }
 
@@ -125,12 +126,12 @@ public class FishingSpotHandler {
         return Optional.empty();
     }
 
-    public static Optional<RecipeHolder<FishingSpotRecipe>> resolveRecipe(ServerLevel level, BlockPos pos, @Nullable ResourceLocation recipeId) {
+    public static Optional<RecipeHolder<FishingSpotRecipe>> resolveRecipe(ServerLevel level, BlockPos pos, @Nullable ResourceLocation recipeId, ServerPlayer player) {
         final var optRecipe = FishingSpotHandler.recipeById(level, recipeId);
-        if (optRecipe.isPresent() && FishingSpotHandler.isValidRecipeFor(optRecipe.get(), level, pos)) {
+        if (optRecipe.isPresent() && FishingSpotHandler.isValidRecipeFor(optRecipe.get(), level, pos, player)) {
             return optRecipe;
         }
-        return FishingSpotHandler.findRecipe(level, pos);
+        return FishingSpotHandler.findRecipe(level, pos, player);
     }
 
     public static Optional<BlockPos> findFishingSpot(ServerLevel serverLevel, BlockPos pos) {
