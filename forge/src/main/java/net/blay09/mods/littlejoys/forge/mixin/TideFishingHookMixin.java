@@ -78,4 +78,9 @@ public abstract class TideFishingHookMixin extends Entity implements FishingSpot
     public void setFishingSpot(BlockPos fishingSpot) {
         littlejoys_fishingSpot = fishingSpot;
     }
+
+    @Override
+    public Player littlejoys$getPlayerOwner() {
+        return ((TideFishingHook) (Object) this).getPlayerOwner();
+    }
 }

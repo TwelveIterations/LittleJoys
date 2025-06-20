@@ -15,6 +15,7 @@ import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
@@ -63,7 +64,7 @@ public class DigSpotHandler {
                         return;
                     }
 
-                    findRecipe(level, aboveSurfacePos).ifPresentOrElse(recipe -> {
+                    findRecipe(level, aboveSurfacePos, player).ifPresentOrElse(recipe -> {
                         level.setBlock(aboveSurfacePos, ModBlocks.digSpot.defaultBlockState(), 3);
                         if (level.getBlockEntity(aboveSurfacePos) instanceof DigSpotBlockEntity digSpot) {
                             digSpot.setRecipeId(recipe.identifier());
@@ -102,20 +103,20 @@ public class DigSpotHandler {
         return bestPos;
     }
 
-    private static Optional<DigSpotRecipe> findRecipe(ServerLevel level, BlockPos pos) {
+    private static Optional<DigSpotRecipe> findRecipe(ServerLevel level, BlockPos pos, ServerPlayer player) {
         final var recipeManager = level.getRecipeManager();
         final var recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.digSpotRecipeType);
         final var candidates = new ArrayList<DigSpotRecipe>();
         for (final var recipe : recipes) {
-            if (isValidRecipeFor(recipe, level, pos)) {
+            if (isValidRecipeFor(recipe, level, pos, player)) {
                 candidates.add(recipe);
             }
         }
         return WeightedRandom.getRandomItem(random, candidates);
     }
 
-    private static boolean isValidRecipeFor(DigSpotRecipe recipe, ServerLevel level, BlockPos pos) {
-        final var context = new EventContextImpl(level, pos, level.getBlockState(pos));
+    private static boolean isValidRecipeFor(DigSpotRecipe recipe, ServerLevel level, BlockPos pos, ServerPlayer player) {
+        final var context = new EventContextImpl(level, pos, level.getBlockState(pos), player);
         return recipe.eventCondition().test(context);
     }
 
