@@ -48,11 +48,11 @@ public class FishingSpotHandler {
                 final var centerPos = getOriginForNextSpawn(player);
                 final var checkRange = LittleJoysConfig.getActive().fishingSpots.minimumDistanceBetween;
                 final var spawnRange = LittleJoysConfig.getActive().fishingSpots.spawnDistance;
-                final var closestFishingSpot = poiManager.findClosest(it -> it.is(ModPoiTypeTags.FISHING_SPOTS),
+                final var fishingSpotInRange = poiManager.getInRange(it -> it.is(ModPoiTypeTags.FISHING_SPOTS),
                         centerPos,
                         checkRange,
-                        PoiManager.Occupancy.ANY);
-                if (closestFishingSpot.isEmpty()) {
+                        PoiManager.Occupancy.ANY).findAny();
+                if (fishingSpotInRange.isEmpty()) {
                     final var offsetX = random.nextInt(spawnRange + spawnRange) - spawnRange;
                     final var offsetZ = random.nextInt(spawnRange + spawnRange) - spawnRange;
                     final var randomOffsetPos = new BlockPos(centerPos.getX() + offsetX, centerPos.getX(), centerPos.getZ() + offsetZ);
@@ -62,10 +62,14 @@ public class FishingSpotHandler {
                     final var totalSpots = ChunkLimitManager.get(level).getTotalFishingSpotsInChunk(aboveSurfacePos);
                     final var maxSpots = LittleJoysConfig.getActive().fishingSpots.totalLimitPerChunk;
                     if (maxSpots > 0 && totalSpots >= maxSpots) {
+                        // If we have exceeded the total, don't bother re-checking until 10 seconds have passed
+                        littleJoysData.putInt(FISHING_SPOT_COOLDOWN, 200);
                         return;
                     }
 
                     if (!level.getBlockState(aboveSurfacePos).canBeReplaced()) {
+                        // If this position was bad, try again in a second
+                        littleJoysData.putInt(FISHING_SPOT_COOLDOWN, 20);
                         return;
                     }
 
@@ -77,6 +81,9 @@ public class FishingSpotHandler {
                         ChunkLimitManager.get(level).trackFishingSpot(aboveSurfacePos);
                         littleJoysData.putInt(FISHING_SPOT_COOLDOWN, Math.round(LittleJoysConfig.getActive().fishingSpots.spawnIntervalSeconds * 20));
                     }, () -> littleJoysData.putInt(FISHING_SPOT_COOLDOWN, 20));
+                } else {
+                    // If we have one in range, don't bother re-checking until 10 seconds have passed
+                    littleJoysData.putInt(FISHING_SPOT_COOLDOWN, 200);
                 }
             }
         });
