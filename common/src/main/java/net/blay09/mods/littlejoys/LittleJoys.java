@@ -45,7 +45,7 @@ public class LittleJoys {
                 CanSeeSkyCondition.class,
                 CanSeeSkyCondition.CODEC,
                 CanSeeSkyCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(new ResourceLocation("is_dimension"),
+        LittleJoysAPI.registerEventCondition(ResourceLocation.withDefaultNamespace("is_dimension"),
                 IsDimensionCondition.class,
                 IsDimensionCondition.CODEC,
                 IsDimensionCondition::fromNetwork);
