@@ -1,4 +1,4 @@
-- Fixed fishing spots not disappearing when using Stardew Fishing
-- Fixed performance of dig spots when failing to generate a dig spot
-- Fixed fake players being able to trigger a Gold Rush or Drop Rush
-- API: Added `findFishingSpot`, `claimFishingSpot` and `consumeFishingSpot`
+- Added `is_dimension` condition for events
+- Added `gamestages:has_stage` condition for events (for Game Stages mod)
+- Fixed fishing spots not disappearing when using Fishing Overhaul
+- Fixed performance of fishing spots when failing to generate a fishing spot
