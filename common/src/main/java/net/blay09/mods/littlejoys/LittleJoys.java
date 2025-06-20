@@ -45,6 +45,10 @@ public class LittleJoys {
                 CanSeeSkyCondition.class,
                 CanSeeSkyCondition.CODEC,
                 CanSeeSkyCondition::fromNetwork);
+        LittleJoysAPI.registerEventCondition(new ResourceLocation("is_dimension"),
+                IsDimensionCondition.class,
+                IsDimensionCondition.CODEC,
+                IsDimensionCondition::fromNetwork);
 
         LittleJoysConfig.initialize();
         ModBlocks.initialize(Balm.getBlocks());
