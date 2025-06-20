@@ -18,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.item.ItemStack;
@@ -59,13 +60,14 @@ public class GoldRushHandler {
             }
 
             final var level = event.getLevel();
-            if (!(level instanceof ServerLevel serverLevel)) {
+            final var player = event.getPlayer();
+            if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer serverPlayer)) {
                 return;
             }
 
             var activeGoldRush = activeGoldRushes.get(level.dimension(), event.getPos());
             if (activeGoldRush == null) {
-                final var optRecipe = findRecipe(serverLevel, event.getPos(), event.getState());
+                final var optRecipe = findRecipe(serverLevel, event.getPos(), event.getState(), serverPlayer);
                 if (optRecipe.isPresent()) {
                     final var recipeHolder = optRecipe.get();
                     final var recipe = recipeHolder.value();
@@ -114,7 +116,7 @@ public class GoldRushHandler {
         });
     }
 
-    private static Optional<RecipeHolder<GoldRushRecipe>> findRecipe(ServerLevel level, BlockPos pos, BlockState state) {
+    private static Optional<RecipeHolder<GoldRushRecipe>> findRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
         final var recipes = recipeMap.byType(ModRecipeTypes.goldRushRecipeType);
@@ -122,15 +124,15 @@ public class GoldRushHandler {
         final var baseChance = LittleJoysConfig.getActive().goldRush.baseChance;
         final var roll = random.nextFloat();
         for (final var recipeHolder : recipes) {
-            if (isValidRecipeFor(recipeHolder, level, pos, state) && roll <= baseChance * recipeHolder.value().chanceMultiplier()) {
+            if (isValidRecipeFor(recipeHolder, level, pos, state, player) && roll <= baseChance * recipeHolder.value().chanceMultiplier()) {
                 candidates.add(new WeightedRecipeHolder<>(recipeHolder));
             }
         }
         return WeightedRandom.getRandomItem(random, candidates).map(WeightedRecipeHolder::recipeHolder);
     }
 
-    private static boolean isValidRecipeFor(RecipeHolder<GoldRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state) {
-        final var context = new EventContextImpl(level, pos, state);
+    private static boolean isValidRecipeFor(RecipeHolder<GoldRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        final var context = new EventContextImpl(level, pos, state, player);
         return recipe.value().eventCondition().test(context);
     }
 }

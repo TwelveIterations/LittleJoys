@@ -20,9 +20,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -63,11 +63,12 @@ public class DropRushHandler {
             }
 
             final var level = event.getLevel();
-            if (!(level instanceof ServerLevel serverLevel)) {
+            final var player = event.getPlayer();
+            if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer serverPlayer)) {
                 return;
             }
 
-            handleDropRushChance(serverLevel, event.getPos(), event.getState(), event.getPlayer());
+            handleDropRushChance(serverLevel, event.getPos(), event.getState(), serverPlayer);
         });
 
         Balm.getEvents().onTickEvent(TickType.ServerLevel, TickPhase.Start, level -> {
@@ -102,8 +103,8 @@ public class DropRushHandler {
         });
     }
 
-    public static void handleDropRushChance(ServerLevel level, BlockPos pos, BlockState state, Player player) {
-        findRecipe(level, pos, state).ifPresent(recipeHolder -> {
+    public static void handleDropRushChance(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        findRecipe(level, pos, state, player).ifPresent(recipeHolder -> {
             final var recipe = recipeHolder.value();
             final var dropRushInstance = new DropRushInstance(
                     player.getUUID(),
@@ -145,7 +146,7 @@ public class DropRushHandler {
         dropRush.addEntity(itemEntity);
     }
 
-    private static Optional<RecipeHolder<DropRushRecipe>> findRecipe(ServerLevel level, BlockPos pos, BlockState state) {
+    private static Optional<RecipeHolder<DropRushRecipe>> findRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
         final var recipes = recipeMap.byType(ModRecipeTypes.dropRushRecipeType);
@@ -153,15 +154,15 @@ public class DropRushHandler {
         final var baseChance = LittleJoysConfig.getActive().dropRush.baseChance;
         final var roll = random.nextFloat();
         for (final var recipeHolder : recipes) {
-            if (isValidRecipeFor(recipeHolder, level, pos, state) && roll <= baseChance * recipeHolder.value().chanceMultiplier()) {
+            if (isValidRecipeFor(recipeHolder, level, pos, state, player) && roll <= baseChance * recipeHolder.value().chanceMultiplier()) {
                 candidates.add(new WeightedRecipeHolder<>(recipeHolder));
             }
         }
         return WeightedRandom.getRandomItem(random, candidates).map(WeightedRecipeHolder::recipeHolder);
     }
 
-    private static boolean isValidRecipeFor(RecipeHolder<DropRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state) {
-        final var context = new EventContextImpl(level, pos, state);
+    private static boolean isValidRecipeFor(RecipeHolder<DropRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        final var context = new EventContextImpl(level, pos, state, player);
         return recipe.value().eventCondition().test(context);
     }
 
