@@ -66,7 +66,8 @@ public class GoldRushHandler {
                             event.getState(),
                             recipe.lootTable(),
                             (int) Math.floor(20 * recipe.seconds()),
-                            recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()));
+                            recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()),
+                            serverPlayer);
                     Balm.getNetworking().sendToTracking(((ServerLevel) level), event.getPos(), new ClientboundGoldRushPacket(event.getPos(), true));
                     event.getPlayer().awardStat(ModStats.goldRushesTriggered);
                     activeGoldRushes.put(level.dimension(), event.getPos(), activeGoldRush);
@@ -98,7 +99,7 @@ public class GoldRushHandler {
                 goldRush.setDropCooldownTicks(goldRush.getDropCooldownTicks() - 1);
                 if (goldRush.getTicksPassed() >= goldRush.getMaxTicks()) {
                     if (level.getBlockState(goldRush.getPos()).equals(goldRush.getInitialState())) {
-                        level.destroyBlock(goldRush.getPos(), true);
+                        level.destroyBlock(goldRush.getPos(), true, goldRush.getPlayer());
                     }
                     Balm.getNetworking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(goldRush.getPos(), false));
                 }

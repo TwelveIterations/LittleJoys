@@ -75,7 +75,7 @@ public class GoldRushClientHandler {
     public static void addActiveGoldRush(BlockPos pos) {
         final var level = Minecraft.getInstance().level;
         if (level != null) {
-            activeGoldRushes.put(level.dimension(), pos, new GoldRushInstance(pos, level.getBlockState(pos), BuiltInLootTables.EMPTY, -1, -1));
+            activeGoldRushes.put(level.dimension(), pos, new GoldRushInstance(pos, level.getBlockState(pos), BuiltInLootTables.EMPTY, -1, -1, null));
         }
     }
 
