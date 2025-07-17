@@ -67,20 +67,7 @@ public class GoldRushHandler {
 
             var activeGoldRush = activeGoldRushes.get(level.dimension(), event.getPos());
             if (activeGoldRush == null) {
-                final var optRecipe = findRecipe(serverLevel, event.getPos(), event.getState(), serverPlayer);
-                if (optRecipe.isPresent()) {
-                    final var recipeHolder = optRecipe.get();
-                    final var recipe = recipeHolder.value();
-                    activeGoldRush = new GoldRushInstance(event.getPos(),
-                            event.getState(),
-                            Optional.of(recipe.lootTable()),
-                            (int) Math.floor(20 * recipe.seconds()),
-                            recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()),
-                            serverPlayer);
-                    Balm.getNetworking().sendToTracking(((ServerLevel) level), event.getPos(), new ClientboundGoldRushPacket(event.getPos(), true));
-                    event.getPlayer().awardStat(ModStats.goldRushesTriggered);
-                    activeGoldRushes.put(level.dimension(), event.getPos(), activeGoldRush);
-                }
+                activeGoldRush = rollForGoldRush(serverLevel, event.getPos(), event.getState(), serverPlayer).orElse(null);
             }
             if (activeGoldRush != null) {
                 if (activeGoldRush.getDropCooldownTicks() <= 0) {
@@ -117,7 +104,33 @@ public class GoldRushHandler {
         });
     }
 
-    private static Optional<RecipeHolder<GoldRushRecipe>> findRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+    public static Optional<GoldRushInstance> rollForGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        return rollRecipe(level, pos, state, player, false).map(recipe -> startGoldRush(level, pos, state, player, recipe));
+    }
+
+    public static boolean isInGoldRush(ServerLevel level, BlockPos pos) {
+        return activeGoldRushes.contains(level.dimension(), pos);
+    }
+
+    public static Optional<GoldRushInstance> startGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        return rollRecipe(level, pos, state, player, true).map(recipe -> startGoldRush(level, pos, state, player, recipe));
+    }
+
+    public static GoldRushInstance startGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, RecipeHolder<GoldRushRecipe> recipeHolder) {
+        final var recipe = recipeHolder.value();
+        final var activeGoldRush = new GoldRushInstance(pos,
+                state,
+                Optional.of(recipe.lootTable()),
+                (int) Math.floor(20 * recipe.seconds()),
+                recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()),
+                player);
+        Balm.getNetworking().sendToTracking(level, pos, new ClientboundGoldRushPacket(pos, true));
+        player.awardStat(ModStats.goldRushesTriggered);
+        activeGoldRushes.put(level.dimension(), pos, activeGoldRush);
+        return activeGoldRush;
+    }
+
+    private static Optional<RecipeHolder<GoldRushRecipe>> rollRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, boolean force) {
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
         final var recipes = recipeMap.byType(ModRecipeTypes.goldRushRecipeType);
@@ -125,7 +138,7 @@ public class GoldRushHandler {
         final var baseChance = LittleJoysConfig.getActive().goldRush.baseChance;
         final var roll = random.nextFloat();
         for (final var recipeHolder : recipes) {
-            if (isValidRecipeFor(recipeHolder, level, pos, state, player) && roll <= baseChance * recipeHolder.value().chanceMultiplier()) {
+            if (isValidRecipeFor(recipeHolder, level, pos, state, player) && (force || roll <= baseChance * recipeHolder.value().chanceMultiplier())) {
                 candidates.add(new WeightedRecipeHolder<>(recipeHolder));
             }
         }
