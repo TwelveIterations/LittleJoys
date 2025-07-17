@@ -1,4 +1,2 @@
-- Added `is_dimension` condition for events
-- Added `gamestages:has_stage` condition for events (for Game Stages mod)
-- Fixed fishing spots not disappearing when using Fishing Overhaul
-- Fixed performance of fishing spots when failing to generate a fishing spot
+- Added `/littlejoys` command to spawn Dig Spot, Fishing Spot, or trigger a Drop Rush or Gold Rush at a position
+- Fixed player not being passed when breaking block after a gold rush to ensure appropriate events are fired
