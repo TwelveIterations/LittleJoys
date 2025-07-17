@@ -4,6 +4,7 @@ import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.littlejoys.api.LittleJoysAPI;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.blay09.mods.littlejoys.block.entity.ModBlockEntities;
+import net.blay09.mods.littlejoys.command.LittleJoysCommand;
 import net.blay09.mods.littlejoys.entity.ModEntities;
 import net.blay09.mods.littlejoys.handler.DigSpotHandler;
 import net.blay09.mods.littlejoys.handler.DropRushHandler;
@@ -61,6 +62,7 @@ public class LittleJoys {
         ModSounds.initialize(Balm.getSounds());
         ModParticles.initialize(Balm.getParticles());
         ModPoiTypes.initialize(Balm.getWorldGen());
+        Balm.getCommands().register(LittleJoysCommand::register);
 
         DropRushHandler.initialize();
         GoldRushHandler.initialize();

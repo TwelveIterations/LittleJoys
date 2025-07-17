@@ -21,7 +21,7 @@ public class SweetBerryBushBlockMixin {
     @Inject(method = "use", at = @At("RETURN"))
     public void use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
         if (cir.getReturnValue() == InteractionResult.CONSUME && level instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer) {
-            DropRushHandler.handleDropRushChance(serverLevel, pos, state, serverPlayer);
+            DropRushHandler.rollForDropRush(serverLevel, pos, state, serverPlayer);
         }
     }
 }

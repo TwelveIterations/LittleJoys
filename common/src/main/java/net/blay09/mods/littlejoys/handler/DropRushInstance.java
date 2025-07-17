@@ -3,9 +3,7 @@ package net.blay09.mods.littlejoys.handler;
 import net.blay09.mods.littlejoys.entity.DropRushItemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,6 @@ import java.util.UUID;
 public final class DropRushInstance {
     private final UUID playerId;
     private final BlockPos pos;
-    private final BlockState initialState;
     private final ResourceLocation lootTable;
     private final int maxTicks;
 
@@ -25,10 +22,9 @@ public final class DropRushInstance {
     private int ticksPassed;
     private int dropCooldownTicks;
 
-    public DropRushInstance(UUID playerId, BlockPos pos, BlockState initialState, ResourceLocation lootTable, int maxTicks) {
+    public DropRushInstance(UUID playerId, BlockPos pos, ResourceLocation lootTable, int maxTicks) {
         this.playerId = playerId;
         this.pos = pos;
-        this.initialState = initialState;
         this.lootTable = lootTable;
         this.maxTicks = maxTicks;
     }
@@ -39,10 +35,6 @@ public final class DropRushInstance {
 
     public BlockPos getPos() {
         return pos;
-    }
-
-    public BlockState getInitialState() {
-        return initialState;
     }
 
     public ResourceLocation getLootTable() {

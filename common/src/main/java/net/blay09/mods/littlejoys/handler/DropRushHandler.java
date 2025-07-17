@@ -61,7 +61,7 @@ public class DropRushHandler {
                 return;
             }
 
-            handleDropRushChance(serverLevel, event.getPos(), event.getState(), serverPlayer);
+            rollForDropRush(serverLevel, event.getPos(), event.getState(), serverPlayer);
         });
 
         Balm.getEvents().onTickEvent(TickType.ServerLevel, TickPhase.Start, level -> {
@@ -96,32 +96,43 @@ public class DropRushHandler {
         });
     }
 
-    public static void handleDropRushChance(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
-        findRecipe(level, pos, state, player).ifPresent(recipe -> {
-            final var dropRushInstance = new DropRushInstance(
-                    player.getUUID(),
-                    pos,
-                    state,
-                    recipe.lootTable(),
-                    (int) Math.floor(20 * recipe.seconds()));
-            final var lootParamsBuilder = (new LootParams.Builder(level))
-                    .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-                    .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
-                    .withOptionalParameter(LootContextParams.BLOCK_ENTITY, level.getBlockEntity(pos));
-            final var lootTableId = recipe.lootTable();
-            if (lootTableId != BuiltInLootTables.EMPTY) {
-                final var lootParams = lootParamsBuilder.withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
-                        .create(LootContextParamSets.BLOCK);
-                final var lootTable = level.getServer().getLootData().getLootTable(lootTableId);
-                for (int i = 0; i < recipe.rolls(); i++) {
-                    lootTable.getRandomItems(lootParams).forEach(dropRushInstance::addDrop);
-                }
+    public static boolean rollForDropRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        return rollRecipe(level, pos, state, player, false).map(recipe -> {
+            startDropRush(level, pos, player, recipe);
+            return true;
+        }).orElse(false);
+    }
+
+    public static boolean startDropRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        return rollRecipe(level, pos, state, player, true).map(recipe -> {
+            startDropRush(level, pos, player, recipe);
+            return true;
+        }).orElse(false);
+    }
+
+    public static void startDropRush(ServerLevel level, BlockPos pos, ServerPlayer player, DropRushRecipe recipe) {
+        final var dropRushInstance = new DropRushInstance(
+                player.getUUID(),
+                pos,
+                recipe.lootTable(),
+                (int) Math.floor(20 * recipe.seconds()));
+        final var lootParamsBuilder = (new LootParams.Builder(level))
+                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+                .withOptionalParameter(LootContextParams.BLOCK_ENTITY, level.getBlockEntity(pos));
+        final var lootTableId = recipe.lootTable();
+        if (lootTableId != BuiltInLootTables.EMPTY) {
+            final var lootParams = lootParamsBuilder.withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
+                    .create(LootContextParamSets.BLOCK);
+            final var lootTable = level.getServer().getLootData().getLootTable(lootTableId);
+            for (int i = 0; i < recipe.rolls(); i++) {
+                lootTable.getRandomItems(lootParams).forEach(dropRushInstance::addDrop);
             }
-            dropRushInstance.setTicksPerDrop(Math.max(DROP_TICKS / Math.max(1, dropRushInstance.getDrops().size()), 1));
-            Balm.getNetworking().sendTo(player, new ClientboundStartDropRushPacket(dropRushInstance.getMaxTicks()));
-            player.awardStat(ModStats.dropRushesTriggered);
-            activeDropRushes.put(level.dimension(), pos, dropRushInstance);
-        });
+        }
+        dropRushInstance.setTicksPerDrop(Math.max(DROP_TICKS / Math.max(1, dropRushInstance.getDrops().size()), 1));
+        Balm.getNetworking().sendTo(player, new ClientboundStartDropRushPacket(dropRushInstance.getMaxTicks()));
+        player.awardStat(ModStats.dropRushesTriggered);
+        activeDropRushes.put(level.dimension(), pos, dropRushInstance);
     }
 
     private static void spawnDropRushItem(Level level, DropRushInstance dropRush, ItemStack itemStack) {
@@ -140,14 +151,14 @@ public class DropRushHandler {
         dropRush.addEntity(itemEntity);
     }
 
-    private static Optional<DropRushRecipe> findRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+    private static Optional<DropRushRecipe> rollRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, boolean force) {
         final var recipeManager = level.getRecipeManager();
         final var recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.dropRushRecipeType);
         final var candidates = new ArrayList<DropRushRecipe>();
         final var baseChance = LittleJoysConfig.getActive().dropRush.baseChance;
         final var roll = random.nextFloat();
         for (final var recipe : recipes) {
-            if (isValidRecipeFor(recipe, level, pos, state, player) && roll <= baseChance * recipe.chanceMultiplier()) {
+            if (isValidRecipeFor(recipe, level, pos, state, player) && (force || roll <= baseChance * recipe.chanceMultiplier())) {
                 candidates.add(recipe);
             }
         }
