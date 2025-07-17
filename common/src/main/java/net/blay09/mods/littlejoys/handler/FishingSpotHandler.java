@@ -74,20 +74,33 @@ public class FishingSpotHandler {
                         return;
                     }
 
-                    resolveRecipe(level, aboveSurfacePos, null, player).ifPresentOrElse(recipeHolder -> {
-                        level.setBlock(aboveSurfacePos, ModBlocks.fishingSpot.defaultBlockState(), 3);
-                        if (level.getBlockEntity(aboveSurfacePos) instanceof FishingSpotBlockEntity fishingSpot) {
-                            fishingSpot.setRecipeId(recipeHolder.id());
-                        }
-                        ChunkLimitManager.get(level).trackFishingSpot(aboveSurfacePos);
+                    if(createFishingSpot(level, aboveSurfacePos, player)) {
                         littleJoysData.putInt(FISHING_SPOT_COOLDOWN, Math.round(LittleJoysConfig.getActive().fishingSpots.spawnIntervalSeconds * 20));
-                    }, () -> littleJoysData.putInt(FISHING_SPOT_COOLDOWN, 20));
+                    } else {
+                        // Cool down for a second if we failed
+                        littleJoysData.putInt(FISHING_SPOT_COOLDOWN, 20);
+                    }
                 } else {
                     // If we have one in range, don't bother re-checking until 10 seconds have passed
                     littleJoysData.putInt(FISHING_SPOT_COOLDOWN, 200);
                 }
             }
         });
+    }
+
+    public static boolean createFishingSpot(ServerLevel level, BlockPos pos, ServerPlayer player) {
+        return findRecipe(level, pos, player).map(recipeHolder -> {
+            createFishingSpot(level, pos, recipeHolder);
+            return true;
+        }).orElse(false);
+    }
+
+    public static void createFishingSpot(ServerLevel level, BlockPos pos, RecipeHolder<FishingSpotRecipe> recipeHolder) {
+        level.setBlock(pos, ModBlocks.fishingSpot.defaultBlockState(), 3);
+        if (level.getBlockEntity(pos) instanceof FishingSpotBlockEntity fishingSpot) {
+            fishingSpot.setRecipeId(recipeHolder.id());
+        }
+        ChunkLimitManager.get(level).trackFishingSpot(pos);
     }
 
     private static BlockPos getOriginForNextSpawn(Player player) {
