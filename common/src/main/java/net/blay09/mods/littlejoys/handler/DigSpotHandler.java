@@ -67,20 +67,33 @@ public class DigSpotHandler {
                         return;
                     }
 
-                    findRecipe(level, aboveSurfacePos, player).ifPresentOrElse(recipeHolder -> {
-                        level.setBlock(aboveSurfacePos, ModBlocks.digSpot.defaultBlockState(), 3);
-                        if (level.getBlockEntity(aboveSurfacePos) instanceof DigSpotBlockEntity digSpot) {
-                            digSpot.setRecipeId(recipeHolder.id());
-                        }
-                        ChunkLimitManager.get(level).trackDigSpot(aboveSurfacePos);
+                    if (createDigSpot(level, aboveSurfacePos, player)) {
                         littleJoysData.putInt(DIG_SPOT_COOLDOWN, Math.round(LittleJoysConfig.getActive().digSpots.spawnIntervalSeconds * 20));
-                    }, () -> littleJoysData.putInt(DIG_SPOT_COOLDOWN, 20));
+                    } else {
+                        // Cool down for a second if we failed
+                        littleJoysData.putInt(DIG_SPOT_COOLDOWN, 20);
+                    }
                 } else {
                     // If we have one in range, don't bother re-checking until 10 seconds have passed
                     littleJoysData.putInt(DIG_SPOT_COOLDOWN, 200);
                 }
             }
         });
+    }
+
+    public static boolean createDigSpot(ServerLevel level, BlockPos pos, ServerPlayer player) {
+        return findRecipe(level, pos, player).map(recipeHolder -> {
+            createDigSpot(level, pos, recipeHolder);
+            return true;
+        }).orElse(false);
+    }
+
+    public static void createDigSpot(ServerLevel level, BlockPos pos, RecipeHolder<DigSpotRecipe> recipeHolder) {
+        level.setBlock(pos, ModBlocks.digSpot.defaultBlockState(), 3);
+        if (level.getBlockEntity(pos) instanceof DigSpotBlockEntity digSpot) {
+            digSpot.setRecipeId(recipeHolder.id());
+        }
+        ChunkLimitManager.get(level).trackDigSpot(pos);
     }
 
     private static BlockPos getOriginForNextSpawn(Player player) {
