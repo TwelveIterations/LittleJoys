@@ -18,6 +18,7 @@ public class ForgeLittleJoys {
 
         Balm.initializeIfLoaded("fishingoverhaul", "net.blay09.mods.littlejoys.forge.compat.FishingOverhaulSupport");
         Balm.initializeIfLoaded("gamestages", "net.blay09.mods.littlejoys.forge.compat.GameStagesSupport");
+        Balm.initializeIfLoaded("stardew_fishing", "net.blay09.mods.littlejoys.forge.compat.StardewFishingSupport");
     }
 
 }

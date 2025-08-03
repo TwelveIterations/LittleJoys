@@ -6,8 +6,7 @@
   "refmap": "littlejoys.refmap.json",
   "mixins": [
     "AquaFishingBobberEntityMixin",
-    "TideFishingHookMixin",
-    "StardewFishingFishingHookLogicMixin"
+    "TideFishingHookMixin"
   ],
   "client": [
   ],

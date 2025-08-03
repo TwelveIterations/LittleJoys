@@ -6,7 +6,7 @@ dependencies {
     modCompileOnly("curse.maven:aquaculture-60028:6296111")
     //modRuntimeOnly("curse.maven:cloth-config-348521:5729105")
     modCompileOnly("curse.maven:tide-884685:6106864")
-    modCompileOnly("curse.maven:stardew-fishing-1066037:6434447")
+    modCompileOnly("curse.maven:stardew-fishing-1066037:6841343")
     modCompileOnly("curse.maven:fishing-overhaul-491332:6298057")
     modCompileOnly("curse.maven:game-stages-268655:5790361")
 }
