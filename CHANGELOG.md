@@ -1,2 +1,1 @@
-- Added `/littlejoys` command to spawn Dig Spot, Fishing Spot, or trigger a Drop Rush or Gold Rush at a position
-- Fixed player not being passed when breaking block after a gold rush to ensure appropriate events are fired
+- Fixed crash with latest version of Stardew Fishing
