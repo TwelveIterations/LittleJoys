@@ -2,9 +2,8 @@ package net.blay09.mods.littlejoys.entity;
 
 import net.blay09.mods.balm.api.Balm;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.particles.SpellParticleOption;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -19,7 +18,8 @@ import java.util.UUID;
 
 public class DropRushItemEntity extends ItemEntity {
 
-    private static final EntityDataAccessor<CompoundTag> DATA_TARGET = SynchedEntityData.defineId(DropRushItemEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final EntityDataAccessor<Long> DATA_TARGET_LEAST = SynchedEntityData.defineId(DropRushItemEntity.class, EntityDataSerializers.LONG);
+    private static final EntityDataAccessor<Long> DATA_TARGET_MOST = SynchedEntityData.defineId(DropRushItemEntity.class, EntityDataSerializers.LONG);
     private int ticksPassed;
     private int actualLifetime = 6000;
     private boolean pickedUp;
@@ -54,8 +54,9 @@ public class DropRushItemEntity extends ItemEntity {
             discard();
         }
 
-        if (level().isClientSide && !onGround()) {
-            level().addParticle(ParticleTypes.INSTANT_EFFECT, getX(), getY(), getZ(), 0f, 0f, 0f);
+        if (level().isClientSide() && !onGround()) {
+            final var particle = SpellParticleOption.create(ParticleTypes.INSTANT_EFFECT, 1f, 1f, 1f, 1f);
+            level().addParticle(particle, getX(), getY(), getZ(), 0f, 0f, 0f);
         }
     }
 
@@ -88,15 +89,16 @@ public class DropRushItemEntity extends ItemEntity {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (key == DATA_TARGET) {
-            getEntityData().get(DATA_TARGET).read("Target", UUIDUtil.CODEC).ifPresent(this::setTarget);
+        if (key == DATA_TARGET_LEAST || key == DATA_TARGET_MOST) {
+            setTarget(new UUID(getEntityData().get(DATA_TARGET_MOST), getEntityData().get(DATA_TARGET_LEAST)));
         }
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(DATA_TARGET, new CompoundTag());
+        builder.define(DATA_TARGET_LEAST, 0L);
+        builder.define(DATA_TARGET_MOST, 0L);
     }
 
     @Override
@@ -112,20 +114,14 @@ public class DropRushItemEntity extends ItemEntity {
 
     @Nullable
     public UUID getTarget() {
-        return getEntityData().get(DATA_TARGET).read("Target", UUIDUtil.CODEC).orElse(null);
+        return new UUID(getEntityData().get(DATA_TARGET_MOST), getEntityData().get(DATA_TARGET_LEAST));
     }
 
     @Override
     public void setTarget(@Nullable UUID target) {
         super.setTarget(target);
-        CompoundTag compoundTag = new CompoundTag();
-        compoundTag.storeNullable("Target", UUIDUtil.CODEC, target);
-        getEntityData().set(DATA_TARGET, compoundTag);
-    }
-
-    @Override
-    public ItemEntity copy() {
-        return new DropRushItemEntity(this);
+        getEntityData().set(DATA_TARGET_LEAST, target != null ? target.getLeastSignificantBits() : 0);
+        getEntityData().set(DATA_TARGET_MOST, target != null ? target.getMostSignificantBits() : 0);
     }
 
     @Override
