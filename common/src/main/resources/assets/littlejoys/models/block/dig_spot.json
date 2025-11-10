@@ -2,7 +2,8 @@
   "render_type": "cutout",
   "parent": "block/block",
   "textures": {
-    "up": "littlejoys:block/dig_spot"
+    "up": "littlejoys:block/dig_spot",
+    "particle": "littlejoys:block/dig_spot"
   },
   "elements": [
     {
