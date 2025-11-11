@@ -53,6 +53,11 @@ public record GoldRushRecipe(EventCondition eventCondition,
         return ModRecipeTypes.goldRushRecipeSerializer;
     }
 
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
     public static class Serializer implements RecipeSerializer<GoldRushRecipe> {
 
         private static final MapCodec<GoldRushRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

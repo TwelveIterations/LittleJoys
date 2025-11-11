@@ -48,6 +48,11 @@ public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable
         return ModRecipeTypes.digSpotRecipeSerializer;
     }
 
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
     public static class Serializer implements RecipeSerializer<DigSpotRecipe> {
 
         private static final MapCodec<DigSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

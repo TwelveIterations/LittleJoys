@@ -47,6 +47,11 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
     public RecipeSerializer<FishingSpotRecipe> getSerializer() {
         return ModRecipeTypes.fishingSpotRecipeSerializer;
     }
+    
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
 
     public static class Serializer implements RecipeSerializer<FishingSpotRecipe> {
         private static final MapCodec<FishingSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

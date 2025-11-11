@@ -48,6 +48,11 @@ public record DropRushRecipe(EventCondition eventCondition, float chanceMultipli
         return ModRecipeTypes.dropRushRecipeSerializer;
     }
 
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
+
     public static class Serializer implements RecipeSerializer<DropRushRecipe> {
 
         private static final MapCodec<DropRushRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
