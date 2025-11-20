@@ -1,8 +1,7 @@
 dependencies {
-    implementation("net.blay09.mods:balm-neoforge:${balm_version}") {
-        changing = balm_version.contains("SNAPSHOT")
+    implementation(libs.balmNeoForge) {
+        changing = libs.versions.balm.get().endsWith("SNAPSHOT")
     }
-    implementation("net.blay09.mods:kuma-api-neoforge:${kuma_version}")
     compileOnly("curse.maven:aquaculture-60028:6393086")
     //compileOnly("curse.maven:cloth-config-348521:5729127")
     compileOnly("curse.maven:tide-884685:6312322")
