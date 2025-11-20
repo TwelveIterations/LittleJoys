@@ -20,7 +20,7 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
 
     @Override
     public RecipeType<FishingSpotRecipe> getType() {
-        return ModRecipeTypes.fishingSpotRecipeType;
+        return ModRecipeTypes.fishingSpot.type();
     }
 
     @Override
@@ -30,7 +30,7 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.fishingSpotRecipeBookCategory;
+        return ModRecipeTypes.fishingSpot.bookCategory();
     }
 
     @Override
@@ -45,7 +45,7 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
 
     @Override
     public RecipeSerializer<FishingSpotRecipe> getSerializer() {
-        return ModRecipeTypes.fishingSpotRecipeSerializer;
+        return ModRecipeTypes.fishingSpot.serializer();
     }
     
     @Override

@@ -1,65 +1,35 @@
 package net.blay09.mods.littlejoys.recipe;
 
-import net.blay09.mods.balm.api.recipe.BalmRecipes;
-import net.minecraft.world.item.crafting.RecipeBookCategory;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-
-import static net.blay09.mods.littlejoys.LittleJoys.id;
+import net.blay09.mods.balm.world.item.crafting.BalmRecipeTypeRegistrar;
+import net.blay09.mods.balm.world.item.crafting.DeferredRecipeType;
+import net.minecraft.world.item.crafting.RecipeInput;
 
 public class ModRecipeTypes {
 
-    public static RecipeType<DigSpotRecipe> digSpotRecipeType;
-    public static RecipeSerializer<DigSpotRecipe> digSpotRecipeSerializer;
-    public static RecipeBookCategory digSpotRecipeBookCategory;
+    public static DeferredRecipeType<RecipeInput, DigSpotRecipe> digSpot;
+    public static DeferredRecipeType<RecipeInput, FishingSpotRecipe> fishingSpot;
+    public static DeferredRecipeType<RecipeInput, GoldRushRecipe> goldRush;
+    public static DeferredRecipeType<RecipeInput, DropRushRecipe> dropRush;
 
-    public static RecipeType<FishingSpotRecipe> fishingSpotRecipeType;
-    public static RecipeSerializer<FishingSpotRecipe> fishingSpotRecipeSerializer;
-    public static RecipeBookCategory fishingSpotRecipeBookCategory;
+    public static void initialize(BalmRecipeTypeRegistrar recipes) {
+        digSpot = recipes.register("dig_spot", DigSpotRecipe.class)
+                .withSerializer(DigSpotRecipe.Serializer::new)
+                .withRecipeBookCategory()
+                .asDeferredRecipeType();
 
-    public static RecipeType<GoldRushRecipe> goldRushRecipeType;
-    public static RecipeSerializer<GoldRushRecipe> goldRushRecipeSerializer;
-    public static RecipeBookCategory goldRushRecipeBookCategory;
+        fishingSpot = recipes.register("fishing_spot", FishingSpotRecipe.class)
+                .withSerializer(FishingSpotRecipe.Serializer::new)
+                .withRecipeBookCategory()
+                .asDeferredRecipeType();
 
-    public static RecipeType<DropRushRecipe> dropRushRecipeType;
-    public static RecipeSerializer<DropRushRecipe> dropRushRecipeSerializer;
-    public static RecipeBookCategory dropRushRecipeBookCategory;
+        goldRush = recipes.register("gold_rush", GoldRushRecipe.class)
+                .withSerializer(GoldRushRecipe.Serializer::new)
+                .withRecipeBookCategory()
+                .asDeferredRecipeType();
 
-    public static void initialize(BalmRecipes recipes) {
-        recipes.registerRecipeType((identifier) -> digSpotRecipeType = new RecipeType<>() {
-            @Override
-            public String toString() {
-                return identifier.getPath();
-            }
-        }, id("dig_spot"));
-        recipes.registerRecipeSerializer(() -> digSpotRecipeSerializer = new DigSpotRecipe.Serializer(), id("dig_spot"));
-        recipes.registerRecipeBookCategory(() -> digSpotRecipeBookCategory = new RecipeBookCategory(), id("dig_spot"));
-
-        recipes.registerRecipeType((identifier) -> fishingSpotRecipeType = new RecipeType<>() {
-            @Override
-            public String toString() {
-                return identifier.getPath();
-            }
-        }, id("fishing_spot"));
-        recipes.registerRecipeSerializer(() -> fishingSpotRecipeSerializer = new FishingSpotRecipe.Serializer(), id("fishing_spot"));
-        recipes.registerRecipeBookCategory(() -> fishingSpotRecipeBookCategory = new RecipeBookCategory(), id("fishing_spot"));
-
-        recipes.registerRecipeType((identifier) -> goldRushRecipeType = new RecipeType<>() {
-            @Override
-            public String toString() {
-                return identifier.getPath();
-            }
-        }, id("gold_rush"));
-        recipes.registerRecipeSerializer(() -> goldRushRecipeSerializer = new GoldRushRecipe.Serializer(), id("gold_rush"));
-        recipes.registerRecipeBookCategory(() -> goldRushRecipeBookCategory = new RecipeBookCategory(), id("gold_rush"));
-
-        recipes.registerRecipeType((identifier) -> dropRushRecipeType = new RecipeType<>() {
-            @Override
-            public String toString() {
-                return identifier.getPath();
-            }
-        }, id("drop_rush"));
-        recipes.registerRecipeSerializer(() -> dropRushRecipeSerializer = new DropRushRecipe.Serializer(), id("drop_rush"));
-        recipes.registerRecipeBookCategory(() -> dropRushRecipeBookCategory = new RecipeBookCategory(), id("drop_rush"));
+        dropRush = recipes.register("drop_rush", DropRushRecipe.class)
+                .withSerializer(DropRushRecipe.Serializer::new)
+                .withRecipeBookCategory()
+                .asDeferredRecipeType();
     }
 }

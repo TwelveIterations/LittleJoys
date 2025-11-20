@@ -2,7 +2,7 @@ package net.blay09.mods.littlejoys.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import net.blay09.mods.balm.api.command.BalmCommands;
+import net.blay09.mods.balm.commands.BalmCommands;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.handler.DigSpotHandler;
 import net.blay09.mods.littlejoys.handler.DropRushHandler;
@@ -19,24 +19,25 @@ import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
 public class LittleJoysCommand {
 
-    private static final ResourceLocation PERMISSION_LITTLEJOYS_DIGSPOT = LittleJoys.id("command.littlejoys.digspot");
-    private static final ResourceLocation PERMISSION_LITTLEJOYS_FISHINGSPOT = LittleJoys.id("command.littlejoys.fishingspot");
-    private static final ResourceLocation PERMISSION_LITTLEJOYS_GOLDRUSH = LittleJoys.id("command.littlejoys.goldrush");
-    private static final ResourceLocation PERMISSION_LITTLEJOYS_DROPRUSH = LittleJoys.id("command.littlejoys.droprush");
+    private static final Identifier PERMISSION_LITTLEJOYS_DIGSPOT = LittleJoys.id("command.littlejoys.digspot");
+    private static final Identifier PERMISSION_LITTLEJOYS_FISHINGSPOT = LittleJoys.id("command.littlejoys.fishingspot");
+    private static final Identifier PERMISSION_LITTLEJOYS_GOLDRUSH = LittleJoys.id("command.littlejoys.goldrush");
+    private static final Identifier PERMISSION_LITTLEJOYS_DROPRUSH = LittleJoys.id("command.littlejoys.droprush");
 
     private static final DynamicCommandExceptionType ERROR_UNKNOWN_RECIPE = new DynamicCommandExceptionType((arg) -> Component.translatable("recipe.notFound", arg));
 
     @SuppressWarnings("unchecked")
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_DIGSPOT, 2);
-        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_FISHINGSPOT, 2);
-        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_GOLDRUSH, 2);
-        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_DROPRUSH, 2);
+        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_DIGSPOT, Permissions.COMMANDS_GAMEMASTER);
+        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_FISHINGSPOT, Permissions.COMMANDS_GAMEMASTER);
+        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_GOLDRUSH, Permissions.COMMANDS_GAMEMASTER);
+        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_DROPRUSH, Permissions.COMMANDS_GAMEMASTER);
 
         dispatcher.register(Commands.literal("littlejoys")
                 .then(Commands.literal("digspot")

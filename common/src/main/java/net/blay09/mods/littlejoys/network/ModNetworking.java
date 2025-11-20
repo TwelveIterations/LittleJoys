@@ -1,6 +1,6 @@
 package net.blay09.mods.littlejoys.network;
 
-import net.blay09.mods.balm.api.network.BalmNetworking;
+import net.blay09.mods.balm.network.BalmNetworking;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundStartDropRushPacket;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundGoldRushPacket;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundStopDropRushPacket;

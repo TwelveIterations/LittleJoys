@@ -25,7 +25,7 @@ public record GoldRushRecipe(EventCondition eventCondition,
 
     @Override
     public RecipeType<GoldRushRecipe> getType() {
-        return ModRecipeTypes.goldRushRecipeType;
+        return ModRecipeTypes.goldRush.type();
     }
 
     @Override
@@ -35,7 +35,7 @@ public record GoldRushRecipe(EventCondition eventCondition,
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.goldRushRecipeBookCategory;
+        return ModRecipeTypes.goldRush.bookCategory();
     }
 
     @Override
@@ -50,7 +50,7 @@ public record GoldRushRecipe(EventCondition eventCondition,
 
     @Override
     public RecipeSerializer<GoldRushRecipe> getSerializer() {
-        return ModRecipeTypes.goldRushRecipeSerializer;
+        return ModRecipeTypes.goldRush.serializer();
     }
 
     @Override

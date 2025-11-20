@@ -20,7 +20,7 @@ public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable
 
     @Override
     public RecipeType<DigSpotRecipe> getType() {
-        return ModRecipeTypes.digSpotRecipeType;
+        return ModRecipeTypes.digSpot.type();
     }
 
     @Override
@@ -30,7 +30,7 @@ public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.digSpotRecipeBookCategory;
+        return ModRecipeTypes.digSpot.bookCategory();
     }
 
     @Override
@@ -45,7 +45,7 @@ public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable
 
     @Override
     public RecipeSerializer<DigSpotRecipe> getSerializer() {
-        return ModRecipeTypes.digSpotRecipeSerializer;
+        return ModRecipeTypes.digSpot.serializer();
     }
 
     @Override

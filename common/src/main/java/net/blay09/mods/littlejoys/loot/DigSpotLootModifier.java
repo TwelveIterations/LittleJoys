@@ -1,6 +1,6 @@
 package net.blay09.mods.littlejoys.loot;
 
-import net.blay09.mods.balm.api.loot.BalmLootModifier;
+import net.blay09.mods.balm.world.level.storage.loot.BalmLootModifier;
 import net.blay09.mods.littlejoys.block.entity.DigSpotBlockEntity;
 import net.blay09.mods.littlejoys.handler.DigSpotHandler;
 import net.minecraft.world.item.ItemStack;

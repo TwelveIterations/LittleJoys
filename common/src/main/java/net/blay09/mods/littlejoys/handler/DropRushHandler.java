@@ -2,10 +2,10 @@ package net.blay09.mods.littlejoys.handler;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.BreakBlockEvent;
-import net.blay09.mods.balm.api.event.TickPhase;
-import net.blay09.mods.balm.api.event.TickType;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.event.EventHandling;
+import net.blay09.mods.balm.platform.event.callback.BlockCallback;
+import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.entity.DropRushItemEntity;
 import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
@@ -44,33 +44,32 @@ public class DropRushHandler {
     private static final Table<ResourceKey<Level>, BlockPos, DropRushInstance> activeDropRushes = HashBasedTable.create();
 
     public static void initialize() {
-        Balm.getEvents().onEvent(BreakBlockEvent.class, event -> {
-            if (event.getPlayer().getAbilities().instabuild) {
-                return;
+        BlockCallback.Break.EVENT.register((level, pos, state, blockEntity, player) -> {
+            if (player.getAbilities().instabuild) {
+                return EventHandling.RESUME;
             }
 
-            if (Balm.getHooks().isFakePlayer(event.getPlayer())) {
-                return;
+            if (Balm.hooks().isFakePlayer(player)) {
+                return EventHandling.RESUME;
             }
 
-            final var hasSilkTouch = event.getLevel().registryAccess().lookup(Registries.ENCHANTMENT)
+            final var hasSilkTouch = level.registryAccess().lookup(Registries.ENCHANTMENT)
                     .flatMap(it -> it.get(Enchantments.SILK_TOUCH))
-                    .map(it -> EnchantmentHelper.getEnchantmentLevel(it, event.getPlayer()) > 0)
+                    .map(it -> EnchantmentHelper.getEnchantmentLevel(it, player) > 0)
                     .orElse(false);
             if (hasSilkTouch) {
-                return;
+                return EventHandling.RESUME;
             }
 
-            final var level = event.getLevel();
-            final var player = event.getPlayer();
             if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer serverPlayer)) {
-                return;
+                return EventHandling.RESUME;
             }
 
-            rollForDropRush(serverLevel, event.getPos(), event.getState(), serverPlayer);
+            rollForDropRush(serverLevel, pos, state, serverPlayer);
+            return EventHandling.RESUME;
         });
 
-        Balm.getEvents().onTickEvent(TickType.ServerLevel, TickPhase.Start, level -> {
+        ServerTickCallback.ServerLevelTick.BEFORE.register(level -> {
             for (final var dropRush : activeDropRushes.row(level.dimension()).values()) {
                 dropRush.setTicksPassed(dropRush.getTicksPassed() + 1);
                 dropRush.setDropCooldownTicks(dropRush.getDropCooldownTicks() - 1);
@@ -89,12 +88,12 @@ public class DropRushHandler {
                 if (dropRush.getEntities().isEmpty()) {
                     final var player = level.getPlayerByUUID(dropRush.getPlayerId());
                     if (player != null) {
-                        Balm.getNetworking().sendTo(player, new ClientboundStopDropRushPacket(ClientboundStopDropRushPacket.Reason.FULL_CLEAR));
+                        Balm.networking().sendTo(player, new ClientboundStopDropRushPacket(ClientboundStopDropRushPacket.Reason.FULL_CLEAR));
                     }
                 } else if (dropRush.getTicksPassed() >= dropRush.getMaxTicks()) {
                     final var player = level.getPlayerByUUID(dropRush.getPlayerId());
                     if (player != null) {
-                        Balm.getNetworking().sendTo(player, new ClientboundStopDropRushPacket(ClientboundStopDropRushPacket.Reason.TIME_UP));
+                        Balm.networking().sendTo(player, new ClientboundStopDropRushPacket(ClientboundStopDropRushPacket.Reason.TIME_UP));
                     }
                 }
             }
@@ -128,14 +127,14 @@ public class DropRushHandler {
                 .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
                 .withOptionalParameter(LootContextParams.BLOCK_ENTITY, level.getBlockEntity(pos));
         final var lootTableId = recipe.lootTable();
-            final var lootParams = lootParamsBuilder.withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
-                    .create(LootContextParamSets.BLOCK);
-            final var lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableId);
-            for (int i = 0; i < recipe.rolls(); i++) {
-                lootTable.getRandomItems(lootParams).forEach(dropRushInstance::addDrop);
-            }
+        final var lootParams = lootParamsBuilder.withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
+                .create(LootContextParamSets.BLOCK);
+        final var lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableId);
+        for (int i = 0; i < recipe.rolls(); i++) {
+            lootTable.getRandomItems(lootParams).forEach(dropRushInstance::addDrop);
+        }
         dropRushInstance.setTicksPerDrop(Math.max(DROP_TICKS / Math.max(1, dropRushInstance.getDrops().size()), 1));
-        Balm.getNetworking().sendTo(player, new ClientboundStartDropRushPacket(dropRushInstance.getMaxTicks()));
+        Balm.networking().sendTo(player, new ClientboundStartDropRushPacket(dropRushInstance.getMaxTicks()));
         player.awardStat(ModStats.dropRushesTriggered);
         activeDropRushes.put(level.dimension(), pos, dropRushInstance);
     }
@@ -159,7 +158,7 @@ public class DropRushHandler {
     private static Optional<RecipeHolder<DropRushRecipe>> rollRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, boolean force) {
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.dropRushRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.dropRush.type());
         final var candidates = new ArrayList<RecipeHolder<DropRushRecipe>>();
         final var baseChance = LittleJoysConfig.getActive().dropRush.baseChance;
         final var roll = random.nextFloat();

@@ -1,8 +1,7 @@
 package net.blay09.mods.littlejoys.handler;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.TickPhase;
-import net.blay09.mods.balm.api.event.TickType;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.block.ModBlocks;
@@ -35,15 +34,15 @@ public class DigSpotHandler {
     private static final String DIG_SPOT_COOLDOWN = "digSpotCooldown";
 
     public static void initialize() {
-        Balm.getEvents().onTickEvent(TickType.ServerPlayer, TickPhase.End, (player) -> {
-            final var playerData = Balm.getHooks().getPersistentData(player);
+        ServerTickCallback.ServerPlayerTick.AFTER.register(player -> {
+            final var playerData = Balm.hooks().getPersistentData(player);
             final var littleJoysData = playerData.getCompoundOrEmpty(LittleJoys.MOD_ID);
             playerData.put(LittleJoys.MOD_ID, littleJoysData);
             final var cooldown = littleJoysData.getIntOr(DIG_SPOT_COOLDOWN, 0);
             if (cooldown > 0) {
                 littleJoysData.putInt(DIG_SPOT_COOLDOWN, cooldown - 1);
             } else {
-                final var level = (ServerLevel) player.level();
+                final var level = player.level();
                 final var poiManager = level.getPoiManager();
                 final var centerPos = getOriginForNextSpawn(player);
                 final var checkRange = LittleJoysConfig.getActive().digSpots.minimumDistanceBetween;
@@ -122,7 +121,7 @@ public class DigSpotHandler {
     private static Optional<RecipeHolder<DigSpotRecipe>> findRecipe(ServerLevel level, BlockPos pos, ServerPlayer player) {
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.digSpotRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.digSpot.type());
         final var candidates = new ArrayList<RecipeHolder<DigSpotRecipe>>();
         for (final var recipe : recipes) {
             if (isValidRecipeFor(recipe, level, pos, player)) {
@@ -150,7 +149,7 @@ public class DigSpotHandler {
     }
 
     public static void digSpotConsumed(Player player) {
-        final var playerData = Balm.getHooks().getPersistentData(player);
+        final var playerData = Balm.hooks().getPersistentData(player);
         final var littleJoysData = playerData.getCompoundOrEmpty(LittleJoys.MOD_ID);
         playerData.put(LittleJoys.MOD_ID, littleJoysData);
         littleJoysData.putInt(DIG_SPOT_COOLDOWN, Math.round(LittleJoysConfig.getActive().digSpots.afterDiggingCooldownSeconds * 20));

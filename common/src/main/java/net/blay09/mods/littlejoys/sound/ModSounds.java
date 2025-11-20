@@ -1,21 +1,19 @@
 package net.blay09.mods.littlejoys.sound;
 
-import net.blay09.mods.balm.api.DeferredObject;
-import net.blay09.mods.balm.api.sound.BalmSounds;
+import net.blay09.mods.balm.core.BalmRegistrar;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 
-import static net.blay09.mods.littlejoys.LittleJoys.id;
-
 public class ModSounds {
-    public static DeferredObject<SoundEvent> goldRush;
-    public static DeferredObject<SoundEvent> dropRushStart;
-    public static DeferredObject<SoundEvent> dropRush;
-    public static DeferredObject<SoundEvent> dropRushStop;
+    public static Holder<SoundEvent> goldRush;
+    public static Holder<SoundEvent> dropRushStart;
+    public static Holder<SoundEvent> dropRush;
+    public static Holder<SoundEvent> dropRushStop;
 
-    public static void initialize(BalmSounds sounds) {
-        goldRush = sounds.register(id("gold_rush"));
-        dropRushStart = sounds.register(id("drop_rush_start"));
-        dropRush = sounds.register(id("drop_rush"));
-        dropRushStop = sounds.register(id("drop_rush_stop"));
+    public static void initialize(BalmRegistrar.Scoped<SoundEvent> sounds) {
+        goldRush = sounds.register("gold_rush", SoundEvent::createVariableRangeEvent);
+        dropRushStart = sounds.register("drop_rush_start", SoundEvent::createVariableRangeEvent);
+        dropRush = sounds.register("drop_rush", SoundEvent::createVariableRangeEvent);
+        dropRushStop = sounds.register("drop_rush_stop", SoundEvent::createVariableRangeEvent);
     }
 }

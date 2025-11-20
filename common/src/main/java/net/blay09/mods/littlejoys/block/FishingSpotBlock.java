@@ -56,7 +56,7 @@ public class FishingSpotBlock extends BaseEntityBlock {
         final var z = pos.getZ() + 0.5f;
         final var offsetX = 0.2f - random.nextFloat() * 0.4f;
         final var offsetZ = 0.2f - random.nextFloat() * 0.4f;
-        level.addAlwaysVisibleParticle(ModParticles.fishingSpot, x + offsetX, y, z + offsetZ, 0f, 0f, 0f);
+        level.addAlwaysVisibleParticle(ModParticles.fishingSpot.value(), x + offsetX, y, z + offsetZ, 0f, 0f, 0f);
     }
 
     @Override

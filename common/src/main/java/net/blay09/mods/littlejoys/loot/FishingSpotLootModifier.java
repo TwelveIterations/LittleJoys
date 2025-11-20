@@ -1,12 +1,11 @@
 package net.blay09.mods.littlejoys.loot;
 
-import net.blay09.mods.balm.api.loot.BalmLootModifier;
+import net.blay09.mods.balm.world.level.storage.loot.BalmLootModifier;
 import net.blay09.mods.littlejoys.block.entity.FishingSpotBlockEntity;
 import net.blay09.mods.littlejoys.handler.FishingSpotHandler;
 import net.blay09.mods.littlejoys.handler.FishingSpotHolder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 

@@ -5,7 +5,7 @@ import com.mojang.serialization.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
@@ -22,7 +22,7 @@ import java.util.stream.StreamSupport;
 
 public record FluidIngredient(Value[] values) {
     public static final FluidIngredient WATER = new FluidIngredient(new Value[]{new TagValue(FluidTags.WATER)});
-    public static final Codec<FluidIngredient> CODEC = Codec.unit(WATER);
+    public static final Codec<FluidIngredient> CODEC = MapCodec.unitCodec(WATER);
 
     public boolean test(FluidState state) {
         for (final var value : values) {
@@ -66,10 +66,10 @@ public record FluidIngredient(Value[] values) {
         if (json.has("fluid") && json.has("tag")) {
             throw new JsonParseException("A fluid ingredient entry is either a tag or a fluid, not both");
         } else if (json.has("fluid")) {
-            final var fluid = BuiltInRegistries.FLUID.getValue(ResourceLocation.parse(GsonHelper.getAsString(json, "fluid")));
+            final var fluid = BuiltInRegistries.FLUID.getValue(Identifier.parse(GsonHelper.getAsString(json, "fluid")));
             return new FluidValue(fluid);
         } else if (json.has("tag")) {
-            final var tag = TagKey.create(Registries.FLUID, ResourceLocation.parse(GsonHelper.getAsString(json, "tag")));
+            final var tag = TagKey.create(Registries.FLUID, Identifier.parse(GsonHelper.getAsString(json, "tag")));
             return new TagValue(tag);
         } else {
             throw new JsonParseException("A fluid ingredient entry needs either a tag or a fluid");
@@ -77,12 +77,12 @@ public record FluidIngredient(Value[] values) {
     }
 
     public static FluidIngredient fromNetwork(FriendlyByteBuf buffer) {
-        return fromValues(buffer.readList(FriendlyByteBuf::readResourceLocation)
+        return fromValues(buffer.readList(FriendlyByteBuf::readIdentifier)
                 .stream().map(BuiltInRegistries.FLUID::getValue).map(FluidValue::new));
     }
 
     public void toNetwork(FriendlyByteBuf buffer) {
-        buffer.writeCollection(Arrays.asList(getFluids()), (buf, fluid) -> buf.writeResourceLocation(BuiltInRegistries.FLUID.getKey(fluid)));
+        buffer.writeCollection(Arrays.asList(getFluids()), (buf, fluid) -> buf.writeIdentifier(BuiltInRegistries.FLUID.getKey(fluid)));
     }
 
     public interface Value {

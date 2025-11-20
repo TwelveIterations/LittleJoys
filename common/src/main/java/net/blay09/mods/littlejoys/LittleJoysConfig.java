@@ -1,18 +1,18 @@
 package net.blay09.mods.littlejoys;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.config.reflection.Comment;
-import net.blay09.mods.balm.api.config.reflection.Config;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.config.reflection.Comment;
+import net.blay09.mods.balm.platform.config.reflection.Config;
 
 @Config(LittleJoys.MOD_ID)
 public class LittleJoysConfig {
 
     public static void initialize() {
-        Balm.getConfig().registerConfig(LittleJoysConfig.class);
+        Balm.config().registerConfig(LittleJoysConfig.class);
     }
 
     public static LittleJoysConfig getActive() {
-        return Balm.getConfig().getActiveConfig(LittleJoysConfig.class);
+        return Balm.config().getActiveConfig(LittleJoysConfig.class);
     }
 
     public DropRush dropRush = new DropRush();

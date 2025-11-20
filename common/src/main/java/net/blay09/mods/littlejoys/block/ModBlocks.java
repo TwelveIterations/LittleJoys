@@ -1,26 +1,17 @@
 package net.blay09.mods.littlejoys.block;
 
-import net.blay09.mods.balm.api.block.BalmBlocks;
-import net.blay09.mods.balm.api.item.BalmItems;
-import net.minecraft.world.level.block.Block;
-
-import static net.blay09.mods.balm.api.block.BalmBlocks.blockProperties;
-import static net.blay09.mods.littlejoys.LittleJoys.id;
+import net.blay09.mods.balm.world.level.block.BalmBlockRegistrar;
+import net.blay09.mods.balm.world.level.block.DeferredBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 public class ModBlocks {
 
-    public static Block digSpot;
-    public static Block fishingSpot;
+    public static DeferredBlock digSpot;
+    public static DeferredBlock fishingSpot;
 
-    public static void initialize(BalmBlocks blocks) {
-        blocks.register(
-                (identifier) -> digSpot = new DigSpotBlock(blockProperties(identifier)),
-                BalmItems::blockItem,
-                id("dig_spot"));
-        blocks.register(
-                (identifier) -> fishingSpot = new FishingSpotBlock(blockProperties(identifier).noLootTable()),
-                BalmItems::blockItem,
-                id("fishing_spot"));
+    public static void initialize(BalmBlockRegistrar blocks) {
+        digSpot = blocks.register("dig_spot", DigSpotBlock::new, it -> it).withDefaultItem().asDeferredBlock();
+        fishingSpot = blocks.register("fishing_spot", FishingSpotBlock::new, BlockBehaviour.Properties::noLootTable).withDefaultItem().asDeferredBlock();
     }
 
 }

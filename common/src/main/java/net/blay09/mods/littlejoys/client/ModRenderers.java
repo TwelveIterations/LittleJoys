@@ -1,27 +1,28 @@
 package net.blay09.mods.littlejoys.client;
 
-import net.blay09.mods.balm.api.client.rendering.BalmRenderers;
+import net.blay09.mods.balm.client.particle.BalmParticleProviderRegistrar;
+import net.blay09.mods.balm.client.renderer.chunk.BalmBlockRenderTypeRegistrar;
+import net.blay09.mods.balm.client.renderer.entity.BalmEntityRendererRegistrar;
 import net.blay09.mods.littlejoys.client.entity.DropRushItemRenderer;
 import net.blay09.mods.littlejoys.entity.ModEntities;
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.minecraft.client.particle.SuspendedTownParticle;
-import net.minecraft.client.renderer.RenderType;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.world.entity.EntityType;
-
-import static net.blay09.mods.littlejoys.LittleJoys.id;
 
 public class ModRenderers {
 
-    public static void initialize(BalmRenderers renderers) {
-        // Note: To support cutout rendering on all loaders, you must additionally specify `"render_type": "minecraft:cutout"` in your block model JSON.
-        renderers.setBlockRenderType(() -> ModBlocks.digSpot, ChunkSectionLayer.CUTOUT);
-        renderers.setBlockRenderType(() -> ModBlocks.fishingSpot, ChunkSectionLayer.CUTOUT);
+    public static void initialize(BalmEntityRendererRegistrar renderers) {
+        renderers.register(ModEntities.dropRushItem, DropRushItemRenderer::new);
+    }
 
-        renderers.registerEntityRenderer(id("drop_rush_item"), () -> (EntityType) ModEntities.dropRushItem.get(), DropRushItemRenderer::new);
+    public static void initialize(BalmParticleProviderRegistrar renderers) {
+        renderers.register(ModParticles.goldRush, SuspendedTownParticle.HappyVillagerProvider::new);
+        renderers.register(ModParticles.fishingSpot, SuspendedTownParticle.HappyVillagerProvider::new);
+    }
 
-        renderers.registerParticleProvider(id("gold_rush"), () -> ModParticles.goldRush, SuspendedTownParticle.HappyVillagerProvider::new);
-        renderers.registerParticleProvider(id("fishing_spot"), () -> ModParticles.fishingSpot, SuspendedTownParticle.HappyVillagerProvider::new);
+    public static void initialize(BalmBlockRenderTypeRegistrar renderers) {
+        renderers.setRenderLayer(ModBlocks.digSpot, ChunkSectionLayer.CUTOUT);
+        renderers.setRenderLayer(ModBlocks.fishingSpot, ChunkSectionLayer.CUTOUT);
     }
 }

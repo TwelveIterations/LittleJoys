@@ -2,10 +2,9 @@ package net.blay09.mods.littlejoys.client.handler;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.TickPhase;
-import net.blay09.mods.balm.api.event.TickType;
-import net.blay09.mods.balm.api.event.client.DisconnectedFromServerEvent;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.client.platform.event.callback.ClientLifecycleCallback;
+import net.blay09.mods.balm.client.platform.event.callback.ClientTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.handler.GoldRushInstance;
 import net.blay09.mods.littlejoys.particle.ModParticles;
@@ -14,11 +13,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
 import java.util.Optional;
 
@@ -29,11 +27,7 @@ public class GoldRushClientHandler {
     private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = HashBasedTable.create();
 
     public static void initialize() {
-        Balm.getEvents().onTickEvent(TickType.ClientLevel, TickPhase.Start, level -> {
-            if (level == null) { // Balm erroneously fires client level ticks even if level is null
-                return;
-            }
-
+        ClientTickCallback.ClientLevelTick.BEFORE.register(level -> {
             for (final var goldRush : activeGoldRushes.row(level.dimension()).values()) {
                 final var pos = goldRush.getPos();
                 final var x = pos.getX();
@@ -50,11 +44,11 @@ public class GoldRushClientHandler {
                         final var offsetZ = direction.getAxis() == Direction.Axis.Z ? 0.5f + 0.6f * direction.getAxisDirection().getStep() : randomOffsetZ;
                         final var offsetPos = pos.relative(direction);
                         if (!level.getBlockState(offsetPos).isViewBlocking(level, offsetPos)) {
-                            level.addParticle(ModParticles.goldRush, x + offsetX, y + offsetY, z + offsetZ, 0f, 0f, 0f);
+                            level.addParticle(ModParticles.goldRush.value(), x + offsetX, y + offsetY, z + offsetZ, 0f, 0f, 0f);
                         }
                     }
                 } else {
-                    level.addParticle(ModParticles.goldRush,
+                    level.addParticle(ModParticles.goldRush.value(),
                             x + randomOffsetX,
                             y + randomOffsetY,
                             z + randomOffsetZ,
@@ -63,14 +57,15 @@ public class GoldRushClientHandler {
                             0f);
                 }
                 if (goldRush.getTicksPassed() % 160 == 0) {
-                    level.playLocalSound(pos, ModSounds.goldRush.get(), SoundSource.BLOCKS, 0.5f, 1f, false);
+                    level.playLocalSound(pos, ModSounds.goldRush.value(), SoundSource.BLOCKS, 0.5f, 1f, false);
                 }
                 goldRush.setTicksPassed(goldRush.getTicksPassed() + 1);
             }
         });
-        Balm.getEvents().onEvent(DisconnectedFromServerEvent.class, (event) -> {
+
+        ClientLifecycleCallback.DisconnectedFromServer.EVENT.register(client -> {
             activeGoldRushes.clear();
-            Minecraft.getInstance().getSoundManager().stop(ResourceLocation.fromNamespaceAndPath(LittleJoys.MOD_ID, "gold_rush"), SoundSource.BLOCKS);
+            Minecraft.getInstance().getSoundManager().stop(Identifier.fromNamespaceAndPath(LittleJoys.MOD_ID, "gold_rush"), SoundSource.BLOCKS);
         });
     }
 
@@ -87,7 +82,7 @@ public class GoldRushClientHandler {
         if (level != null) {
             activeGoldRushes.remove(level.dimension(), pos);
             if (activeGoldRushes.isEmpty()) {
-                minecraft.getSoundManager().stop(ResourceLocation.fromNamespaceAndPath(LittleJoys.MOD_ID, "gold_rush"), SoundSource.BLOCKS);
+                minecraft.getSoundManager().stop(Identifier.fromNamespaceAndPath(LittleJoys.MOD_ID, "gold_rush"), SoundSource.BLOCKS);
             }
         }
     }

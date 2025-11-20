@@ -1,6 +1,6 @@
 package net.blay09.mods.littlejoys.loot;
 
-import net.blay09.mods.balm.api.loot.BalmLootTables;
+import net.blay09.mods.balm.world.level.storage.loot.BalmLootTables;
 
 import static net.blay09.mods.littlejoys.LittleJoys.id;
 

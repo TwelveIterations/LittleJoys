@@ -63,7 +63,7 @@ public class DigSpotBlock extends BaseEntityBlock {
             final var z = pos.getZ() + 0.5f;
             final var offsetX = 0.1f - random.nextFloat() * 0.2f;
             final var offsetZ = 0.1f - random.nextFloat() * 0.2f;
-            level.addParticle(ModParticles.goldRush, x + offsetX, y, z + offsetZ, 0f, 0f, 0f);
+            level.addParticle(ModParticles.goldRush.value(), x + offsetX, y, z + offsetZ, 0f, 0f, 0f);
         }
     }
 

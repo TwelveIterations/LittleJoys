@@ -1,20 +1,17 @@
 package net.blay09.mods.littlejoys.block.entity;
 
-import net.blay09.mods.balm.api.DeferredObject;
-import net.blay09.mods.balm.api.block.BalmBlockEntities;
+import net.blay09.mods.balm.world.level.block.entity.BalmBlockEntityTypeRegistrar;
 import net.blay09.mods.littlejoys.block.ModBlocks;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
-import static net.blay09.mods.littlejoys.LittleJoys.id;
 
 public class ModBlockEntities {
 
-    public static DeferredObject<BlockEntityType<DigSpotBlockEntity>> digSpot;
-    public static DeferredObject<BlockEntityType<FishingSpotBlockEntity>> fishingSpot;
+    public static Holder<BlockEntityType<DigSpotBlockEntity>> digSpot;
+    public static Holder<BlockEntityType<FishingSpotBlockEntity>> fishingSpot;
 
-    public static void initialize(BalmBlockEntities blockEntities) {
-        digSpot = blockEntities.registerBlockEntity(id("dig_spot"), DigSpotBlockEntity::new, () -> new Block[]{ModBlocks.digSpot});
-        fishingSpot = blockEntities.registerBlockEntity(id("fishing_spot"), FishingSpotBlockEntity::new, () -> new Block[]{ModBlocks.fishingSpot});
+    public static void initialize(BalmBlockEntityTypeRegistrar blockEntities) {
+        digSpot = blockEntities.register("dig_spot", DigSpotBlockEntity::new, ModBlocks.digSpot).asHolder();
+        fishingSpot = blockEntities.register("fishing_spot", FishingSpotBlockEntity::new, ModBlocks.fishingSpot).asHolder();
     }
 }

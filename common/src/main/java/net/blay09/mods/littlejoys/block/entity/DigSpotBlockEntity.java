@@ -1,24 +1,22 @@
 package net.blay09.mods.littlejoys.block.entity;
 
-import net.blay09.mods.balm.api.block.entity.OnLoadHandler;
-import net.blay09.mods.balm.common.BalmBlockEntity;
+import net.blay09.mods.balm.world.level.block.entity.OnLoadHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class DigSpotBlockEntity extends BalmBlockEntity implements OnLoadHandler {
+public class DigSpotBlockEntity extends BlockEntity implements OnLoadHandler {
 
     private ResourceKey<Recipe<?>> recipeId;
     private BlockState stateBelow;
 
     public DigSpotBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.digSpot.get(), pos, state);
+        super(ModBlockEntities.digSpot.value(), pos, state);
     }
 
     @Override

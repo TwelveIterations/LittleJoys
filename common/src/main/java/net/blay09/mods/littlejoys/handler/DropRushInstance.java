@@ -3,7 +3,7 @@ package net.blay09.mods.littlejoys.handler;
 import net.blay09.mods.littlejoys.entity.DropRushItemEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;

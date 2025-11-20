@@ -1,22 +1,20 @@
 package net.blay09.mods.littlejoys.block.entity;
 
-import net.blay09.mods.balm.common.BalmBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
-public class FishingSpotBlockEntity extends BalmBlockEntity {
+public class FishingSpotBlockEntity extends BlockEntity {
 
     private ResourceKey<Recipe<?>> recipeId;
 
     public FishingSpotBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.fishingSpot.get(), pos, state);
+        super(ModBlockEntities.fishingSpot.value(), pos, state);
     }
 
     @Override

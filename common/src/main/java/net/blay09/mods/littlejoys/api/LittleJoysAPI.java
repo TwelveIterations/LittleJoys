@@ -3,7 +3,7 @@ package net.blay09.mods.littlejoys.api;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -25,7 +25,7 @@ public class LittleJoysAPI {
         LittleJoysAPI.internalMethods = internalMethods;
     }
 
-    public static <T extends EventCondition> void registerEventCondition(ResourceLocation identifier, Class<T> clazz, MapCodec<T> codec, Function<FriendlyByteBuf, T> networkDeserializer) {
+    public static <T extends EventCondition> void registerEventCondition(Identifier identifier, Class<T> clazz, MapCodec<T> codec, Function<FriendlyByteBuf, T> networkDeserializer) {
         internalMethods.registerEventCondition(identifier, clazz, codec, networkDeserializer);
     }
 

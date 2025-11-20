@@ -1,8 +1,7 @@
 package net.blay09.mods.littlejoys.handler;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.TickPhase;
-import net.blay09.mods.balm.api.event.TickType;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.block.ModBlocks;
@@ -23,7 +22,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -38,8 +36,8 @@ public class FishingSpotHandler {
     private static final String FISHING_SPOT_COOLDOWN = "fishingSpotCooldown";
 
     public static void initialize() {
-        Balm.getEvents().onTickEvent(TickType.ServerPlayer, TickPhase.End, (player) -> {
-            final var playerData = Balm.getHooks().getPersistentData(player);
+        ServerTickCallback.ServerPlayerTick.AFTER.register(player -> {
+            final var playerData = Balm.hooks().getPersistentData(player);
             final var littleJoysData = playerData.getCompoundOrEmpty(LittleJoys.MOD_ID);
             playerData.put(LittleJoys.MOD_ID, littleJoysData);
             final var cooldown = littleJoysData.getIntOr(FISHING_SPOT_COOLDOWN, 0);
@@ -114,7 +112,7 @@ public class FishingSpotHandler {
     private static Optional<RecipeHolder<FishingSpotRecipe>> findRecipe(ServerLevel level, BlockPos pos, ServerPlayer player) {
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.fishingSpotRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.fishingSpot.type());
         final var candidates = new ArrayList<RecipeHolder<FishingSpotRecipe>>();
         for (final var recipe : recipes) {
             if (isValidRecipeFor(recipe, level, pos, player)) {
@@ -157,7 +155,7 @@ public class FishingSpotHandler {
     }
 
     public static int claimFishingSpot(ServerLevel level, BlockPos pos) {
-        level.sendParticles(ModParticles.goldRush,
+        level.sendParticles(ModParticles.goldRush.value(),
                 pos.getX() + 0.5f,
                 pos.getY() + 0.5f,
                 pos.getZ() + 0.5f,
@@ -182,7 +180,7 @@ public class FishingSpotHandler {
         if (player != null) {
             player.awardStat(ModStats.fishingSpotsFished);
 
-            final var playerData = Balm.getHooks().getPersistentData(player);
+            final var playerData = Balm.hooks().getPersistentData(player);
             final var littleJoysData = playerData.getCompoundOrEmpty(LittleJoys.MOD_ID);
             playerData.put(LittleJoys.MOD_ID, littleJoysData);
             littleJoysData.putInt(FISHING_SPOT_COOLDOWN, Math.round(LittleJoysConfig.getActive().fishingSpots.afterFishingCooldownSeconds * 20));

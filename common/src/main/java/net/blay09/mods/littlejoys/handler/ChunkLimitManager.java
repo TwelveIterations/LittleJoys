@@ -22,8 +22,8 @@ public class ChunkLimitManager extends SavedData {
     ).apply(instance, ChunkLimitManager::new));
     private static final SavedDataType<ChunkLimitManager> TYPE = new SavedDataType<>(
             DATA_NAME,
-            (context) -> new ChunkLimitManager(Map.of(), Map.of()),
-            ctx -> CODEC,
+            () -> new ChunkLimitManager(Map.of(), Map.of()),
+            CODEC,
             null // TODO this can't be null but mod loaders will save us soon I'm sure
     );
     private final Map<Long, Integer> fishingSpotCounts = new HashMap<>();

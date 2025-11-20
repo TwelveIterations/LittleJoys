@@ -1,6 +1,6 @@
 package net.blay09.mods.littlejoys.entity;
 
-import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.Balm;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SpellParticleOption;
@@ -29,7 +29,7 @@ public class DropRushItemEntity extends ItemEntity {
     }
 
     public DropRushItemEntity(Level level, double posX, double posY, double posZ, ItemStack itemStack, double deltaX, double deltaY, double deltaZ) {
-        this(ModEntities.dropRushItem.get(), level);
+        this(ModEntities.dropRushItem.value(), level);
         this.setPos(posX, posY, posZ);
         this.setDeltaMovement(deltaX, deltaY, deltaZ);
         this.setItem(itemStack);
@@ -103,7 +103,7 @@ public class DropRushItemEntity extends ItemEntity {
 
     @Override
     public boolean isCurrentlyGlowing() {
-        final var player = Balm.getProxy().getClientPlayer();
+        final var player = Balm.safeClientAccess().getClientPlayer();
         return player != null && Objects.equals(getTarget(), player.getUUID());
     }
 

@@ -20,7 +20,7 @@ public record DropRushRecipe(EventCondition eventCondition, float chanceMultipli
 
     @Override
     public RecipeType<DropRushRecipe> getType() {
-        return ModRecipeTypes.dropRushRecipeType;
+        return ModRecipeTypes.dropRush.type();
     }
 
     @Override
@@ -30,7 +30,7 @@ public record DropRushRecipe(EventCondition eventCondition, float chanceMultipli
 
     @Override
     public RecipeBookCategory recipeBookCategory() {
-        return ModRecipeTypes.dropRushRecipeBookCategory;
+        return ModRecipeTypes.dropRush.bookCategory();
     }
 
     @Override
@@ -45,7 +45,7 @@ public record DropRushRecipe(EventCondition eventCondition, float chanceMultipli
 
     @Override
     public RecipeSerializer<DropRushRecipe> getSerializer() {
-        return ModRecipeTypes.dropRushRecipeSerializer;
+        return ModRecipeTypes.dropRush.serializer();
     }
 
     @Override

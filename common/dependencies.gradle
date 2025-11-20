@@ -2,5 +2,4 @@ dependencies {
     implementation(libs.balmCommon) {
         changing = libs.versions.balm.get().endsWith("SNAPSHOT")
     }
-    implementation("net.blay09.mods:kuma-api-common:${kuma_version}")
 }

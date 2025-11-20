@@ -2,10 +2,10 @@ package net.blay09.mods.littlejoys.handler;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.BreakBlockEvent;
-import net.blay09.mods.balm.api.event.TickPhase;
-import net.blay09.mods.balm.api.event.TickType;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.event.EventHandling;
+import net.blay09.mods.balm.platform.event.callback.BlockCallback;
+import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundGoldRushPacket;
@@ -20,17 +20,21 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -41,54 +45,53 @@ public class GoldRushHandler {
     private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = HashBasedTable.create();
 
     public static void initialize() {
-        Balm.getEvents().onEvent(BreakBlockEvent.class, event -> {
-            if (event.getPlayer().getAbilities().instabuild) {
-                return;
+        BlockCallback.Break.EVENT.register((level, pos, state, blockEntity, player) -> {
+            if (player.getAbilities().instabuild) {
+                return EventHandling.RESUME;
             }
 
-            if (Balm.getHooks().isFakePlayer(event.getPlayer())) {
-                return;
+            if (Balm.hooks().isFakePlayer(player)) {
+                return EventHandling.RESUME;
             }
 
-            final var hasSilkTouch = event.getLevel().registryAccess().lookup(Registries.ENCHANTMENT)
+            final var hasSilkTouch = level.registryAccess().lookup(Registries.ENCHANTMENT)
                     .flatMap(it -> it.get(Enchantments.SILK_TOUCH))
-                    .map(it -> EnchantmentHelper.getEnchantmentLevel(it, event.getPlayer()) > 0)
+                    .map(it -> EnchantmentHelper.getEnchantmentLevel(it, player) > 0)
                     .orElse(false);
             if (hasSilkTouch) {
-                return;
+                return EventHandling.RESUME;
             }
 
-            final var level = event.getLevel();
-            final var player = event.getPlayer();
             if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer serverPlayer)) {
-                return;
+                return EventHandling.RESUME;
             }
 
-            var activeGoldRush = activeGoldRushes.get(level.dimension(), event.getPos());
+            var activeGoldRush = activeGoldRushes.get(serverLevel.dimension(), pos);
             if (activeGoldRush == null) {
-                activeGoldRush = rollForGoldRush(serverLevel, event.getPos(), event.getState(), serverPlayer).orElse(null);
+                activeGoldRush = rollForGoldRush(serverLevel, pos, state, serverPlayer).orElse(null);
             }
             if (activeGoldRush != null) {
                 if (activeGoldRush.getDropCooldownTicks() <= 0) {
-                    final var pos = activeGoldRush.getPos();
+                    final var goldRushPos = activeGoldRush.getPos();
                     final var lootParamsBuilder = (new LootParams.Builder(((ServerLevel) level)))
-                            .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                            .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(goldRushPos))
                             .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
-                            .withOptionalParameter(LootContextParams.BLOCK_ENTITY, level.getBlockEntity(pos));
+                            .withOptionalParameter(LootContextParams.BLOCK_ENTITY, level.getBlockEntity(goldRushPos));
                     final var lootTableId = activeGoldRush.getLootTable();
                     if (lootTableId.isPresent()) {
-                        final var lootParams = lootParamsBuilder.withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
+                        final var lootParams = lootParamsBuilder.withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(goldRushPos))
                                 .create(LootContextParamSets.BLOCK);
                         final var lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableId.get());
-                        lootTable.getRandomItems(lootParams).forEach((itemStack) -> Block.popResource(level, pos, itemStack));
+                        lootTable.getRandomItems(lootParams).forEach((itemStack) -> Block.popResource(serverLevel, goldRushPos, itemStack));
                     }
                     activeGoldRush.setDropCooldownTicks(activeGoldRush.getTicksPerDrop());
                 }
-                event.setCanceled(true);
+                return EventHandling.CANCEL;
             }
+            return EventHandling.RESUME;
         });
 
-        Balm.getEvents().onTickEvent(TickType.ServerLevel, TickPhase.Start, level -> {
+        ServerTickCallback.ServerLevelTick.BEFORE.register(level -> {
             for (final var goldRush : activeGoldRushes.row(level.dimension()).values()) {
                 goldRush.setTicksPassed(goldRush.getTicksPassed() + 1);
                 goldRush.setDropCooldownTicks(goldRush.getDropCooldownTicks() - 1);
@@ -96,7 +99,7 @@ public class GoldRushHandler {
                     if (level.getBlockState(goldRush.getPos()).equals(goldRush.getInitialState())) {
                         level.destroyBlock(goldRush.getPos(), true, goldRush.getPlayer());
                     }
-                    Balm.getNetworking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(goldRush.getPos(), false));
+                    Balm.networking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(goldRush.getPos(), false));
                 }
             }
             activeGoldRushes.values().removeIf(it -> it.getTicksPassed() >= it.getMaxTicks());
@@ -123,7 +126,7 @@ public class GoldRushHandler {
                 (int) Math.floor(20 * recipe.seconds()),
                 recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()),
                 player);
-        Balm.getNetworking().sendToTracking(level, pos, new ClientboundGoldRushPacket(pos, true));
+        Balm.networking().sendToTracking(level, pos, new ClientboundGoldRushPacket(pos, true));
         player.awardStat(ModStats.goldRushesTriggered);
         activeGoldRushes.put(level.dimension(), pos, activeGoldRush);
         return activeGoldRush;
@@ -132,7 +135,7 @@ public class GoldRushHandler {
     private static Optional<RecipeHolder<GoldRushRecipe>> rollRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, boolean force) {
         final var recipeManager = level.getServer().getRecipeManager();
         final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.goldRushRecipeType);
+        final var recipes = recipeMap.byType(ModRecipeTypes.goldRush.type());
         final var candidates = new ArrayList<RecipeHolder<GoldRushRecipe>>();
         final var baseChance = LittleJoysConfig.getActive().goldRush.baseChance;
         final var roll = random.nextFloat();
