@@ -3,7 +3,6 @@ package net.blay09.mods.littlejoys.handler;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import net.blay09.mods.balm.Balm;
-import net.blay09.mods.balm.platform.event.EventHandling;
 import net.blay09.mods.balm.platform.event.callback.BlockCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
@@ -44,13 +43,13 @@ public class DropRushHandler {
     private static final Table<ResourceKey<Level>, BlockPos, DropRushInstance> activeDropRushes = HashBasedTable.create();
 
     public static void initialize() {
-        BlockCallback.Break.EVENT.register((level, pos, state, blockEntity, player) -> {
+        BlockCallback.Break.Before.EVENT.register((level, pos, state, blockEntity, player) -> {
             if (player.getAbilities().instabuild) {
-                return EventHandling.RESUME;
+                return true;
             }
 
             if (Balm.hooks().isFakePlayer(player)) {
-                return EventHandling.RESUME;
+                return true;
             }
 
             final var hasSilkTouch = level.registryAccess().lookup(Registries.ENCHANTMENT)
@@ -58,15 +57,15 @@ public class DropRushHandler {
                     .map(it -> EnchantmentHelper.getEnchantmentLevel(it, player) > 0)
                     .orElse(false);
             if (hasSilkTouch) {
-                return EventHandling.RESUME;
+                return true;
             }
 
             if (!(level instanceof ServerLevel serverLevel) || !(player instanceof ServerPlayer serverPlayer)) {
-                return EventHandling.RESUME;
+                return true;
             }
 
             rollForDropRush(serverLevel, pos, state, serverPlayer);
-            return EventHandling.RESUME;
+            return true;
         });
 
         ServerTickCallback.ServerLevelTick.BEFORE.register(level -> {
