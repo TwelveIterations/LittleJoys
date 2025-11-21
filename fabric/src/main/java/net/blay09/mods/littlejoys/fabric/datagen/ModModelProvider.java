@@ -13,8 +13,8 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
-        blockStateModelGenerator.createNonTemplateModelBlock(ModBlocks.digSpot);
-        blockStateModelGenerator.createNonTemplateModelBlock(ModBlocks.fishingSpot);
+        blockStateModelGenerator.createNonTemplateModelBlock(ModBlocks.digSpot.asBlock());
+        blockStateModelGenerator.createNonTemplateModelBlock(ModBlocks.fishingSpot.asBlock());
     }
 
     @Override

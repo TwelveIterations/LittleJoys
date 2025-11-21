@@ -9,7 +9,7 @@ public class ModParticles {
     public static Holder<SimpleParticleType> fishingSpot;
 
     public static void initialize(BalmParticleTypeRegistrar particles) {
-        goldRush = particles.register("gold_rush", (id) -> particles.createSimple(true)).asHolder();
-        fishingSpot = particles.register("fishing_spot", (id) -> particles.createSimple(true)).asHolder();
+        goldRush = particles.register("gold_rush", true).asHolder();
+        fishingSpot = particles.register("fishing_spot", true).asHolder();
     }
 }

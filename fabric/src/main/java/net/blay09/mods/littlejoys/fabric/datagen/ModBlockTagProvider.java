@@ -17,7 +17,7 @@ public class ModBlockTagProvider extends IntrinsicHolderTagsProvider<Block> {
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        tag(ModBlockTags.DIG_SPOTS).add(ModBlocks.digSpot);
-        tag(ModBlockTags.FISHING_SPOTS).add(ModBlocks.fishingSpot);
+        tag(ModBlockTags.DIG_SPOTS).add(ModBlocks.digSpot.asBlock());
+        tag(ModBlockTags.FISHING_SPOTS).add(ModBlocks.fishingSpot.asBlock());
     }
 }

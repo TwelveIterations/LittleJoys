@@ -15,6 +15,6 @@ public class ModBlockLootTableProvider extends FabricBlockLootTableProvider {
 
     @Override
     public void generate() {
-        add(ModBlocks.digSpot, noDrop());
+        add(ModBlocks.digSpot.asBlock(), noDrop());
     }
 }
