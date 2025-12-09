@@ -63,7 +63,7 @@ public class LittleJoys {
         ModNetworking.initialize(Balm.networking());
         registrars.registrar(Registries.SOUND_EVENT, ModSounds::initialize);
         registrars.particleTypes(ModParticles::initialize);
-        registrars.registrar(Registries.POINT_OF_INTEREST_TYPE, ModPoiTypes::initialize);
+        registrars.poiTypes(ModPoiTypes::initialize);
         Balm.commands().register(LittleJoysCommand::register);
 
         DropRushHandler.initialize();

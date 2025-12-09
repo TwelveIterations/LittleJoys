@@ -1,6 +1,6 @@
 package net.blay09.mods.littlejoys.poi;
 
-import net.blay09.mods.balm.core.BalmRegistrar;
+import net.blay09.mods.balm.world.entity.ai.village.poi.BalmPoiTypeRegistrar;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -19,8 +19,8 @@ public class ModPoiTypes {
     public static Holder<PoiType> digSpot;
     public static Holder<PoiType> fishingSpot;
 
-    public static void initialize(BalmRegistrar.Scoped<PoiType> worldGen) {
-        digSpot = worldGen.register(DIG_SPOT.identifier().getPath(), (id) -> new PoiType(Set.of(ModBlocks.digSpot.defaultBlockState()), 1, 1));
-        fishingSpot = worldGen.register(FISHING_SPOT.identifier().getPath(), (id) -> new PoiType(Set.of(ModBlocks.fishingSpot.defaultBlockState()), 1, 1));
+    public static void initialize(BalmPoiTypeRegistrar worldGen) {
+        digSpot = worldGen.register(DIG_SPOT.identifier().getPath(), () -> new PoiType(Set.of(ModBlocks.digSpot.defaultBlockState()), 1, 1));
+        fishingSpot = worldGen.register(FISHING_SPOT.identifier().getPath(), () -> new PoiType(Set.of(ModBlocks.fishingSpot.defaultBlockState()), 1, 1));
     }
 }
