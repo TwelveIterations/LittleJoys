@@ -4,5 +4,9 @@
   "subtitle.littlejoys.drop_rush_start": "Ready, set ...",
   "subtitle.littlejoys.drop_rush_stop": "Finish!",
   "subtitle.littlejoys.drop_rush": "Collect Drops",
-  "subtitle.littlejoys.gold_rush": "Infinite Drops"
+  "subtitle.littlejoys.gold_rush": "Infinite Drops",
+  "stat.littlejoys.dig_spots": "Found Dig Spots",
+  "stat.littlejoys.drop_rushes": "Found Drop Rushes",
+  "stat.littlejoys.fishing_spots": "Found Fishing Spots",
+  "stat.littlejoys.gold_rushes": "Found Gold Rushes"
 }
