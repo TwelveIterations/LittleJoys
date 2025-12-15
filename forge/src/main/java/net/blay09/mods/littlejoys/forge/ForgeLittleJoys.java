@@ -1,6 +1,6 @@
 package net.blay09.mods.littlejoys.forge;
 
-import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.api.EmptyLoadContext;
 import net.blay09.mods.balm.client.BalmClient;
 import net.blay09.mods.balm.forge.platform.runtime.ForgeLoadContext;
