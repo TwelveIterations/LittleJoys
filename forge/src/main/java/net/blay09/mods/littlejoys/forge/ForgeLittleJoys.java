@@ -2,8 +2,8 @@ package net.blay09.mods.littlejoys.forge;
 
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.EmptyLoadContext;
-import net.blay09.mods.balm.api.client.BalmClient;
-import net.blay09.mods.balm.forge.ForgeLoadContext;
+import net.blay09.mods.balm.client.BalmClient;
+import net.blay09.mods.balm.forge.platform.runtime.ForgeLoadContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
