@@ -15,7 +15,6 @@
   "littlejoys.configuration.goldRush": "Gold Rush",
   "littlejoys.configuration.dropRush.baseChance": "Drop Rush Chance",
   "littlejoys.configuration.goldRush.baseChance": "Gold Rush Chance",
-  "littlejoys.configuration.": "Gold Rush Chance",
   "littlejoys.configuration.fishingSpots.minimumDistanceBetween" : "Minimum Distance Between",
   "littlejoys.configuration.fishingSpots.minimumDistanceBetween.tooltip" : "The minimum distance between fishing spots, preventing them from spawning too close together.",
   "littlejoys.configuration.fishingSpots.spawnDistance": "Spawn Distance",
