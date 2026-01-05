@@ -6,7 +6,7 @@ Minecraft Mod. Adds small rewarding events such as Dig Spots, Fishing Spots, Dro
 
 #### Downloads
 
-[![Versions](http://cf.way2muchnoise.eu/versions/1235950_latest.svg)](https://minecraft.curseforge.com/projects/little-joys) [![Downloads](http://cf.way2muchnoise.eu/full_1235950_downloads.svg)](https://minecraft.curseforge.com/projects/little-joys)
+[![Versions](http://cf.way2muchnoise.eu/versions/1235950_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/little-joys) [![Downloads](http://cf.way2muchnoise.eu/full_1235950_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/little-joys)
 
 ## Contributing
 
