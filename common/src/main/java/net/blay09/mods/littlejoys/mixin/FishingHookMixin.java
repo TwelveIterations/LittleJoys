@@ -36,15 +36,15 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
         super(entityType, level);
     }
 
-    @Inject(method = "catchingFish", at = @At("HEAD"))
+    @Inject(method = "catchingFish", at = @At("HEAD"), order = 900)
     private void catchingFish(BlockPos pos, CallbackInfo ci) {
         if (level() instanceof ServerLevel serverLevel
                 && littlejoys_fishingSpot == null
-                && timeUntilLured > 40) {
+                ) {
             FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
                 littlejoys_fishingSpot = fishingSpotPos;
                 int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
-                if (configuredTimeUntilLured >= 0) {
+                if (configuredTimeUntilLured < timeUntilLured ) {
                     timeUntilLured = Math.max(1, configuredTimeUntilLured);
                 }
             });

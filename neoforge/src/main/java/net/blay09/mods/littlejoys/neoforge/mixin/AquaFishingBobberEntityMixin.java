@@ -22,17 +22,17 @@ public abstract class AquaFishingBobberEntityMixin extends FishingHook {
         super(entityType, level);
     }
 
-    @Inject(method = "catchingFish", at = @At("HEAD"))
+    @Inject(method = "catchingFish", at = @At("HEAD"), order = 900)
     private void catchingFish(BlockPos pos, CallbackInfo ci) {
         try {
             if (level() instanceof ServerLevel serverLevel) {
                 final var fishingHookAccessor = (FishingHookAccessor) this;
                 final var fishingSpotHolder = (FishingSpotHolder) this;
-                if (fishingSpotHolder.getFishingSpot().isEmpty() && fishingHookAccessor.getTimeUntilLured() > 40) {
+                if (fishingSpotHolder.getFishingSpot().isEmpty()) {
                     FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
                         fishingSpotHolder.setFishingSpot(fishingSpotPos);
                         int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
-                        if (configuredTimeUntilLured >= 0) {
+                        if (configuredTimeUntilLured < fishingHookAccessor.getTimeUntilLured()) {
                             fishingHookAccessor.setTimeUntilLured(Math.max(1, configuredTimeUntilLured));
                         }
                     });
