@@ -4,6 +4,7 @@ import net.blay09.mods.littlejoys.handler.FishingSpotHandler;
 import net.blay09.mods.littlejoys.handler.FishingSpotHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -36,6 +37,7 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
         super(entityType, level);
     }
 
+    // Set order = 900 so catchingFish is still being called and not canceled by other mods
     @Inject(method = "catchingFish", at = @At("HEAD"), order = 900)
     private void catchingFish(BlockPos pos, CallbackInfo ci) {
         if (level() instanceof ServerLevel serverLevel
@@ -45,7 +47,7 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
                 littlejoys_fishingSpot = fishingSpotPos;
                 int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
                 if (configuredTimeUntilLured < timeUntilLured ) {
-                    timeUntilLured = Math.max(1, configuredTimeUntilLured);
+                    timeUntilLured = Mth.clamp(timeUntilLured,1 ,configuredTimeUntilLured);
                 }
             });
         }
