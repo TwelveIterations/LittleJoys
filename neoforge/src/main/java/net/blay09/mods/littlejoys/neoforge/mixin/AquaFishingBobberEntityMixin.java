@@ -5,6 +5,7 @@ import net.blay09.mods.littlejoys.handler.FishingSpotHandler;
 import net.blay09.mods.littlejoys.handler.FishingSpotHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +22,7 @@ public abstract class AquaFishingBobberEntityMixin extends FishingHook {
     public AquaFishingBobberEntityMixin(EntityType<? extends FishingHook> entityType, Level level) {
         super(entityType, level);
     }
-
+    // Set order = 900 so catchingFish is still being called and not canceled by other mods
     @Inject(method = "catchingFish", at = @At("HEAD"), order = 900)
     private void catchingFish(BlockPos pos, CallbackInfo ci) {
         try {
@@ -32,8 +33,8 @@ public abstract class AquaFishingBobberEntityMixin extends FishingHook {
                     FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
                         fishingSpotHolder.setFishingSpot(fishingSpotPos);
                         int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
-                        if (configuredTimeUntilLured < fishingHookAccessor.getTimeUntilLured()) {
-                            fishingHookAccessor.setTimeUntilLured(Math.max(1, configuredTimeUntilLured));
+                        if (configuredTimeUntilLured >= 0 && configuredTimeUntilLured < fishingHookAccessor.getTimeUntilLured()) {
+                            fishingHookAccessor.setTimeUntilLured(Mth.clamp(fishingHookAccessor.getTimeUntilLured(), 1, configuredTimeUntilLured));
                         }
                     });
                 }
