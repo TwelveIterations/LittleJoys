@@ -19,15 +19,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -39,9 +36,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class GoldRushHandler {
+    private static final int TRACKED_PLACEMENT_TTL = 20 * 60 * 30;
+    private static final int CLEANUP_INTERVAL_TICKS = 20 * 10;
+
     private static final RandomSource random = RandomSource.create();
 
     private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = HashBasedTable.create();
+    private static final Table<ResourceKey<Level>, BlockPos, Long> trackedPlacements = HashBasedTable.create();
 
     public static void initialize() {
         BlockCallback.Break.Before.EVENT.register((level, pos, state, blockEntity, player) -> {
@@ -65,8 +66,9 @@ public class GoldRushHandler {
                 return true;
             }
 
+            final var hadTrackedPlacement = consumeTrackedPlacement(serverLevel, pos.immutable(), serverLevel.getGameTime());
             var activeGoldRush = activeGoldRushes.get(serverLevel.dimension(), pos);
-            if (activeGoldRush == null) {
+            if (activeGoldRush == null && !hadTrackedPlacement) {
                 activeGoldRush = rollForGoldRush(serverLevel, pos, state, serverPlayer).orElse(null);
             }
             if (activeGoldRush != null) {
@@ -101,8 +103,21 @@ public class GoldRushHandler {
                     Balm.networking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(goldRush.getPos(), false));
                 }
             }
+            if (level.getGameTime() % CLEANUP_INTERVAL_TICKS == 0) {
+                cleanupTrackedPlacements(level, level.getGameTime());
+            }
             activeGoldRushes.values().removeIf(it -> it.getTicksPassed() >= it.getMaxTicks());
         });
+    }
+
+    public static void trackPlacement(ServerLevel level, BlockPos pos, BlockState state, @Nullable ServerPlayer player) {
+        final var immutablePos = pos.immutable();
+        if (player == null || !canTriggerGoldRush(level, immutablePos, state, player)) {
+            trackedPlacements.remove(level.dimension(), immutablePos);
+            return;
+        }
+
+        trackedPlacements.put(level.dimension(), immutablePos, level.getGameTime() + TRACKED_PLACEMENT_TTL);
     }
 
     public static Optional<GoldRushInstance> rollForGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
@@ -149,5 +164,31 @@ public class GoldRushHandler {
     private static boolean isValidRecipeFor(RecipeHolder<GoldRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
         final var context = new EventContextImpl(level, pos, state, player);
         return recipe.value().eventCondition().test(context);
+    }
+
+    private static boolean canTriggerGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        final var recipeManager = level.getServer().getRecipeManager();
+        final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
+        final var recipes = recipeMap.byType(ModRecipeTypes.goldRush.type());
+        for (final var recipeHolder : recipes) {
+            if (isValidRecipeFor(recipeHolder, level, pos, state, player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean consumeTrackedPlacement(ServerLevel level, BlockPos pos, long gameTime) {
+        final var expiry = trackedPlacements.get(level.dimension(), pos);
+        if (expiry == null) {
+            return false;
+        }
+
+        trackedPlacements.remove(level.dimension(), pos);
+        return expiry > gameTime;
+    }
+
+    private static void cleanupTrackedPlacements(ServerLevel level, long gameTime) {
+        trackedPlacements.row(level.dimension()).entrySet().removeIf(entry -> entry.getValue() <= gameTime);
     }
 }
