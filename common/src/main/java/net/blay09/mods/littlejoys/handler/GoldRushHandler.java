@@ -32,14 +32,19 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 public class GoldRushHandler {
+    private static final int TRACKED_PLACEMENT_TTL = 20 * 60 * 30;
+    private static final int CLEANUP_INTERVAL_TICKS = 20 * 10;
+
     private static final RandomSource random = RandomSource.create();
 
     private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = HashBasedTable.create();
+    private static final Table<ResourceKey<Level>, BlockPos, Long> trackedPlacements = HashBasedTable.create();
 
     public static void initialize() {
         Balm.getEvents().onEvent(BreakBlockEvent.class, event -> {
@@ -65,8 +70,9 @@ public class GoldRushHandler {
                 return;
             }
 
+            final var hadTrackedPlacement = consumeTrackedPlacement(serverLevel, event.getPos().immutable(), serverLevel.getGameTime());
             var activeGoldRush = activeGoldRushes.get(level.dimension(), event.getPos());
-            if (activeGoldRush == null) {
+            if (activeGoldRush == null && !hadTrackedPlacement) {
                 activeGoldRush = rollForGoldRush(serverLevel, event.getPos(), event.getState(), serverPlayer).orElse(null);
             }
             if (activeGoldRush != null) {
@@ -100,8 +106,21 @@ public class GoldRushHandler {
                     Balm.getNetworking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(goldRush.getPos(), false));
                 }
             }
+            if (level.getGameTime() % CLEANUP_INTERVAL_TICKS == 0) {
+                cleanupTrackedPlacements((ServerLevel) level, level.getGameTime());
+            }
             activeGoldRushes.values().removeIf(it -> it.getTicksPassed() >= it.getMaxTicks());
         });
+    }
+
+    public static void trackPlacement(ServerLevel level, BlockPos pos, BlockState state, @Nullable ServerPlayer player) {
+        final var immutablePos = pos.immutable();
+        if (player == null || !canTriggerGoldRush(level, immutablePos, state, player)) {
+            trackedPlacements.remove(level.dimension(), immutablePos);
+            return;
+        }
+
+        trackedPlacements.put(level.dimension(), immutablePos, level.getGameTime() + TRACKED_PLACEMENT_TTL);
     }
 
     public static Optional<GoldRushInstance> rollForGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
@@ -147,5 +166,30 @@ public class GoldRushHandler {
     private static boolean isValidRecipeFor(RecipeHolder<GoldRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
         final var context = new EventContextImpl(level, pos, state, player);
         return recipe.value().eventCondition().test(context);
+    }
+
+    private static boolean canTriggerGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+        final var recipeManager = level.getServer().getRecipeManager();
+        final var recipes = recipeManager.getAllRecipesFor(ModRecipeTypes.goldRushRecipeType);
+        for (final var recipeHolder : recipes) {
+            if (isValidRecipeFor(recipeHolder, level, pos, state, player)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean consumeTrackedPlacement(ServerLevel level, BlockPos pos, long gameTime) {
+        final var expiry = trackedPlacements.get(level.dimension(), pos);
+        if (expiry == null) {
+            return false;
+        }
+
+        trackedPlacements.remove(level.dimension(), pos);
+        return expiry > gameTime;
+    }
+
+    private static void cleanupTrackedPlacements(ServerLevel level, long gameTime) {
+        trackedPlacements.row(level.dimension()).entrySet().removeIf(entry -> entry.getValue() <= gameTime);
     }
 }
