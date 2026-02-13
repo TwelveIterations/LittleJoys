@@ -5,6 +5,7 @@ import net.blay09.mods.littlejoys.handler.FishingSpotHandler;
 import net.blay09.mods.littlejoys.handler.FishingSpotHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
@@ -21,19 +22,21 @@ public abstract class AquaFishingBobberEntityMixin extends FishingHook {
     public AquaFishingBobberEntityMixin(EntityType<? extends FishingHook> entityType, Level level) {
         super(entityType, level);
     }
-
-    @Inject(method = "catchingFish", at = @At("HEAD"))
+    // Set order = 900 so catchingFish is still being called and not canceled by other mods
+    @Inject(method = "catchingFish", at = @At("HEAD"), order = 900)
     private void catchingFish(BlockPos pos, CallbackInfo ci) {
         try {
             if (level() instanceof ServerLevel serverLevel) {
                 final var fishingHookAccessor = (FishingHookAccessor) this;
                 final var fishingSpotHolder = (FishingSpotHolder) this;
-                if (fishingSpotHolder.getFishingSpot().isEmpty() && fishingHookAccessor.getTimeUntilLured() > 40) {
+                if (fishingSpotHolder.getFishingSpot().isEmpty()) {
                     FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
                         fishingSpotHolder.setFishingSpot(fishingSpotPos);
                         int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
-                        if (configuredTimeUntilLured >= 0) {
-                            fishingHookAccessor.setTimeUntilLured(Math.max(1, configuredTimeUntilLured));
+                        final var timeUntilLured = fishingHookAccessor.getTimeUntilLured();
+                        final var newTimeUntilLured = configuredTimeUntilLured >= 0 ? Mth.clamp(timeUntilLured, 1, configuredTimeUntilLured) : timeUntilLured;
+                        if (timeUntilLured != newTimeUntilLured) {
+                            fishingHookAccessor.setTimeUntilLured(newTimeUntilLured);
                         }
                     });
                 }
