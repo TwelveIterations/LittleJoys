@@ -14,5 +14,7 @@ public class NeoForgeLittleJoys {
         Balm.initializeMod(LittleJoys.MOD_ID, context, LittleJoys::initialize);
 
         Balm.initializeIfLoaded("fishingoverhaul", "net.blay09.mods.littlejoys.neoforge.compat.FishingOverhaulSupport");
+        Balm.initializeIfLoaded("stardew_fishing", "net.blay09.mods.littlejoys.neoforge.compat.StardewFishingSupport");
+
     }
 }
