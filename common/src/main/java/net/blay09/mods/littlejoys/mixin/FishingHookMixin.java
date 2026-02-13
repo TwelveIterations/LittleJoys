@@ -46,7 +46,7 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
             FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
                 littlejoys_fishingSpot = fishingSpotPos;
                 int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
-                if (configuredTimeUntilLured >= 0 && configuredTimeUntilLured < timeUntilLured) {
+                if (configuredTimeUntilLured >= 0) {
                     timeUntilLured = Mth.clamp(timeUntilLured, 1, configuredTimeUntilLured);
                 }
             });
