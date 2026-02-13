@@ -33,8 +33,10 @@ public abstract class AquaFishingBobberEntityMixin extends FishingHook {
                     FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
                         fishingSpotHolder.setFishingSpot(fishingSpotPos);
                         int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
-                        if (configuredTimeUntilLured >= 0 && configuredTimeUntilLured < fishingHookAccessor.getTimeUntilLured()) {
-                            fishingHookAccessor.setTimeUntilLured(Mth.clamp(fishingHookAccessor.getTimeUntilLured(), 1, configuredTimeUntilLured));
+                        final var timeUntilLured = fishingHookAccessor.getTimeUntilLured();
+                        final var newTimeUntilLured = configuredTimeUntilLured >= 0 ? Mth.clamp(timeUntilLured, 1, configuredTimeUntilLured) : timeUntilLured;
+                        if (timeUntilLured != newTimeUntilLured) {
+                            fishingHookAccessor.setTimeUntilLured(newTimeUntilLured);
                         }
                     });
                 }
