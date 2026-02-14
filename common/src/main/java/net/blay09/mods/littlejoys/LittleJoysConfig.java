@@ -21,6 +21,7 @@ public class LittleJoysConfig implements BalmConfigData {
     public GoldRush goldRush = new GoldRush();
     public FishingSpots fishingSpots = new FishingSpots();
     public DigSpots digSpots = new DigSpots();
+    public StardewFishing stardewFishing = new StardewFishing();
 
     public static class FishingSpots {
         @Comment("The minimum distance between fishing spots, preventing them from spawning too close together.")
@@ -66,6 +67,17 @@ public class LittleJoysConfig implements BalmConfigData {
 
         @Comment("The offset applied to the spawn area in the direction the player is facing. Set to 0 to center it around the player.")
         public int projectForwardDistance = 25;
+    }
+
+    public static class StardewFishing {
+        @Comment("The treasure chest chance bonus applied when fishing at a fishing spot.")
+        public float fishingSpotTreasureChestChanceBonus = 0f;
+
+        @Comment("The golden chest chance bonus applied when fishing at a fishing spot.")
+        public float fishingSpotGoldenChestChanceBonus = 0f;
+
+        @Comment("If enabled, Little Joy's own fishing spot rewards will be skipped when Stardew Fishing minigames take over.")
+        public boolean skipFishingSpotRewards = false;
     }
 
     public static class DropRush {

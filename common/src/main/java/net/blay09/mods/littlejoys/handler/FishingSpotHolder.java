@@ -9,4 +9,6 @@ public interface FishingSpotHolder {
     Player littlejoys$getPlayerOwner();
     Optional<BlockPos> getFishingSpot();
     void setFishingSpot(BlockPos fishingSpot);
+    boolean littlejoys$shouldSkipRewards();
+    void littlejoys$setSkipRewards(boolean skipRewards);
 }
