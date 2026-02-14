@@ -29,12 +29,8 @@ public class StardewFishingSupport {
         final var fishingHook = event.getHook();
         if (fishingHook instanceof FishingSpotHolder fishingSpotHolder && fishingSpotHolder.getFishingSpot().isPresent()) {
             final var config = LittleJoysConfig.getActive().stardewFishing;
-            if (config.fishingSpotTreasureChestChanceBonus >= 0) {
-                event.setTreasureChanceBonus(config.fishingSpotTreasureChestChanceBonus);
-            }
-            if (config.fishingSpotGoldenChestChanceBonus >= 0) {
-                event.setGoldenChanceBonus(config.fishingSpotGoldenChestChanceBonus);
-            }
+            event.setTreasureChanceBonus(event.getTreasureChanceBonus() + config.fishingSpotTreasureChestChanceBonus);
+            event.setGoldenChanceBonus(event.getGoldenChanceBonus() + config.fishingSpotGoldenChestChanceBonus);
             if (config.skipFishingSpotRewards) {
                 fishingSpotHolder.littlejoys$setSkipRewards(true);
             }

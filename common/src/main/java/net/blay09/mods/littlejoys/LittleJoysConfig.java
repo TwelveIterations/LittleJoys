@@ -68,11 +68,11 @@ public class LittleJoysConfig {
     }
 
     public static class StardewFishing {
-        @Comment("The treasure chest chance bonus applied when fishing at a fishing spot. Set to -1 to disable.")
-        public float fishingSpotTreasureChestChanceBonus = -1f;
+        @Comment("The treasure chest chance bonus applied when fishing at a fishing spot.")
+        public float fishingSpotTreasureChestChanceBonus = 0f;
 
-        @Comment("The golden chest chance bonus applied when fishing at a fishing spot. Set to -1 to disable.")
-        public float fishingSpotGoldenChestChanceBonus = -1f;
+        @Comment("The golden chest chance bonus applied when fishing at a fishing spot.")
+        public float fishingSpotGoldenChestChanceBonus = 0f;
 
         @Comment("If enabled, Little Joy's own fishing spot rewards will be skipped when Stardew Fishing minigames take over.")
         public boolean skipFishingSpotRewards = false;
