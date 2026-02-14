@@ -42,5 +42,12 @@
   "littlejoys.configuration.digSpots.totalLimitPerChunk" : "Limit per Chunk",
   "littlejoys.configuration.digSpots.totalLimitPerChunk.tooltip" : "The limit of dig spots that can spawn in a given chunk overall. Once this many dig spots have spawned, the chunk will never spawn any again. Set to -1 to disable.",
   "littlejoys.configuration.digSpots.projectForwardDistance" : "Forward Distance",
-  "littlejoys.configuration.digSpots.projectForwardDistance.tooltip" : "The offset applied to the spawn area in the direction the player is facing. Set to 0 to center it around the player."
+  "littlejoys.configuration.digSpots.projectForwardDistance.tooltip" : "The offset applied to the spawn area in the direction the player is facing. Set to 0 to center it around the player.",
+  "littlejoys.configuration.stardewFishing": "Stardew Fishing",
+  "littlejoys.configuration.stardewFishing.fishingSpotTreasureChestChanceBonus": "Fishing Spot Treasure Chest Chance Bonus",
+  "littlejoys.configuration.stardewFishing.fishingSpotTreasureChestChanceBonus.tooltip": "The treasure chest chance bonus applied when fishing at a fishing spot. Set to -1 to disable.",
+  "littlejoys.configuration.stardewFishing.fishingSpotGoldenChestChanceBonus": "Fishing Spot Golden Chest Chance Bonus",
+  "littlejoys.configuration.stardewFishing.fishingSpotGoldenChestChanceBonus.tooltip": "The golden chest chance bonus applied when fishing at a fishing spot. Set to -1 to disable.",
+  "littlejoys.configuration.stardewFishing.skipFishingSpotRewards": "Skip Fishing Spot Rewards",
+  "littlejoys.configuration.stardewFishing.skipFishingSpotRewards.tooltip": "If enabled, Little Joy's own fishing spot rewards will be skipped when Stardew Fishing minigames take over."
 }

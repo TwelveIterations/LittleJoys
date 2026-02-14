@@ -14,6 +14,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,8 +31,12 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
     @Shadow
     private int timeUntilLured;
 
+    @Unique
     @Nullable
-    private BlockPos littlejoys_fishingSpot;
+    private BlockPos littlejoys$fishingSpot;
+
+    @Unique
+    private boolean littlejoys$skipRewards;
 
     public FishingHookMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -41,10 +46,10 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
     @Inject(method = "catchingFish", at = @At("HEAD"), order = 900)
     private void catchingFish(BlockPos pos, CallbackInfo ci) {
         if (level() instanceof ServerLevel serverLevel
-                && littlejoys_fishingSpot == null
+                && littlejoys$fishingSpot == null
                 ) {
             FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
-                littlejoys_fishingSpot = fishingSpotPos;
+                littlejoys$fishingSpot = fishingSpotPos;
                 int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
                 if (configuredTimeUntilLured >= 0) {
                     timeUntilLured = Mth.clamp(timeUntilLured, 1, configuredTimeUntilLured);
@@ -56,24 +61,34 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
     @Inject(method = "retrieve", at = @At("RETURN"))
     private void retrieve(ItemStack itemStack, CallbackInfoReturnable<Integer> ci) {
         if (level() instanceof ServerLevel serverLevel) {
-            if (littlejoys_fishingSpot != null && nibble > 0) {
-                FishingSpotHandler.consumeFishingSpot(((FishingHook) (Object) this).getPlayerOwner(), serverLevel, littlejoys_fishingSpot);
+            if (littlejoys$fishingSpot != null && nibble > 0) {
+                FishingSpotHandler.consumeFishingSpot(((FishingHook) (Object) this).getPlayerOwner(), serverLevel, littlejoys$fishingSpot);
             }
         }
     }
 
     @Override
     public Optional<BlockPos> getFishingSpot() {
-        return Optional.ofNullable(littlejoys_fishingSpot);
+        return Optional.ofNullable(littlejoys$fishingSpot);
     }
 
     @Override
     public void setFishingSpot(BlockPos fishingSpot) {
-        littlejoys_fishingSpot = fishingSpot;
+        littlejoys$fishingSpot = fishingSpot;
     }
 
     @Override
     public Player littlejoys$getPlayerOwner() {
         return ((FishingHook) (Object) this).getPlayerOwner();
+    }
+
+    @Override
+    public boolean littlejoys$shouldSkipRewards() {
+        return littlejoys$skipRewards;
+    }
+
+    @Override
+    public void littlejoys$setSkipRewards(boolean skipRewards) {
+        littlejoys$skipRewards = skipRewards;
     }
 }
