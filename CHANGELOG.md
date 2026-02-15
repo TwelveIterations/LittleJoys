@@ -1,2 +1,3 @@
-- Added `/littlejoys` command to spawn Dig Spot, Fishing Spot, or trigger a Drop Rush or Gold Rush at a position
-- Fixed player not being passed when breaking block after a gold rush to ensure appropriate events are fired
+- Re-added Stardew Fishing compatibility
+- Added config options for Stardew Fishing compatibility: fishingSpotTreasureChestChance, fishingSpotGoldenChestChance and skipFishingSpotRewards
+- Fixed gold rush being triggerable from silk-touched placed ores
