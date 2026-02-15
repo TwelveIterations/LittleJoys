@@ -1,1 +1,3 @@
-- Fixed translations in config screen and stats
+- Re-added Stardew Fishing compatibility
+- Added config options for Stardew Fishing compatibility: fishingSpotTreasureChestChance, fishingSpotGoldenChestChance and skipFishingSpotRewards
+- Fixed gold rush being triggerable from silk-touched placed ores
