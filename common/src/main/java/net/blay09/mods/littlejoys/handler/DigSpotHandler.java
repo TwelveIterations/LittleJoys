@@ -107,7 +107,7 @@ public class DigSpotHandler {
         for (int i = 0; i < 5; i++) {
             final var offsetX = random.nextInt(spawnRange + spawnRange) - spawnRange;
             final var offsetZ = random.nextInt(spawnRange + spawnRange) - spawnRange;
-            final var randomOffsetPos = new BlockPos(origin.getX() + offsetX, origin.getX(), origin.getZ() + offsetZ);
+            final var randomOffsetPos = new BlockPos(origin.getX() + offsetX, origin.getY(), origin.getZ() + offsetZ);
             final var surfacePos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE, randomOffsetPos).below();
             final var surfaceDist = Math.abs(surfacePos.getY() - origin.getY());
             if (bestPos == null || surfaceDist < bestDist) {
