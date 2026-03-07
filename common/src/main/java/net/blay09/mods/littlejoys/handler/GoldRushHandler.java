@@ -72,6 +72,12 @@ public class GoldRushHandler {
                 activeGoldRush = rollForGoldRush(serverLevel, pos, state, serverPlayer).orElse(null);
             }
             if (activeGoldRush != null) {
+                if (!state.equals(activeGoldRush.getInitialState())) {
+                    activeGoldRushes.remove(serverLevel.dimension(), pos);
+                    Balm.networking().sendToAll(serverLevel.getServer(), new ClientboundGoldRushPacket(pos, false));
+                    return true;
+                }
+
                 if (activeGoldRush.getDropCooldownTicks() <= 0) {
                     final var goldRushPos = activeGoldRush.getPos();
                     final var lootParamsBuilder = (new LootParams.Builder(((ServerLevel) level)))
