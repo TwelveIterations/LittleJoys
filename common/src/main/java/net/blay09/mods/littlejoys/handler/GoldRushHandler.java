@@ -70,10 +70,10 @@ public class GoldRushHandler {
                 activeGoldRush = rollForGoldRush(serverLevel, event.getPos(), event.getState(), serverPlayer).orElse(null);
             }
             if (activeGoldRush != null) {
-                if (!state.equals(activeGoldRush.getInitialState())) {
-                    activeGoldRushes.remove(serverLevel.dimension(), pos);
-                    Balm.networking().sendToAll(serverLevel.getServer(), new ClientboundGoldRushPacket(pos, false));
-                    return true;
+                if (!event.getState().equals(activeGoldRush.getInitialState())) {
+                    activeGoldRushes.remove(serverLevel.dimension(), event.getPos());
+                    Balm.getNetworking().sendToAll(serverLevel.getServer(), new ClientboundGoldRushPacket(event.getPos(), false));
+                    return;
                 }
 
                 if (activeGoldRush.getDropCooldownTicks() <= 0) {
