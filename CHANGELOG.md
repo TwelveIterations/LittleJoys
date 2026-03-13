@@ -1,3 +1,2 @@
-- Re-added Stardew Fishing compatibility
-- Added config options for Stardew Fishing compatibility: fishingSpotTreasureChestChance, fishingSpotGoldenChestChance and skipFishingSpotRewards
-- Fixed gold rush being triggerable from silk-touched placed ores
+- Fixed gold rush particles not stopping when the block is destroyed early
+- Reverted an unnecessary fix from the last update because it did not make sense
