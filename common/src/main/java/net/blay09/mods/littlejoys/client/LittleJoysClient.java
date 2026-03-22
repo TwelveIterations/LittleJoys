@@ -7,7 +7,6 @@ import net.blay09.mods.littlejoys.client.handler.GoldRushClientHandler;
 public class LittleJoysClient {
     public static void initialize(BalmClientRegistrars registrars) {
         registrars.entityRenderers(ModRenderers::initialize);
-        registrars.blockRenderTypes(ModRenderers::initialize);
         registrars.particleProviders(ModRenderers::initialize);
 
         DropRushClientHandler.initialize();

@@ -16,7 +16,8 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable> lootTable, int weight) implements Recipe<RecipeInput> {
+public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable> lootTable,
+                                int weight) implements Recipe<RecipeInput> {
 
     @Override
     public RecipeType<FishingSpotRecipe> getType() {
@@ -39,7 +40,7 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
     }
 
     @Override
-    public ItemStack assemble(RecipeInput recipeInput, HolderLookup.Provider provider) {
+    public ItemStack assemble(RecipeInput recipeInput) {
         return ItemStack.EMPTY;
     }
 
@@ -47,43 +48,45 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
     public RecipeSerializer<FishingSpotRecipe> getSerializer() {
         return ModRecipeTypes.fishingSpot.serializer();
     }
-    
+
     @Override
     public boolean isSpecial() {
         return true;
     }
 
-    public static class Serializer implements RecipeSerializer<FishingSpotRecipe> {
-        private static final MapCodec<FishingSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                EventConditionRegistry.CODEC.fieldOf("eventCondition").forGetter(FishingSpotRecipe::eventCondition),
-                ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(FishingSpotRecipe::lootTable),
-                Codec.INT.fieldOf("weight").orElse(1).forGetter(FishingSpotRecipe::weight)
-        ).apply(instance, FishingSpotRecipe::new));
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
 
-        private static final StreamCodec<RegistryFriendlyByteBuf, FishingSpotRecipe> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork,
-                Serializer::fromNetwork);
+    @Override
+    public String group() {
+        return "";
+    }
 
-        private static FishingSpotRecipe fromNetwork(FriendlyByteBuf buf) {
-            final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
-            final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
-            final var weight = buf.readVarInt();
-            return new FishingSpotRecipe(eventCondition, lootTable, weight);
-        }
+    private static final MapCodec<FishingSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            EventConditionRegistry.CODEC.fieldOf("eventCondition").forGetter(FishingSpotRecipe::eventCondition),
+            ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(FishingSpotRecipe::lootTable),
+            Codec.INT.fieldOf("weight").orElse(1).forGetter(FishingSpotRecipe::weight)
+    ).apply(instance, FishingSpotRecipe::new));
 
-        private static void toNetwork(FriendlyByteBuf buf, FishingSpotRecipe recipe) {
-            EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
-            buf.writeResourceKey(recipe.lootTable);
-            buf.writeVarInt(recipe.weight);
-        }
+    private static final StreamCodec<RegistryFriendlyByteBuf, FishingSpotRecipe> STREAM_CODEC = StreamCodec.of(FishingSpotRecipe::toNetwork,
+            FishingSpotRecipe::fromNetwork);
 
-        @Override
-        public MapCodec<FishingSpotRecipe> codec() {
-            return CODEC;
-        }
+    private static FishingSpotRecipe fromNetwork(FriendlyByteBuf buf) {
+        final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
+        final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
+        final var weight = buf.readVarInt();
+        return new FishingSpotRecipe(eventCondition, lootTable, weight);
+    }
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, FishingSpotRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
+    private static void toNetwork(FriendlyByteBuf buf, FishingSpotRecipe recipe) {
+        EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
+        buf.writeResourceKey(recipe.lootTable);
+        buf.writeVarInt(recipe.weight);
+    }
+
+    public static RecipeSerializer<FishingSpotRecipe> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
     }
 }

@@ -13,22 +13,22 @@ public class ModRecipeTypes {
 
     public static void initialize(BalmRecipeTypeRegistrar recipes) {
         digSpot = recipes.register("dig_spot", DigSpotRecipe.class)
-                .withSerializer(DigSpotRecipe.Serializer::new)
+                .withSerializer(DigSpotRecipe::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
 
         fishingSpot = recipes.register("fishing_spot", FishingSpotRecipe.class)
-                .withSerializer(FishingSpotRecipe.Serializer::new)
+                .withSerializer(FishingSpotRecipe::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
 
         goldRush = recipes.register("gold_rush", GoldRushRecipe.class)
-                .withSerializer(GoldRushRecipe.Serializer::new)
+                .withSerializer(GoldRushRecipe::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
 
         dropRush = recipes.register("drop_rush", DropRushRecipe.class)
-                .withSerializer(DropRushRecipe.Serializer::new)
+                .withSerializer(DropRushRecipe::serializer)
                 .withRecipeBookCategory()
                 .asDeferredRecipeType();
     }

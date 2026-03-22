@@ -16,7 +16,8 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable> lootTable, int weight) implements Recipe<RecipeInput> {
+public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable> lootTable,
+                            int weight) implements Recipe<RecipeInput> {
 
     @Override
     public RecipeType<DigSpotRecipe> getType() {
@@ -39,7 +40,7 @@ public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable
     }
 
     @Override
-    public ItemStack assemble(RecipeInput recipeInput, HolderLookup.Provider provider) {
+    public ItemStack assemble(RecipeInput recipeInput) {
         return ItemStack.EMPTY;
     }
 
@@ -53,38 +54,39 @@ public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable
         return true;
     }
 
-    public static class Serializer implements RecipeSerializer<DigSpotRecipe> {
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
 
-        private static final MapCodec<DigSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                EventConditionRegistry.CODEC.fieldOf("eventCondition").forGetter(DigSpotRecipe::eventCondition),
-                ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(DigSpotRecipe::lootTable),
-                Codec.INT.fieldOf("weight").orElse(1).forGetter(DigSpotRecipe::weight)
-        ).apply(instance, DigSpotRecipe::new));
+    @Override
+    public String group() {
+        return "";
+    }
 
-        private static final StreamCodec<RegistryFriendlyByteBuf, DigSpotRecipe> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork,
-                Serializer::fromNetwork);
+    private static final MapCodec<DigSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            EventConditionRegistry.CODEC.fieldOf("eventCondition").forGetter(DigSpotRecipe::eventCondition),
+            ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(DigSpotRecipe::lootTable),
+            Codec.INT.fieldOf("weight").orElse(1).forGetter(DigSpotRecipe::weight)
+    ).apply(instance, DigSpotRecipe::new));
 
-        private static DigSpotRecipe fromNetwork(FriendlyByteBuf buf) {
-            final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
-            final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
-            final var weight = buf.readInt();
-            return new DigSpotRecipe(eventCondition, lootTable, weight);
-        }
+    private static final StreamCodec<RegistryFriendlyByteBuf, DigSpotRecipe> STREAM_CODEC = StreamCodec.of(DigSpotRecipe::toNetwork,
+            DigSpotRecipe::fromNetwork);
 
-        private static void toNetwork(FriendlyByteBuf buf, DigSpotRecipe recipe) {
-            EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
-            buf.writeResourceKey(recipe.lootTable);
-            buf.writeInt(recipe.weight);
-        }
+    private static DigSpotRecipe fromNetwork(FriendlyByteBuf buf) {
+        final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
+        final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
+        final var weight = buf.readInt();
+        return new DigSpotRecipe(eventCondition, lootTable, weight);
+    }
 
-        @Override
-        public MapCodec<DigSpotRecipe> codec() {
-            return CODEC;
-        }
+    private static void toNetwork(FriendlyByteBuf buf, DigSpotRecipe recipe) {
+        EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
+        buf.writeResourceKey(recipe.lootTable);
+        buf.writeInt(recipe.weight);
+    }
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, DigSpotRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
+    public static RecipeSerializer<DigSpotRecipe> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
     }
 }
