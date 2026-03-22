@@ -1,7 +1,7 @@
 package net.blay09.mods.littlejoys.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.SimpleFabricLootTableSubProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -20,9 +20,9 @@ import java.util.function.BiConsumer;
 
 import static net.blay09.mods.littlejoys.LittleJoys.id;
 
-public class ModGenericLootTableProvider extends SimpleFabricLootTableProvider {
+public class ModGenericLootTableProvider extends SimpleFabricLootTableSubProvider {
 
-    public ModGenericLootTableProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+    public ModGenericLootTableProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(output, registryLookup, LootContextParamSets.ALL_PARAMS);
     }
 

@@ -2,8 +2,6 @@ package net.blay09.mods.littlejoys.fabric.datagen;
 
 import net.blay09.mods.littlejoys.poi.ModPoiTypes;
 import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
