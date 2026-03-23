@@ -21,12 +21,15 @@ public class ChunkLimitManager extends SavedData {
             ExtraCodecs.strictUnboundedMap(Codec.STRING.xmap(Long::parseLong, String::valueOf), Codec.INT).fieldOf("FishingSpotChunks").forGetter(ChunkLimitManager::getFishingSpotCounts),
             ExtraCodecs.strictUnboundedMap(Codec.STRING.xmap(Long::parseLong, String::valueOf), Codec.INT).fieldOf("DigSpotChunks").forGetter(ChunkLimitManager::getDigSpotCounts)
     ).apply(instance, ChunkLimitManager::new));
+
+    @SuppressWarnings("DataFlowIssue")
     private static final SavedDataType<ChunkLimitManager> TYPE = new SavedDataType<>(
             id("chunk_limits"),
             () -> new ChunkLimitManager(Map.of(), Map.of()),
             CODEC,
-            null // TODO this can't be null but mod loaders will save us soon I'm sure
+            null
     );
+
     private final Map<Long, Integer> fishingSpotCounts = new HashMap<>();
     private final Map<Long, Integer> digSpotCounts = new HashMap<>();
 
