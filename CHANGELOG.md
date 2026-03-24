@@ -1,2 +1,1 @@
-- Fixed gold rush particles not stopping when the block is destroyed early
-- Reverted an unnecessary fix from the last update because it did not make sense
+- Updated to Minecraft 26.1
