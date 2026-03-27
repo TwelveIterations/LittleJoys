@@ -13,8 +13,8 @@ import static net.blay09.mods.littlejoys.LittleJoys.id;
 
 public class ModPoiTypes {
 
-    public static ResourceKey<PoiType> DIG_SPOT = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, id("dig_spot"));
-    public static ResourceKey<PoiType> FISHING_SPOT = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, id("fishing_spot"));
+    public static final ResourceKey<PoiType> DIG_SPOT = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, id("dig_spot"));
+    public static final ResourceKey<PoiType> FISHING_SPOT = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, id("fishing_spot"));
 
     public static Holder<PoiType> digSpot;
     public static Holder<PoiType> fishingSpot;

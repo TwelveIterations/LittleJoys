@@ -44,7 +44,7 @@ public class FishingSpotHandler {
             if (cooldown > 0) {
                 littleJoysData.putInt(FISHING_SPOT_COOLDOWN, cooldown - 1);
             } else {
-                final var level = (ServerLevel) player.level();
+                final var level = player.level();
                 final var poiManager = level.getPoiManager();
                 final var centerPos = getOriginForNextSpawn(player);
                 final var checkRange = LittleJoysConfig.getActive().fishingSpots.minimumDistanceBetween;

@@ -68,12 +68,12 @@ public abstract class FishingHookMixin extends Entity implements FishingSpotHold
     }
 
     @Override
-    public Optional<BlockPos> getFishingSpot() {
+    public Optional<BlockPos> littlejoys$getFishingSpot() {
         return Optional.ofNullable(littlejoys$fishingSpot);
     }
 
     @Override
-    public void setFishingSpot(BlockPos fishingSpot) {
+    public void littlejoys$setFishingSpot(BlockPos fishingSpot) {
         littlejoys$fishingSpot = fishingSpot;
     }
 

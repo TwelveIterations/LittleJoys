@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "${mod_id}",
+  "id": "littlejoys",
   "version": "${version}",
 
   "name": "${mod_name}",
@@ -15,23 +15,23 @@
   },
 
   "license": "${license}",
-  "icon": "${mod_id}.png",
+  "icon": "littlejoys.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "${group}.${mod_id}.fabric.Fabric${mod_main}"
+      "net.blay09.mods.littlejoys.fabric.FabricLittleJoys"
     ],
     "client": [
-      "${group}.${mod_id}.fabric.client.Fabric${mod_main}Client"
+      "net.blay09.mods.littlejoys.fabric.client.FabricLittleJoysClient"
     ],
     "fabric-datagen": [
-      "${group}.${mod_id}.fabric.datagen.ModDataGenerator"
+      "net.blay09.mods.littlejoys.fabric.datagen.ModDataGenerator"
     ]
   },
   "mixins": [
-    "${mod_id}.mixins.json",
-    "${mod_id}.fabric.mixins.json"
+    "littlejoys.mixins.json",
+    "littlejoys.fabric.mixins.json"
   ],
   "depends": {
     "java": ">=${java_version}",

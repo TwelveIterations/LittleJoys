@@ -4,6 +4,8 @@ import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.config.reflection.Comment;
 import net.blay09.mods.balm.platform.config.reflection.Config;
 
+import java.util.Objects;
+
 @Config(LittleJoys.MOD_ID)
 public class LittleJoysConfig {
 
@@ -12,7 +14,7 @@ public class LittleJoysConfig {
     }
 
     public static LittleJoysConfig getActive() {
-        return Balm.config().getActiveConfig(LittleJoysConfig.class);
+        return Objects.requireNonNull(Balm.config().getActiveConfig(LittleJoysConfig.class));
     }
 
     public DropRush dropRush = new DropRush();

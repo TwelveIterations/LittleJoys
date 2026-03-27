@@ -16,7 +16,7 @@ public class ClientPacketListenerMixin {
     @Shadow
     private ClientLevel level;
 
-    @Inject(method = "handleTakeItemEntity", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "handleTakeItemEntity", at = @At("HEAD"))
     public void handleTakeItemEntity(ClientboundTakeItemEntityPacket packet, CallbackInfo ci) {
         final var entity = level.getEntity(packet.getItemId());
         if (entity instanceof DropRushItemEntity itemEntity) {

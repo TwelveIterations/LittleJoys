@@ -2,7 +2,6 @@ package net.blay09.mods.littlejoys.handler;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.blay09.mods.littlejoys.LittleJoys;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ExtraCodecs;

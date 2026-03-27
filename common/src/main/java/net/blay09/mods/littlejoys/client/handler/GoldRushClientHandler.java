@@ -2,7 +2,6 @@ package net.blay09.mods.littlejoys.client.handler;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.client.platform.event.callback.ClientLifecycleCallback;
 import net.blay09.mods.balm.client.platform.event.callback.ClientTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
@@ -39,9 +38,10 @@ public class GoldRushClientHandler {
                 final var state = level.getBlockState(pos);
                 if (state.isViewBlocking(level, pos)) {
                     for (final var direction : Direction.values()) {
-                        final var offsetX = direction.getAxis() == Direction.Axis.X ? 0.5f + 0.6f * direction.getAxisDirection().getStep() : randomOffsetX;
-                        final var offsetY = direction.getAxis() == Direction.Axis.Y ? 0.5f + 0.6f * direction.getAxisDirection().getStep() : randomOffsetY;
-                        final var offsetZ = direction.getAxis() == Direction.Axis.Z ? 0.5f + 0.6f * direction.getAxisDirection().getStep() : randomOffsetZ;
+                        final var directionalOffset = 0.5f + 0.6f * direction.getAxisDirection().getStep();
+                        final var offsetX = direction.getAxis() == Direction.Axis.X ? directionalOffset : randomOffsetX;
+                        final var offsetY = direction.getAxis() == Direction.Axis.Y ? directionalOffset : randomOffsetY;
+                        final var offsetZ = direction.getAxis() == Direction.Axis.Z ? directionalOffset : randomOffsetZ;
                         final var offsetPos = pos.relative(direction);
                         if (!level.getBlockState(offsetPos).isViewBlocking(level, offsetPos)) {
                             level.addParticle(ModParticles.goldRush.value(), x + offsetX, y + offsetY, z + offsetZ, 0f, 0f, 0f);

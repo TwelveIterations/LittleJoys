@@ -3,31 +3,31 @@ loaderVersion="*"
 license="${license}"
 issueTrackerURL="${issues}"
 [[mods]]
-modId="${mod_id}"
+modId="littlejoys"
 version="${version}"
 displayName="${mod_name}"
 displayURL="${homepage}"
-logoFile="${mod_id}.png"
+logoFile="littlejoys.png"
 credits="${credits}"
 authors="${mod_author}"
 description='''${description}'''
 [[mixins]]
-config = "${mod_id}.mixins.json"
+config = "littlejoys.mixins.json"
 [[mixins]]
-config = "${mod_id}.forge.mixins.json"
-[[dependencies.${mod_id}]]
+config = "littlejoys.forge.mixins.json"
+[[dependencies.littlejoys]]
 modId="forge"
 mandatory=true
 versionRange="[${forge_version},)"
 ordering="NONE"
 side="BOTH"
-[[dependencies.${mod_id}]]
+[[dependencies.littlejoys]]
 modId="minecraft"
 mandatory=true
 versionRange="[${minecraft_version},)"
 ordering="NONE"
 side="BOTH"
-[[dependencies.${mod_id}]]
+[[dependencies.littlejoys]]
 modId="balm"
 mandatory=true
 versionRange="[${balm_version},)"

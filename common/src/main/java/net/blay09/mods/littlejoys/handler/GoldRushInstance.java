@@ -2,7 +2,6 @@ package net.blay09.mods.littlejoys.handler;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -13,10 +12,10 @@ import java.util.Optional;
 public final class GoldRushInstance {
     private final BlockPos pos;
     private final BlockState initialState;
-    private final ResourceKey<LootTable> lootTable;
+    private final @Nullable ResourceKey<LootTable> lootTable;
     private final int maxTicks;
     private final int ticksPerDrop;
-    private final Player player;
+    private final @Nullable Player player;
     private int ticksPassed;
     private int dropCooldownTicks;
 
@@ -49,8 +48,7 @@ public final class GoldRushInstance {
         return ticksPerDrop;
     }
 
-    @Nullable
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return player;
     }
 

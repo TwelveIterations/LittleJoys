@@ -16,7 +16,7 @@ public class FishingOverhaulSupport {
     public void onItemFished(ItemFishedEvent event) {
         final var fishingHook = event.getHookEntity();
         if (fishingHook.level() instanceof ServerLevel serverLevel && fishingHook instanceof FishingSpotHolder fishingSpotHolder) {
-            fishingSpotHolder.getFishingSpot().ifPresent(fishingSpot ->
+            fishingSpotHolder.littlejoys$getFishingSpot().ifPresent(fishingSpot ->
                     LittleJoysAPI.consumeFishingSpot(event.getEntity(), serverLevel, fishingSpot));
         }
     }

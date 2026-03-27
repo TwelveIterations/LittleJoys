@@ -1,6 +1,5 @@
 package net.blay09.mods.littlejoys.block.entity;
 
-import net.blay09.mods.balm.world.level.block.entity.OnLoadHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -9,25 +8,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
 
-public class DigSpotBlockEntity extends BlockEntity implements OnLoadHandler {
+public class DigSpotBlockEntity extends BlockEntity {
 
-    private ResourceKey<Recipe<?>> recipeId;
-    private BlockState stateBelow;
+    private @Nullable ResourceKey<Recipe<?>> recipeId;
 
     public DigSpotBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.digSpot.value(), pos, state);
-    }
-
-    @Override
-    public void onLoad() {
-        if (level != null) {
-            stateBelow = level.getBlockState(worldPosition.below());
-        }
-    }
-
-    public BlockState getStateBelow() {
-        return stateBelow;
     }
 
     @Override
@@ -40,7 +28,7 @@ public class DigSpotBlockEntity extends BlockEntity implements OnLoadHandler {
         recipeId = input.read("recipe", ResourceKey.codec(Registries.RECIPE)).orElse(null);
     }
 
-    public ResourceKey<Recipe<?>> getRecipeId() {
+    public @Nullable ResourceKey<Recipe<?>> getRecipeId() {
         return recipeId;
     }
 

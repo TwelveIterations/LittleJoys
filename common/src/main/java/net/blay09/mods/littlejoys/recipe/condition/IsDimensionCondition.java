@@ -6,7 +6,6 @@ import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.api.EventContext;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.block.state.BlockState;
 
 public record IsDimensionCondition(Identifier dimension) implements EventCondition {
 

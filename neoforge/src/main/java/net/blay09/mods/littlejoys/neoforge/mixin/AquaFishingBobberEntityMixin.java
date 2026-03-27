@@ -29,9 +29,9 @@ public abstract class AquaFishingBobberEntityMixin extends FishingHook {
             if (level() instanceof ServerLevel serverLevel) {
                 final var fishingHookAccessor = (FishingHookAccessor) this;
                 final var fishingSpotHolder = (FishingSpotHolder) this;
-                if (fishingSpotHolder.getFishingSpot().isEmpty()) {
+                if (fishingSpotHolder.littlejoys$getFishingSpot().isEmpty()) {
                     FishingSpotHandler.findFishingSpot(serverLevel, pos).ifPresent(fishingSpotPos -> {
-                        fishingSpotHolder.setFishingSpot(fishingSpotPos);
+                        fishingSpotHolder.littlejoys$setFishingSpot(fishingSpotPos);
                         int configuredTimeUntilLured = FishingSpotHandler.claimFishingSpot(serverLevel, fishingSpotPos);
                         final var timeUntilLured = fishingHookAccessor.getTimeUntilLured();
                         final var newTimeUntilLured = configuredTimeUntilLured >= 0 ? Mth.clamp(timeUntilLured, 1, configuredTimeUntilLured) : timeUntilLured;
@@ -52,7 +52,7 @@ public abstract class AquaFishingBobberEntityMixin extends FishingHook {
             if (level() instanceof ServerLevel serverLevel) {
                 final var fishingHookAccessor = (FishingHookAccessor) this;
                 final var fishingSpotHolder = (FishingSpotHolder) this;
-                final var fishingSpot = fishingSpotHolder.getFishingSpot();
+                final var fishingSpot = fishingSpotHolder.littlejoys$getFishingSpot();
                 if (fishingSpot.isPresent() && fishingHookAccessor.getNibble() > 0) {
                     FishingSpotHandler.consumeFishingSpot(getPlayerOwner(), serverLevel, fishingSpot.get());
                 }

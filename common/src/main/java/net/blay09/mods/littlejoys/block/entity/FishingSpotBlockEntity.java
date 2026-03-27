@@ -8,10 +8,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
 
 public class FishingSpotBlockEntity extends BlockEntity {
 
-    private ResourceKey<Recipe<?>> recipeId;
+    private @Nullable ResourceKey<Recipe<?>> recipeId;
 
     public FishingSpotBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.fishingSpot.value(), pos, state);
@@ -27,7 +28,7 @@ public class FishingSpotBlockEntity extends BlockEntity {
         recipeId = input.read("recipe", ResourceKey.codec(Registries.RECIPE)).orElse(null);
     }
 
-    public ResourceKey<Recipe<?>> getRecipeId() {
+    public @Nullable ResourceKey<Recipe<?>> getRecipeId() {
         return recipeId;
     }
 

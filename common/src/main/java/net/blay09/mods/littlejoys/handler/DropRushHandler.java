@@ -44,11 +44,11 @@ public class DropRushHandler {
 
     public static void initialize() {
         BlockCallback.Break.Before.EVENT.register((level, pos, state, blockEntity, player) -> {
-            if (player.getAbilities().instabuild) {
+            if (player != null && player.getAbilities().instabuild) {
                 return true;
             }
 
-            if (Balm.hooks().isFakePlayer(player)) {
+            if (player == null || Balm.hooks().isFakePlayer(player)) {
                 return true;
             }
 

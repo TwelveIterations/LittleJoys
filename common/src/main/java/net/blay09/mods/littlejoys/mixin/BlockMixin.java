@@ -1,7 +1,6 @@
 package net.blay09.mods.littlejoys.mixin;
 
 import net.blay09.mods.littlejoys.handler.DigSpotHandler;
-import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

@@ -19,7 +19,7 @@ public class StardewFishingSupport {
     public void onItemFished(ItemFishedEvent event) {
         final var fishingHook = event.getHookEntity();
         if (fishingHook.level() instanceof ServerLevel serverLevel && fishingHook instanceof FishingSpotHolder fishingSpotHolder) {
-            fishingSpotHolder.getFishingSpot().ifPresent(fishingSpot ->
+            fishingSpotHolder.littlejoys$getFishingSpot().ifPresent(fishingSpot ->
                     LittleJoysAPI.consumeFishingSpot(event.getEntity(), serverLevel, fishingSpot));
         }
     }
@@ -27,7 +27,7 @@ public class StardewFishingSupport {
     @SubscribeEvent
     public void onStardewMinigameStarted(StardewMinigameStartedEvent event) {
         final var fishingHook = event.getHook();
-        if (fishingHook instanceof FishingSpotHolder fishingSpotHolder && fishingSpotHolder.getFishingSpot().isPresent()) {
+        if (fishingHook instanceof FishingSpotHolder fishingSpotHolder && fishingSpotHolder.littlejoys$getFishingSpot().isPresent()) {
             final var config = LittleJoysConfig.getActive().stardewFishing;
             event.setTreasureChanceBonus(event.getTreasureChanceBonus() + config.fishingSpotTreasureChestChanceBonus);
             event.setGoldenChanceBonus(event.getGoldenChanceBonus() + config.fishingSpotGoldenChestChanceBonus);

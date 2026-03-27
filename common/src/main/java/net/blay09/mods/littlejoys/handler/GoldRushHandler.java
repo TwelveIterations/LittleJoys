@@ -19,21 +19,17 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -45,11 +41,11 @@ public class GoldRushHandler {
 
     public static void initialize() {
         BlockCallback.Break.Before.EVENT.register((level, pos, state, blockEntity, player) -> {
-            if (player.getAbilities().instabuild) {
+            if (player != null && player.getAbilities().instabuild) {
                 return true;
             }
 
-            if (Balm.hooks().isFakePlayer(player)) {
+            if (player == null || Balm.hooks().isFakePlayer(player)) {
                 return true;
             }
 
@@ -78,7 +74,7 @@ public class GoldRushHandler {
 
                 if (activeGoldRush.getDropCooldownTicks() <= 0) {
                     final var goldRushPos = activeGoldRush.getPos();
-                    final var lootParamsBuilder = (new LootParams.Builder(((ServerLevel) level)))
+                    final var lootParamsBuilder = (new LootParams.Builder(serverLevel))
                             .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(goldRushPos))
                             .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
                             .withOptionalParameter(LootContextParams.BLOCK_ENTITY, level.getBlockEntity(goldRushPos));

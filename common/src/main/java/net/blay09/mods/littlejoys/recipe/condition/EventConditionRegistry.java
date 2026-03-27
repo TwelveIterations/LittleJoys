@@ -8,6 +8,7 @@ import com.mojang.serialization.MapCodec;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,15 +44,18 @@ public class EventConditionRegistry {
         TYPES_BY_CLASS.put(identifier, clazz);
     }
 
+    @Nullable
     public static Identifier getIdentifier(Class<? extends EventCondition> conditionClass) {
         return TYPES_BY_CLASS.inverse().get(conditionClass);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends EventCondition> EventConditionType<T> getType(Identifier identifier) {
+    @Nullable
+    public static <T extends EventCondition> EventConditionType<T> getType(@Nullable Identifier identifier) {
         return (EventConditionType<T>) TYPES.get(identifier);
     }
 
+    @Nullable
     public static <T extends EventCondition> EventConditionType<T> getType(Class<T> clazz) {
         return getType(getIdentifier(clazz));
     }

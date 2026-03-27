@@ -109,7 +109,7 @@ public class DropRushItemEntity extends ItemEntity {
 
     @Override
     public int getTeamColor() {
-        return ChatFormatting.RED.getColor();
+        return Objects.requireNonNull(ChatFormatting.RED.getColor());
     }
 
     @Nullable
