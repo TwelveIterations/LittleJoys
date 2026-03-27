@@ -1,7 +1,5 @@
 package net.blay09.mods.littlejoys.api.client;
 
-import org.jetbrains.annotations.ApiStatus;
-
 public class LittleJoysClientAPI {
     private static InternalClientMethods internalMethods;
 
