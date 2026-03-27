@@ -19,7 +19,6 @@ public class LittleJoysAPI {
     /**
      * Internal use only.
      */
-    @ApiStatus.Internal
     public static void __setupAPI(InternalMethods internalMethods) {
         LittleJoysAPI.internalMethods = internalMethods;
     }

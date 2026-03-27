@@ -6,7 +6,6 @@ public class LittleJoysClientAPI {
     /**
      * Internal use only.
      */
-    @ApiStatus.Internal
     public static void __setupAPI(InternalClientMethods internalMethods) {
         LittleJoysClientAPI.internalMethods = internalMethods;
     }
