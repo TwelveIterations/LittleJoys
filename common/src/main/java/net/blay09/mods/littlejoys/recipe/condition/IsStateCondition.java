@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.api.EventContext;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.block.state.BlockState;
 
 public record IsStateCondition(BlockState state) implements EventCondition {
@@ -19,11 +19,11 @@ public record IsStateCondition(BlockState state) implements EventCondition {
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buf) {
+    public void toNetwork(RegistryFriendlyByteBuf buf) {
         buf.writeJsonWithCodec(BlockState.CODEC, state);
     }
 
-    public static IsStateCondition fromNetwork(FriendlyByteBuf buf) {
+    public static IsStateCondition fromNetwork(RegistryFriendlyByteBuf buf) {
         final var state = buf.readLenientJsonWithCodec(BlockState.CODEC);
         return new IsStateCondition(state);
     }

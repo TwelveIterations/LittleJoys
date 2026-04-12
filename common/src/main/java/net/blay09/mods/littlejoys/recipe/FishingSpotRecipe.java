@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.recipe.condition.EventConditionRegistry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
@@ -72,14 +71,14 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
     private static final StreamCodec<RegistryFriendlyByteBuf, FishingSpotRecipe> STREAM_CODEC = StreamCodec.of(FishingSpotRecipe::toNetwork,
             FishingSpotRecipe::fromNetwork);
 
-    private static FishingSpotRecipe fromNetwork(FriendlyByteBuf buf) {
+    private static FishingSpotRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
         final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
         final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
         final var weight = buf.readVarInt();
         return new FishingSpotRecipe(eventCondition, lootTable, weight);
     }
 
-    private static void toNetwork(FriendlyByteBuf buf, FishingSpotRecipe recipe) {
+    private static void toNetwork(RegistryFriendlyByteBuf buf, FishingSpotRecipe recipe) {
         EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
         buf.writeResourceKey(recipe.lootTable);
         buf.writeVarInt(recipe.weight);

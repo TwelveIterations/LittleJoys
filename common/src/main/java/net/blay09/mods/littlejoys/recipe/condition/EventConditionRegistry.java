@@ -7,6 +7,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
@@ -23,7 +24,7 @@ public class EventConditionRegistry {
     public static final Codec<List<EventCondition>> LIST_CODEC = CODEC.listOf();
 
     public record EventConditionType<T extends EventCondition>(Identifier identifier, MapCodec<T> mapCodec,
-                                                               Function<FriendlyByteBuf, ? extends EventCondition> networkDeserializer) {
+                                                               Function<RegistryFriendlyByteBuf, ? extends EventCondition> networkDeserializer) {
         public Codec<T> codec() {
             return mapCodec.codec();
         }
@@ -35,7 +36,7 @@ public class EventConditionRegistry {
                 .orElseGet(() -> DataResult.error(() -> "Unknown event condition: " + identifier)), (type) -> DataResult.success(type.identifier));
     }
 
-    public static <T extends EventCondition> void registerCondition(Identifier identifier, Class<T> clazz, MapCodec<T> codec, Function<FriendlyByteBuf, T> networkDeserializer) {
+    public static <T extends EventCondition> void registerCondition(Identifier identifier, Class<T> clazz, MapCodec<T> codec, Function<RegistryFriendlyByteBuf, T> networkDeserializer) {
         if (TYPES_BY_CLASS.containsKey(identifier)) {
             throw new IllegalArgumentException("Condition with identifier " + identifier + " is already registered");
         }
@@ -60,7 +61,7 @@ public class EventConditionRegistry {
         return getType(getIdentifier(clazz));
     }
 
-    public static EventCondition conditionFromNetwork(FriendlyByteBuf buf) {
+    public static EventCondition conditionFromNetwork(RegistryFriendlyByteBuf buf) {
         final var identifier = buf.readIdentifier();
         final var type = getType(identifier);
         if (type == null) {
@@ -69,7 +70,7 @@ public class EventConditionRegistry {
         return type.networkDeserializer.apply(buf);
     }
 
-    public static void conditionToNetwork(FriendlyByteBuf buf, EventCondition condition) {
+    public static void conditionToNetwork(RegistryFriendlyByteBuf buf, EventCondition condition) {
         final var identifier = getIdentifier(condition.getClass());
         if (identifier == null) {
             throw new IllegalArgumentException("Event condition " + condition.getClass() + " is not registered");

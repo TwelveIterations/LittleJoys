@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.recipe.condition.EventConditionRegistry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
@@ -72,14 +71,14 @@ public record DigSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable
     private static final StreamCodec<RegistryFriendlyByteBuf, DigSpotRecipe> STREAM_CODEC = StreamCodec.of(DigSpotRecipe::toNetwork,
             DigSpotRecipe::fromNetwork);
 
-    private static DigSpotRecipe fromNetwork(FriendlyByteBuf buf) {
+    private static DigSpotRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
         final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
         final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
         final var weight = buf.readInt();
         return new DigSpotRecipe(eventCondition, lootTable, weight);
     }
 
-    private static void toNetwork(FriendlyByteBuf buf, DigSpotRecipe recipe) {
+    private static void toNetwork(RegistryFriendlyByteBuf buf, DigSpotRecipe recipe) {
         EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
         buf.writeResourceKey(recipe.lootTable);
         buf.writeInt(recipe.weight);

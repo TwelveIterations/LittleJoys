@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.api.EventContext;
 import net.blay09.mods.littlejoys.recipe.FluidIngredient;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 public record AboveFluidSourceCondition(FluidIngredient fluid) implements EventCondition {
 
@@ -20,11 +20,11 @@ public record AboveFluidSourceCondition(FluidIngredient fluid) implements EventC
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buf) {
+    public void toNetwork(RegistryFriendlyByteBuf buf) {
         fluid.toNetwork(buf);
     }
 
-    public static AboveFluidSourceCondition fromNetwork(FriendlyByteBuf buf) {
+    public static AboveFluidSourceCondition fromNetwork(RegistryFriendlyByteBuf buf) {
         return new AboveFluidSourceCondition(FluidIngredient.fromNetwork(buf));
     }
 }
