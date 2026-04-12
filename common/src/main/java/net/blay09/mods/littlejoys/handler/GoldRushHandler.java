@@ -2,6 +2,7 @@ package net.blay09.mods.littlejoys.handler;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.google.common.collect.Tables;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.BreakBlockEvent;
 import net.blay09.mods.balm.api.event.TickPhase;
@@ -39,7 +40,7 @@ import java.util.Optional;
 public class GoldRushHandler {
     private static final RandomSource random = RandomSource.create();
 
-    private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = HashBasedTable.create();
+    private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = Tables.synchronizedTable(HashBasedTable.create());
 
     public static void initialize() {
         Balm.getEvents().onEvent(BreakBlockEvent.class, event -> {
