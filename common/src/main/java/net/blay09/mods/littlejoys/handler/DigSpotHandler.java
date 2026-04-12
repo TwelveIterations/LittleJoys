@@ -5,6 +5,7 @@ import net.blay09.mods.balm.api.event.TickPhase;
 import net.blay09.mods.balm.api.event.TickType;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
+import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.blay09.mods.littlejoys.block.entity.DigSpotBlockEntity;
 import net.blay09.mods.littlejoys.recipe.DigSpotRecipe;
@@ -154,5 +155,8 @@ public class DigSpotHandler {
         littleJoysData.putInt(DIG_SPOT_COOLDOWN, Math.round(LittleJoysConfig.getActive().digSpots.afterDiggingCooldownSeconds * 20));
 
         player.awardStat(ModStats.digSpotsDug);
+        if (player instanceof ServerPlayer serverPlayer) {
+            ModAdvancements.awardDigSpot(serverPlayer);
+        }
     }
 }

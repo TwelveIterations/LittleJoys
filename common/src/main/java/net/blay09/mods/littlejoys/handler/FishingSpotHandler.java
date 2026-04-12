@@ -5,6 +5,7 @@ import net.blay09.mods.balm.api.event.TickPhase;
 import net.blay09.mods.balm.api.event.TickType;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
+import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.blay09.mods.littlejoys.block.entity.FishingSpotBlockEntity;
 import net.blay09.mods.littlejoys.particle.ModParticles;
@@ -178,6 +179,9 @@ public class FishingSpotHandler {
         level.destroyBlock(pos, false);
         if (player != null) {
             player.awardStat(ModStats.fishingSpotsFished);
+            if (player instanceof ServerPlayer serverPlayer) {
+                ModAdvancements.awardFishingSpot(serverPlayer);
+            }
 
             final var playerData = Balm.getHooks().getPersistentData(player);
             final var littleJoysData = playerData.getCompound(LittleJoys.MOD_ID);

@@ -7,6 +7,7 @@ import net.blay09.mods.balm.api.event.BreakBlockEvent;
 import net.blay09.mods.balm.api.event.TickPhase;
 import net.blay09.mods.balm.api.event.TickType;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
+import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.entity.DropRushItemEntity;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundStartDropRushPacket;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundStopDropRushPacket;
@@ -90,6 +91,10 @@ public class DropRushHandler {
                 if (dropRush.getEntities().isEmpty()) {
                     final var player = level.getPlayerByUUID(dropRush.getPlayerId());
                     if (player != null) {
+                        player.awardStat(ModStats.dropRushesCompleted);
+                        if (player instanceof ServerPlayer serverPlayer) {
+                            ModAdvancements.awardDropRushComplete(serverPlayer);
+                        }
                         Balm.getNetworking().sendTo(player, new ClientboundStopDropRushPacket(ClientboundStopDropRushPacket.Reason.FULL_CLEAR));
                     }
                 } else if (dropRush.getTicksPassed() >= dropRush.getMaxTicks()) {

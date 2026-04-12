@@ -1,0 +1,25 @@
+{
+  "parent": "littlejoys:littlejoys/root",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.littlejoys.dig_spot.description"
+    },
+    "icon": {
+      "id": "minecraft:arms_up_pottery_sherd"
+    },
+    "title": {
+      "translate": "advancements.littlejoys.dig_spot.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

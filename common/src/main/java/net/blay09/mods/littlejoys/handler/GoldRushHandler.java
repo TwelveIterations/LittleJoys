@@ -8,6 +8,7 @@ import net.blay09.mods.balm.api.event.BreakBlockEvent;
 import net.blay09.mods.balm.api.event.TickPhase;
 import net.blay09.mods.balm.api.event.TickType;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
+import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundGoldRushPacket;
 import net.blay09.mods.littlejoys.recipe.GoldRushRecipe;
 import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
@@ -137,6 +138,7 @@ public class GoldRushHandler {
                 recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()),
                 player);
         player.awardStat(ModStats.goldRushesTriggered);
+        ModAdvancements.awardGoldRush(player);
         activeGoldRushes.put(level.dimension(), pos, activeGoldRush);
         Balm.getNetworking().sendToTracking(level, pos, new ClientboundGoldRushPacket(level.dimension(), pos, true));
         return activeGoldRush;
