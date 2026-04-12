@@ -42,6 +42,7 @@ public class LittleJoys {
         LittleJoysAPI.registerEventCondition(ResourceLocation.withDefaultNamespace("is_tool"), IsToolCondition.class, IsToolCondition.CODEC, IsToolCondition::fromNetwork);
         LittleJoysAPI.registerEventCondition(ResourceLocation.withDefaultNamespace("all"), AndCondition.class, AndCondition.CODEC, AndCondition::fromNetwork);
         LittleJoysAPI.registerEventCondition(ResourceLocation.withDefaultNamespace("any"), AnyCondition.class, AnyCondition.CODEC, AnyCondition::fromNetwork);
+        LittleJoysAPI.registerEventCondition(ResourceLocation.withDefaultNamespace("not"), NotCondition.class, NotCondition.CODEC, NotCondition::fromNetwork);
         LittleJoysAPI.registerEventCondition(ResourceLocation.withDefaultNamespace("always"), AlwaysCondition.class, AlwaysCondition.CODEC, AlwaysCondition::fromNetwork);
         LittleJoysAPI.registerEventCondition(ResourceLocation.withDefaultNamespace("can_see_sky"),
                 CanSeeSkyCondition.class,
