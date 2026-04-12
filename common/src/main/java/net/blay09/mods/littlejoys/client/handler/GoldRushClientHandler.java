@@ -7,7 +7,6 @@ import net.blay09.mods.balm.api.event.TickPhase;
 import net.blay09.mods.balm.api.event.TickType;
 import net.blay09.mods.balm.api.event.client.DisconnectedFromServerEvent;
 import net.blay09.mods.littlejoys.LittleJoys;
-import net.blay09.mods.littlejoys.handler.GoldRushInstance;
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.client.Minecraft;
@@ -18,13 +17,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
 public class GoldRushClientHandler {
 
     private static final RandomSource random = RandomSource.create();
 
-    private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = HashBasedTable.create();
+    private static final Table<ResourceKey<Level>, BlockPos, ClientGoldRushInstance> activeGoldRushes = HashBasedTable.create();
 
     public static void initialize() {
         Balm.getEvents().onTickEvent(TickType.ClientLevel, TickPhase.Start, level -> {
@@ -65,6 +63,8 @@ public class GoldRushClientHandler {
                 }
                 goldRush.setTicksPassed(goldRush.getTicksPassed() + 1);
             }
+
+            resetSoundsIfInactive();
         });
         Balm.getEvents().onEvent(DisconnectedFromServerEvent.class, (event) -> {
             activeGoldRushes.clear();
@@ -72,21 +72,21 @@ public class GoldRushClientHandler {
         });
     }
 
-    public static void addActiveGoldRush(BlockPos pos) {
-        final var level = Minecraft.getInstance().level;
-        if (level != null) {
-            activeGoldRushes.put(level.dimension(), pos, new GoldRushInstance(pos, level.getBlockState(pos), BuiltInLootTables.EMPTY, -1, -1, null));
-        }
+    public static void addActiveGoldRush(ResourceKey<Level> levelId, BlockPos pos) {
+        activeGoldRushes.put(levelId, pos, new ClientGoldRushInstance(pos));
     }
 
-    public static void removeActiveGoldRush(BlockPos pos) {
-        final var minecraft = Minecraft.getInstance();
-        final var level = minecraft.level;
-        if (level != null) {
-            activeGoldRushes.remove(level.dimension(), pos);
-            if (activeGoldRushes.isEmpty()) {
-                minecraft.getSoundManager().stop(ResourceLocation.fromNamespaceAndPath(LittleJoys.MOD_ID, "gold_rush"), SoundSource.BLOCKS);
-            }
+    public static void removeActiveGoldRush(ResourceKey<Level> levelId, BlockPos pos) {
+        final var levelGoldRushes = activeGoldRushes.row(levelId);
+        levelGoldRushes.remove(pos);
+        resetSoundsIfInactive();
+    }
+
+    private static void resetSoundsIfInactive() {
+        final var activeLevel = Minecraft.getInstance().level;
+        final var levelGoldRushes = activeGoldRushes.row(activeLevel.dimension());
+        if (levelGoldRushes.isEmpty()) {
+            Minecraft.getInstance().getSoundManager().stop(ResourceLocation.fromNamespaceAndPath(LittleJoys.MOD_ID, "gold_rush"), SoundSource.BLOCKS);
         }
     }
 }

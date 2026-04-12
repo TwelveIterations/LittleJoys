@@ -15,8 +15,7 @@ public class ModNetworking {
     public static void initialize(BalmNetworking networking) {
         networking.registerClientboundPacket(ClientboundGoldRushPacket.TYPE,
                 ClientboundGoldRushPacket.class,
-                ClientboundGoldRushPacket::encode,
-                ClientboundGoldRushPacket::decode,
+                ClientboundGoldRushPacket.STREAM_CODEC,
                 ClientboundGoldRushPacket::handle);
 
         networking.registerClientboundPacket(ClientboundStartDropRushPacket.TYPE,
