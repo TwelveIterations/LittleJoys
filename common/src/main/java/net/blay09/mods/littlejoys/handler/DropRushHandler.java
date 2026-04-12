@@ -5,6 +5,7 @@ import com.google.common.collect.Table;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.event.callback.BlockCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
+import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.entity.DropRushItemEntity;
 import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
@@ -87,6 +88,10 @@ public class DropRushHandler {
                 if (dropRush.getEntities().isEmpty()) {
                     final var player = level.getPlayerByUUID(dropRush.getPlayerId());
                     if (player != null) {
+                        player.awardStat(ModStats.dropRushesCompleted);
+                        if (player instanceof ServerPlayer serverPlayer) {
+                            ModAdvancements.awardDropRushComplete(serverPlayer);
+                        }
                         Balm.networking().sendTo(player, new ClientboundStopDropRushPacket(ClientboundStopDropRushPacket.Reason.FULL_CLEAR));
                     }
                 } else if (dropRush.getTicksPassed() >= dropRush.getMaxTicks()) {

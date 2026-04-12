@@ -6,6 +6,7 @@ import com.google.common.collect.Tables;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.event.callback.BlockCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
+import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundGoldRushPacket;
@@ -134,6 +135,7 @@ public class GoldRushHandler {
                 recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()),
                 player);
         player.awardStat(ModStats.goldRushesTriggered);
+        ModAdvancements.awardGoldRush(player);
         activeGoldRushes.put(level.dimension(), pos, activeGoldRush);
         Balm.networking().sendToTracking(level, pos, new ClientboundGoldRushPacket(level.dimension(), pos, true));
         return activeGoldRush;

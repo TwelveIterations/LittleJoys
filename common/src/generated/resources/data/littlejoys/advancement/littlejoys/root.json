@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:gui/advancements/backgrounds/stone",
+    "description": {
+      "translate": "advancements.littlejoys.root.description"
+    },
+    "icon": {
+      "id": "minecraft:cookie"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.littlejoys.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
