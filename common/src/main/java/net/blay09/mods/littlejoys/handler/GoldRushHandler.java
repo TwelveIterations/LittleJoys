@@ -96,17 +96,22 @@ public class GoldRushHandler {
         });
 
         Balm.getEvents().onTickEvent(TickType.ServerLevel, TickPhase.Start, level -> {
-            for (final var goldRush : activeGoldRushes.row(level.dimension()).values()) {
+            final var levelGoldRushes = activeGoldRushes.row(level.dimension());
+            final var toRemove = new ArrayList<GoldRushInstance>();
+            for (final var goldRush : levelGoldRushes.values()) {
                 goldRush.setTicksPassed(goldRush.getTicksPassed() + 1);
                 goldRush.setDropCooldownTicks(goldRush.getDropCooldownTicks() - 1);
                 if (goldRush.getTicksPassed() >= goldRush.getMaxTicks()) {
                     if (level.getBlockState(goldRush.getPos()).equals(goldRush.getInitialState())) {
                         level.destroyBlock(goldRush.getPos(), true, goldRush.getPlayer());
                     }
-                    Balm.getNetworking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(goldRush.getPos(), false));
+                    toRemove.add(goldRush);
                 }
             }
-            activeGoldRushes.values().removeIf(it -> it.getTicksPassed() >= it.getMaxTicks());
+            toRemove.forEach(goldRush -> {
+                Balm.getNetworking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(goldRush.getPos(), false));
+                levelGoldRushes.remove(goldRush.getPos());
+            });
         });
     }
 
@@ -130,9 +135,9 @@ public class GoldRushHandler {
                 (int) Math.floor(20 * recipe.seconds()),
                 recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()),
                 player);
-        Balm.getNetworking().sendToTracking(level, pos, new ClientboundGoldRushPacket(pos, true));
         player.awardStat(ModStats.goldRushesTriggered);
         activeGoldRushes.put(level.dimension(), pos, activeGoldRush);
+        Balm.getNetworking().sendToTracking(level, pos, new ClientboundGoldRushPacket(pos, true));
         return activeGoldRush;
     }
 
