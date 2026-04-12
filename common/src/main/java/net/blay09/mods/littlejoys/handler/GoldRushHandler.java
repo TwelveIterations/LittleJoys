@@ -69,7 +69,7 @@ public class GoldRushHandler {
             if (activeGoldRush != null) {
                 if (!state.equals(activeGoldRush.getInitialState())) {
                     activeGoldRushes.remove(serverLevel.dimension(), pos);
-                    Balm.networking().sendToAll(serverLevel.getServer(), new ClientboundGoldRushPacket(pos, false));
+                    Balm.networking().sendToAll(serverLevel.getServer(), new ClientboundGoldRushPacket(serverLevel.dimension(), pos, false));
                     return true;
                 }
 
@@ -107,7 +107,7 @@ public class GoldRushHandler {
                 }
             }
             toRemove.forEach(goldRush -> {
-                Balm.networking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(goldRush.getPos(), false));
+                Balm.networking().sendToAll(level.getServer(), new ClientboundGoldRushPacket(level.dimension(), goldRush.getPos(), false));
                 levelGoldRushes.remove(goldRush.getPos());
             });
         });
@@ -135,7 +135,7 @@ public class GoldRushHandler {
                 player);
         player.awardStat(ModStats.goldRushesTriggered);
         activeGoldRushes.put(level.dimension(), pos, activeGoldRush);
-        Balm.networking().sendToTracking(level, pos, new ClientboundGoldRushPacket(pos, true));
+        Balm.networking().sendToTracking(level, pos, new ClientboundGoldRushPacket(level.dimension(), pos, true));
         return activeGoldRush;
     }
 
