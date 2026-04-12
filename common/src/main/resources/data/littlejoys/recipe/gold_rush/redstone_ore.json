@@ -15,6 +15,13 @@
       {
         "type": "is_tool",
         "item": "#littlejoys:can_trigger_goldrush"
+      },
+      {
+        "type": "not",
+        "condition": {
+          "type": "is_tool",
+          "item": "#littlejoys:cannot_trigger_goldrush"
+        }
       }
     ]
   },
