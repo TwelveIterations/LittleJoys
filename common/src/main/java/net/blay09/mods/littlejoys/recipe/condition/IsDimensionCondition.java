@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.api.EventContext;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -20,11 +21,11 @@ public record IsDimensionCondition(ResourceLocation dimension) implements EventC
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buf) {
+    public void toNetwork(RegistryFriendlyByteBuf buf) {
         buf.writeResourceLocation(dimension);
     }
 
-    public static IsDimensionCondition fromNetwork(FriendlyByteBuf buf) {
+    public static IsDimensionCondition fromNetwork(RegistryFriendlyByteBuf buf) {
         final var dimension = buf.readResourceLocation();
         return new IsDimensionCondition(dimension);
     }

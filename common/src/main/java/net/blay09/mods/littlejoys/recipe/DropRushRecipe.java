@@ -7,7 +7,6 @@ import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.recipe.condition.EventConditionRegistry;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
@@ -74,7 +73,7 @@ public record DropRushRecipe(EventCondition eventCondition, float chanceMultipli
 
         private static final StreamCodec<RegistryFriendlyByteBuf, DropRushRecipe> STREAM_CODEC = StreamCodec.of(Serializer::toNetwork, Serializer::fromNetwork);
 
-        private static DropRushRecipe fromNetwork(FriendlyByteBuf buf) {
+        private static DropRushRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
             final var chance = buf.readFloat();
             final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
@@ -85,7 +84,7 @@ public record DropRushRecipe(EventCondition eventCondition, float chanceMultipli
             return new DropRushRecipe(eventCondition, chance, lootTable, rolls, seconds, range, weight);
         }
 
-        private static void toNetwork(FriendlyByteBuf buf, DropRushRecipe recipe) {
+        private static void toNetwork(RegistryFriendlyByteBuf buf, DropRushRecipe recipe) {
             EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
             buf.writeFloat(recipe.chanceMultiplier);
             buf.writeResourceKey(recipe.lootTable);

@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.api.EventContext;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,12 @@ public record AndCondition(List<EventCondition> conditions) implements EventCond
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buf) {
-        buf.writeCollection(conditions, EventConditionRegistry::conditionToNetwork);
+    public void toNetwork(RegistryFriendlyByteBuf buf) {
+        buf.writeCollection(conditions, (FriendlyByteBuf buffer, EventCondition condition) -> EventConditionRegistry.conditionToNetwork((RegistryFriendlyByteBuf) buffer, condition));
     }
 
-    public static AndCondition fromNetwork(FriendlyByteBuf buf) {
-        final var conditions = buf.readCollection(ArrayList::new, EventConditionRegistry::conditionFromNetwork);
+    public static AndCondition fromNetwork(RegistryFriendlyByteBuf buf) {
+        final var conditions = buf.readCollection(ArrayList::new, (FriendlyByteBuf buffer) -> EventConditionRegistry.conditionFromNetwork((RegistryFriendlyByteBuf) buffer));
         return new AndCondition(conditions);
     }
 }

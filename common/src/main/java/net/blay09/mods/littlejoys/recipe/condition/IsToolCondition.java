@@ -5,10 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.api.EventCondition;
 import net.blay09.mods.littlejoys.api.EventContext;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.HolderSetCodec;
 import net.minecraft.world.item.Item;
 
@@ -24,11 +24,11 @@ public record IsToolCondition(HolderSet<Item> item) implements EventCondition {
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buf) {
-        buf.writeJsonWithCodec(RegistryCodecs.homogeneousList(Registries.ITEM), item);
+    public void toNetwork(RegistryFriendlyByteBuf buf) {
+        ByteBufCodecs.holderSet(Registries.ITEM).encode(buf, item);
     }
 
-    public static IsToolCondition fromNetwork(FriendlyByteBuf buf) {
-        return new IsToolCondition(buf.readJsonWithCodec(RegistryCodecs.homogeneousList(Registries.ITEM)));
+    public static IsToolCondition fromNetwork(RegistryFriendlyByteBuf buf) {
+        return new IsToolCondition(ByteBufCodecs.holderSet(Registries.ITEM).decode(buf));
     }
 }
