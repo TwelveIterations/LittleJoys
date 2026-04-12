@@ -130,8 +130,9 @@ public class GoldRushHandler {
     }
 
     public static GoldRushInstance startGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, RecipeHolder<GoldRushRecipe> recipeHolder) {
+        final var immutablePos = pos.immutable();
         final var recipe = recipeHolder.value();
-        final var activeGoldRush = new GoldRushInstance(pos,
+        final var activeGoldRush = new GoldRushInstance(immutablePos,
                 state,
                 recipe.lootTable(),
                 (int) Math.floor(20 * recipe.seconds()),
@@ -139,8 +140,8 @@ public class GoldRushHandler {
                 player);
         player.awardStat(ModStats.goldRushesTriggered);
         ModAdvancements.awardGoldRush(player);
-        activeGoldRushes.put(level.dimension(), pos, activeGoldRush);
-        Balm.getNetworking().sendToTracking(level, pos, new ClientboundGoldRushPacket(level.dimension(), pos, true));
+        activeGoldRushes.put(level.dimension(), immutablePos, activeGoldRush);
+        Balm.getNetworking().sendToTracking(level, immutablePos, new ClientboundGoldRushPacket(level.dimension(), immutablePos, true));
         return activeGoldRush;
     }
 
