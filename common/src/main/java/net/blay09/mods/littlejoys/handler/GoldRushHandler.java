@@ -2,6 +2,7 @@ package net.blay09.mods.littlejoys.handler;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
+import com.google.common.collect.Tables;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.event.callback.BlockCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
@@ -37,7 +38,7 @@ import java.util.Optional;
 public class GoldRushHandler {
     private static final RandomSource random = RandomSource.create();
 
-    private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = HashBasedTable.create();
+    private static final Table<ResourceKey<Level>, BlockPos, GoldRushInstance> activeGoldRushes = Tables.synchronizedTable(HashBasedTable.create());
 
     public static void initialize() {
         BlockCallback.Break.Before.EVENT.register((level, pos, state, blockEntity, player) -> {
