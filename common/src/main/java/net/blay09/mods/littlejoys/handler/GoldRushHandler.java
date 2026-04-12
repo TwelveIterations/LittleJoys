@@ -63,6 +63,10 @@ public class GoldRushHandler {
                 return true;
             }
 
+            if (Balm.modSupport().multiminers().isMultiMine(serverPlayer, pos)) {
+                return true;
+            }
+
             var activeGoldRush = activeGoldRushes.get(serverLevel.dimension(), pos);
             if (activeGoldRush == null) {
                 activeGoldRush = rollForGoldRush(serverLevel, pos, state, serverPlayer).orElse(null);
