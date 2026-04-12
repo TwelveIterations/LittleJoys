@@ -179,7 +179,7 @@ public class DropRushHandler {
     }
 
     private static boolean isValidRecipeFor(RecipeHolder<DropRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
-        final var context = new EventContextImpl(level, pos, state, player);
+        final var context = new EventContextImpl(level, pos, state, player, player.getMainHandItem());
         return recipe.value().eventCondition().test(context);
     }
 

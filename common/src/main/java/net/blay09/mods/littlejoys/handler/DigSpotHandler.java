@@ -151,7 +151,7 @@ public class DigSpotHandler {
     }
 
     private static boolean isValidRecipeFor(RecipeHolder<DigSpotRecipe> recipe, ServerLevel level, BlockPos pos, ServerPlayer player) {
-        final var context = new EventContextImpl(level, pos, level.getBlockState(pos), player);
+        final var context = new EventContextImpl(level, pos, level.getBlockState(pos), player, player.getMainHandItem());
         return recipe.value().eventCondition().test(context);
     }
 
