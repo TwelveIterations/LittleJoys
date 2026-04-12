@@ -1,10 +1,19 @@
 {
   "type": "littlejoys:gold_rush",
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "minecraft:nether_quartz_ore"
-    }
+    "type": "all",
+    "conditions": [
+      {
+        "type": "is_state",
+        "state": {
+          "Name": "minecraft:nether_quartz_ore"
+        }
+      },
+      {
+        "type": "is_tool",
+        "item": "#littlejoys:can_trigger_goldrush"
+      }
+    ]
   },
   "lootTable": "minecraft:blocks/nether_quartz_ore",
   "chanceMultiplier": 0.25

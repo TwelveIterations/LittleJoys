@@ -1,0 +1,11 @@
+package net.blay09.mods.littlejoys.tag;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+
+import static net.blay09.mods.littlejoys.LittleJoys.id;
+
+public class ModItemTags {
+    public static final TagKey<Item> CAN_TRIGGER_GOLDRUSH = TagKey.create(Registries.ITEM, id("can_trigger_goldrush"));
+}
