@@ -1,6 +1,8 @@
 package net.blay09.mods.littlejoys.handler;
 
 import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.event.EventPhases;
+import net.blay09.mods.balm.platform.event.callback.BlockCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
@@ -12,6 +14,7 @@ import net.blay09.mods.littlejoys.recipe.DigSpotRecipe;
 import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
 import net.blay09.mods.littlejoys.recipe.condition.EventContextImpl;
 import net.blay09.mods.littlejoys.stats.ModStats;
+import net.blay09.mods.littlejoys.tag.ModBlockTags;
 import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -35,6 +38,22 @@ public class DigSpotHandler {
     private static final String DIG_SPOT_COOLDOWN = "digSpotCooldown";
 
     public static void initialize() {
+        BlockCallback.Break.Before.EVENT.register(EventPhases.LOWEST, (level, pos, state, blockEntity, player) -> {
+            if (player != null && player.getAbilities().instabuild) {
+                return true;
+            }
+
+            if (!(level instanceof ServerLevel) || player == null || Balm.hooks().isFakePlayer(player)) {
+                return true;
+            }
+
+            if (level.getBlockState(pos.above()).is(ModBlockTags.DIG_SPOTS)) {
+                DigSpotHandler.digSpotConsumed(player);
+            }
+
+            return true;
+        });
+
         ServerTickCallback.ServerPlayerTick.AFTER.register(player -> {
             final var playerData = Balm.hooks().getPersistentData(player);
             final var littleJoysData = playerData.getCompoundOrEmpty(LittleJoys.MOD_ID);
