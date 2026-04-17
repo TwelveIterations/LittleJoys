@@ -1,1 +1,11 @@
-- Updated to Minecraft 26.1
+- Added advancements for the first time each event is triggered
+- Changed gold rushes to never trigger while multi-mining with FTB Ultimine
+- Data Packs: Added `cannot_trigger_goldrush` item tag used in default event configs, restricting gold rushes from triggering when using Just Hammers hammers
+- Data Packs: Added `can_trigger_goldrush` item tag used in default event configs, limiting gold rushes to pickaxes 
+- Data Packs: Added `not` condition
+- Data Packs: Added `is_tool` condition
+- Fixed gold rush desync on certain break events with mutable positions
+- Fixed dig spots not actually being attributed to players
+- Fixed gold rushes never deactivating on client when dimensions don't match
+- Fixed potential crash when dimensions tick on different threads
+- Fixed incorrect translation keys for item blocks
