@@ -4,12 +4,14 @@ import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.config.BalmConfigData;
 import net.blay09.mods.balm.api.config.Comment;
 import net.blay09.mods.balm.api.config.Config;
+import net.blay09.mods.balm.common.config.ConfigLocalization;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundConfigMessage;
 
 @Config(LittleJoys.MOD_ID)
 public class LittleJoysConfig implements BalmConfigData {
 
     public static void initialize() {
+        ConfigLocalization.enableModernTranslationKeys(LittleJoys.MOD_ID);
         Balm.getConfig().registerConfig(LittleJoysConfig.class, ClientboundConfigMessage::new);
     }
 
