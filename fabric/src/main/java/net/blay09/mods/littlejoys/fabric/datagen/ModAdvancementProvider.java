@@ -1,16 +1,16 @@
 package net.blay09.mods.littlejoys.fabric.datagen;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.criterion.ImpossibleTrigger;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 
 import java.util.concurrent.CompletableFuture;
@@ -20,7 +20,7 @@ import static net.blay09.mods.littlejoys.LittleJoys.id;
 
 public class ModAdvancementProvider extends FabricAdvancementProvider {
 
-    public ModAdvancementProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
+    public ModAdvancementProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(output, registryLookup);
     }
 
@@ -31,7 +31,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         Items.COOKIE,
                         Component.translatable("advancements.littlejoys.root.title"),
                         Component.translatable("advancements.littlejoys.root.description"),
-                        Identifier.withDefaultNamespace("gui/advancements/backgrounds/stone"),
+                        ResourceLocation.withDefaultNamespace("gui/advancements/backgrounds/stone"),
                         AdvancementType.TASK,
                         false,
                         false,
