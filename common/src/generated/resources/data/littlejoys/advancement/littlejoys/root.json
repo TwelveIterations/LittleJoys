@@ -11,6 +11,7 @@
       "translate": "advancements.littlejoys.root.description"
     },
     "icon": {
+      "count": 1,
       "id": "minecraft:cookie"
     },
     "show_toast": false,

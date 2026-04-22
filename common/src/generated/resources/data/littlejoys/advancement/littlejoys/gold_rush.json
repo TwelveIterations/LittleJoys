@@ -10,6 +10,7 @@
       "translate": "advancements.littlejoys.gold_rush.description"
     },
     "icon": {
+      "count": 1,
       "id": "minecraft:raw_gold"
     },
     "title": {

@@ -10,6 +10,7 @@
       "translate": "advancements.littlejoys.fishing_spot.description"
     },
     "icon": {
+      "count": 1,
       "id": "minecraft:pufferfish"
     },
     "title": {
