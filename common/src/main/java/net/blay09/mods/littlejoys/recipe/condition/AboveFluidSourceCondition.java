@@ -19,7 +19,7 @@ public record AboveFluidSourceCondition(FluidIngredient fluid, boolean allowWate
     @Override
     public boolean test(EventContext context) {
         final var groundState = context.level().getBlockState(context.pos().below());
-        if (!allowWaterlogged && groundState.getValueOrElse(BlockStateProperties.WATERLOGGED, false)) {
+        if (!allowWaterlogged && groundState.getOptionalValue(BlockStateProperties.WATERLOGGED).orElse(false)) {
             return false;
         }
 
