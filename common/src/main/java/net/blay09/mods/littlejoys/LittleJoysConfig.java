@@ -24,6 +24,9 @@ public class LittleJoysConfig {
     public StardewFishing stardewFishing = new StardewFishing();
 
     public static class FishingSpots {
+        @Comment("If disabled, fishing spots will not spawn.")
+        public boolean enabled = true;
+
         @Comment("The minimum distance between fishing spots, preventing them from spawning too close together.")
         public int minimumDistanceBetween = 128;
 
@@ -50,6 +53,9 @@ public class LittleJoysConfig {
     }
 
     public static class DigSpots {
+        @Comment("If disabled, dig spots will not spawn.")
+        public boolean enabled = true;
+
         @Comment("The minimum distance between dig spots, preventing them from spawning too close together.")
         public int minimumDistanceBetween = 128;
 
@@ -81,11 +87,17 @@ public class LittleJoysConfig {
     }
 
     public static class DropRush {
+        @Comment("If disabled, drop rushes will not trigger.")
+        public boolean enabled = true;
+
         @Comment("The base chance for a drop rush to occur.")
         public float baseChance = 0.02f;
     }
 
     public static class GoldRush {
+        @Comment("If disabled, gold rushes will not trigger.")
+        public boolean enabled = true;
+
         @Comment("The base chance for a gold rush to occur.")
         public float baseChance = 0.02f;
     }

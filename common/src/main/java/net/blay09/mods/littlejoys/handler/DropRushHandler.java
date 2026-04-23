@@ -45,6 +45,10 @@ public class DropRushHandler {
 
     public static void initialize() {
         BlockCallback.Break.Before.EVENT.register((level, pos, state, blockEntity, player) -> {
+            if (!LittleJoysConfig.getActive().dropRush.enabled) {
+                return true;
+            }
+
             if (player != null && player.getAbilities().instabuild) {
                 return true;
             }

@@ -55,6 +55,10 @@ public class DigSpotHandler {
         });
 
         ServerTickCallback.ServerPlayerTick.AFTER.register(player -> {
+            if (!LittleJoysConfig.getActive().digSpots.enabled) {
+                return;
+            }
+
             final var playerData = Balm.hooks().getPersistentData(player);
             final var littleJoysData = playerData.getCompoundOrEmpty(LittleJoys.MOD_ID);
             playerData.put(LittleJoys.MOD_ID, littleJoysData);
