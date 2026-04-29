@@ -4,10 +4,13 @@ import net.blay09.mods.balm.world.level.storage.loot.BalmLootModifier;
 import net.blay09.mods.littlejoys.block.entity.FishingSpotBlockEntity;
 import net.blay09.mods.littlejoys.handler.FishingSpotHandler;
 import net.blay09.mods.littlejoys.handler.FishingSpotHolder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +21,7 @@ public class FishingSpotLootModifier implements BalmLootModifier {
     private static final Set<LootContext> activeContexts = new HashSet<>();
 
     @Override
-    public void apply(LootContext context, List<ItemStack> list) {
+    public void apply(LootContext context, List<ItemStack> list, @Nullable ResourceKey<LootTable> lootTableId) {
         synchronized (activeContexts) {
             if (activeContexts.contains(context)) {
                 return;
@@ -39,8 +42,8 @@ public class FishingSpotLootModifier implements BalmLootModifier {
         final var fishingSpotPos = fishingSpotHolder.littlejoys$getFishingSpot();
         if (fishingSpotPos.isPresent() && level.getBlockEntity(fishingSpotPos.get()) instanceof FishingSpotBlockEntity fishingSpot) {
             FishingSpotHandler.resolveRecipe(level, fishingSpotPos.get(), fishingSpot.getRecipeId(), player).ifPresent(recipeHolder -> {
-                final var lootTableId = recipeHolder.value().lootTable();
-                final var lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableId);
+                final var recipeLootTableId = recipeHolder.value().lootTable();
+                final var lootTable = level.getServer().reloadableRegistries().getLootTable(recipeLootTableId);
                 synchronized (activeContexts) {
                     activeContexts.add(context);
                 }

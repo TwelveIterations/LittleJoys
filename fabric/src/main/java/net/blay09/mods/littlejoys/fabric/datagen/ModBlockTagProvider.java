@@ -15,7 +15,7 @@ public class ModBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider arg) {
-        valueLookupBuilder(ModBlockTags.DIG_SPOTS).add(ModBlocks.digSpot.asBlock());
-        valueLookupBuilder(ModBlockTags.FISHING_SPOTS).add(ModBlocks.fishingSpot.asBlock());
+        builder(ModBlockTags.DIG_SPOTS).add(ModBlocks.digSpot.asResourceKey());
+        builder(ModBlockTags.FISHING_SPOTS).add(ModBlocks.fishingSpot.asResourceKey());
     }
 }

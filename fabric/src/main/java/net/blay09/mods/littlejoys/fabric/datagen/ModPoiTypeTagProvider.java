@@ -5,12 +5,12 @@ import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.KeyTagProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ModPoiTypeTagProvider extends KeyTagProvider<PoiType> {
+public class ModPoiTypeTagProvider extends TagsProvider<PoiType> {
     public ModPoiTypeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
         super(output, Registries.POINT_OF_INTEREST_TYPE, provider);
     }

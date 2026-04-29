@@ -16,7 +16,7 @@ public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider lookup) {
-        valueLookupBuilder(ModItemTags.CAN_TRIGGER_GOLDRUSH).addOptionalTag(ItemTags.PICKAXES);
+        builder(ModItemTags.CAN_TRIGGER_GOLDRUSH).addOptionalTag(ItemTags.PICKAXES);
         getOrCreateRawBuilder(ModItemTags.CANNOT_TRIGGER_GOLDRUSH).addOptionalTag(Identifier.fromNamespaceAndPath("justhammers", "hammer"));
     }
 }

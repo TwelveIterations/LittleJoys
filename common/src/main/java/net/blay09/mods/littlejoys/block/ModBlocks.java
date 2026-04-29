@@ -10,8 +10,6 @@ public class ModBlocks {
     public static DeferredBlock fishingSpot;
 
     public static void initialize(BalmBlockRegistrar blocks) {
-        blocks.enableBlockDescriptionPrefixForItems();
-
         digSpot = blocks.register("dig_spot", DigSpotBlock::new, it -> it).withDefaultItem().asDeferredBlock();
         fishingSpot = blocks.register("fishing_spot", FishingSpotBlock::new, BlockBehaviour.Properties::noLootTable).withDefaultItem().asDeferredBlock();
     }
