@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -31,6 +32,9 @@ public abstract class TideFishingHookMixin extends Entity implements FishingSpot
 
     @Nullable
     private BlockPos littlejoys_fishingSpot;
+
+    @Unique
+    private boolean littlejoys$skipRewards;
 
     public TideFishingHookMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -82,5 +86,15 @@ public abstract class TideFishingHookMixin extends Entity implements FishingSpot
     @Override
     public Player littlejoys$getPlayerOwner() {
         return ((TideFishingHook) (Object) this).getPlayerOwner();
+    }
+
+    @Override
+    public boolean littlejoys$shouldSkipRewards() {
+        return littlejoys$skipRewards;
+    }
+
+    @Override
+    public void littlejoys$setSkipRewards(boolean skipRewards) {
+        littlejoys$skipRewards = skipRewards;
     }
 }
