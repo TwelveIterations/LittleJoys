@@ -5,7 +5,7 @@ dependencies {
     implementation("net.blay09.mods:kuma-api-neoforge:${kuma_version}")
     compileOnly("curse.maven:aquaculture-60028:6357106")
     //compileOnly("curse.maven:cloth-config-348521:5729127")
-    compileOnly("curse.maven:tide-884685:6106866")
+    compileOnly("curse.maven:tide-884685:7586281")
     compileOnly("curse.maven:fishing-overhaul-491332:6297564")
     compileOnly("curse.maven:stardew-fishing-1066037:7413865")
 }

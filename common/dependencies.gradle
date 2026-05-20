@@ -3,5 +3,5 @@ dependencies {
         changing = balm_version.endsWith("SNAPSHOT")
     }
     implementation("net.blay09.mods:kuma-api-common:${kuma_version}")
-    compileOnly("curse.maven:tide-884685:6106866")
+    compileOnly("curse.maven:tide-884685:7586281")
 }
