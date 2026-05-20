@@ -1,11 +1,1 @@
-- Added advancements for the first time each event is triggered
-- Changed Gold Rushes to only trigger for pickaxes
-- Data Packs: Added `can_trigger_goldrush` and `cannot_trigger_goldrush` item tags, restricting gold rushes to pickaxes for all default events
-- Data Packs: Added `is_tool` and `not` condition for use in event datapacks
-- Data Packs: Added `allowWaterlogged` (default: `false`) to `above_fluid_source condition`, fix fishing spots spawning in waterlogged blocks
-- Fixed gold rush desync when triggered by specific tools like hammers
-- Fixed gold rushes never deactivating on clients that traveled to another dimension
-- Fixed dig spots not being attributed to players in stats
-- Fixed potential crashes with multithreading performance mods
-- Fixed config translation keys
-- Fixed warning logs about missing particle textures
+- Fixed crash with Tide
