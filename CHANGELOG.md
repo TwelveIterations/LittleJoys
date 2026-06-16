@@ -1,3 +1,1 @@
-- Added config options to disable individual events
-- Added `allowWaterlogged` (default: `false`) to `above_fluid_source` condition
-- Fixed fishing spots spawning in waterlogged blocks
+- Updated to Minecraft 26.2
