@@ -14,8 +14,8 @@ import net.blay09.mods.littlejoys.network.protocol.ClientboundStartDropRushPacke
 import net.blay09.mods.littlejoys.network.protocol.ClientboundStopDropRushPacket;
 import net.blay09.mods.littlejoys.recipe.DropRushRecipe;
 import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
-import net.blay09.mods.littlejoys.recipe.condition.EventContextImpl;
 import net.blay09.mods.littlejoys.stats.ModStats;
+import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -181,7 +181,11 @@ public class DropRushHandler {
     }
 
     private static boolean isValidRecipeFor(RecipeHolder<DropRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
-        final var context = new EventContextImpl(level, pos, state, player, player.getMainHandItem());
+        final var context = MutableShogiContext.of(player)
+                .withLevel(level)
+                .withBlockPos(pos)
+                .withBlockState(state)
+                .withItemStack(player.getMainHandItem());
         return recipe.value().eventCondition().test(context);
     }
 

@@ -12,7 +12,7 @@ import net.blay09.mods.littlejoys.block.entity.DigSpotBlockEntity;
 import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.recipe.DigSpotRecipe;
 import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
-import net.blay09.mods.littlejoys.recipe.condition.EventContextImpl;
+import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
 import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
@@ -156,7 +156,11 @@ public class DigSpotHandler {
     }
 
     private static boolean isValidRecipeFor(RecipeHolder<DigSpotRecipe> recipe, ServerLevel level, BlockPos pos, ServerPlayer player) {
-        final var context = new EventContextImpl(level, pos, level.getBlockState(pos), player, player.getMainHandItem());
+        final var context = MutableShogiContext.of(player)
+                .withLevel(level)
+                .withBlockPos(pos)
+                .withBlockState(level.getBlockState(pos))
+                .withItemStack(player.getMainHandItem());
         return recipe.value().eventCondition().test(context);
     }
 

@@ -11,9 +11,9 @@ import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.blay09.mods.littlejoys.recipe.FishingSpotRecipe;
 import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
-import net.blay09.mods.littlejoys.recipe.condition.EventContextImpl;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
+import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
@@ -128,7 +128,11 @@ public class FishingSpotHandler {
     }
 
     private static boolean isValidRecipeFor(RecipeHolder<FishingSpotRecipe> recipe, ServerLevel level, BlockPos pos, ServerPlayer player) {
-        final var context = new EventContextImpl(level, pos, level.getBlockState(pos), player, player.getMainHandItem());
+        final var context = MutableShogiContext.of(player)
+                .withLevel(level)
+                .withBlockPos(pos)
+                .withBlockState(level.getBlockState(pos))
+                .withItemStack(player.getMainHandItem());
         return recipe.value().eventCondition().test(context);
     }
 
