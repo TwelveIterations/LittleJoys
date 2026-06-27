@@ -3,8 +3,8 @@ package net.blay09.mods.littlejoys.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.blay09.mods.littlejoys.api.EventCondition;
-import net.blay09.mods.littlejoys.recipe.condition.EventConditionRegistry;
+import net.blay09.mods.littlejoys.recipe.condition.LittleJoysRules;
+import net.blay09.mods.shogi.effect.ShogiEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -14,7 +14,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootTable> lootTable,
+public record FishingSpotRecipe(ShogiEffect<?> eventCondition, ResourceKey<LootTable> lootTable,
                                 int weight) implements Recipe<RecipeInput> {
 
     @Override
@@ -63,7 +63,7 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
     }
 
     private static final MapCodec<FishingSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            EventConditionRegistry.CODEC.fieldOf("eventCondition").forGetter(FishingSpotRecipe::eventCondition),
+            LittleJoysRules.EVENT_CONDITIONS.getEffectCodec().fieldOf("eventCondition").forGetter(FishingSpotRecipe::eventCondition),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(FishingSpotRecipe::lootTable),
             Codec.INT.fieldOf("weight").orElse(1).forGetter(FishingSpotRecipe::weight)
     ).apply(instance, FishingSpotRecipe::new));
@@ -72,14 +72,12 @@ public record FishingSpotRecipe(EventCondition eventCondition, ResourceKey<LootT
             FishingSpotRecipe::fromNetwork);
 
     private static FishingSpotRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-        final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
         final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
         final var weight = buf.readVarInt();
-        return new FishingSpotRecipe(eventCondition, lootTable, weight);
+        return new FishingSpotRecipe(LittleJoysRules.UNSYNCED_EVENT_CONDITION, lootTable, weight);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buf, FishingSpotRecipe recipe) {
-        EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
         buf.writeResourceKey(recipe.lootTable);
         buf.writeVarInt(recipe.weight);
     }

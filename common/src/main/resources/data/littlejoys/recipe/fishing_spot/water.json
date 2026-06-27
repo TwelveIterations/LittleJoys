@@ -1,13 +1,13 @@
 {
   "type": "littlejoys:fishing_spot",
   "eventCondition": {
-    "type": "all",
+    "type": "shogi:and",
     "conditions": [
       {
-        "type": "above_fluid_source"
+        "type": "littlejoys:above_fluid_source"
       },
       {
-        "type": "can_see_sky"
+        "type": "shogi:can_see_sky"
       }
     ]
   },

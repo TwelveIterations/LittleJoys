@@ -1,7 +1,7 @@
 {
   "type": "littlejoys:dig_spot",
   "eventCondition": {
-    "type": "above_state",
+    "type": "littlejoys:above_state",
     "state": {
       "Name": "minecraft:gravel"
     }
