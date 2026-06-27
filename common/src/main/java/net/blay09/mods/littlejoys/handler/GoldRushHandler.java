@@ -13,8 +13,8 @@ import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundGoldRushPacket;
 import net.blay09.mods.littlejoys.recipe.GoldRushRecipe;
 import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
-import net.blay09.mods.littlejoys.recipe.condition.EventContextImpl;
 import net.blay09.mods.littlejoys.stats.ModStats;
+import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -168,7 +168,11 @@ public class GoldRushHandler {
     }
 
     private static boolean isValidRecipeFor(RecipeHolder<GoldRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
-        final var context = new EventContextImpl(level, pos, state, player, player.getMainHandItem());
+        final var context = MutableShogiContext.of(player)
+                .withLevel(level)
+                .withBlockPos(pos)
+                .withBlockState(state)
+                .withItemStack(player.getMainHandItem());
         return recipe.value().eventCondition().test(context);
     }
 }

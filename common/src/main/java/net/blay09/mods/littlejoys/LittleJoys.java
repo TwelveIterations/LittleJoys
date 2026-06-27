@@ -22,7 +22,7 @@ import net.blay09.mods.littlejoys.network.ModNetworking;
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.blay09.mods.littlejoys.poi.ModPoiTypes;
 import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
-import net.blay09.mods.littlejoys.recipe.condition.*;
+import net.blay09.mods.littlejoys.recipe.condition.LittleJoysRules;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.minecraft.core.registries.Registries;
@@ -38,36 +38,7 @@ public class LittleJoys {
 
     public static void initialize(BalmRegistrars registrars) {
         LittleJoysAPI.__setupAPI(new InternalMethodsImpl());
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("above_fluid_source"),
-                AboveFluidSourceCondition.class,
-                AboveFluidSourceCondition.CODEC,
-                AboveFluidSourceCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("above_state"),
-                AboveStateCondition.class,
-                AboveStateCondition.CODEC,
-                AboveStateCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("is_block"),
-                IsBlockCondition.class,
-                IsBlockCondition.CODEC,
-                IsBlockCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("is_state_property"),
-                IsStatePropertyCondition.class,
-                IsStatePropertyCondition.CODEC,
-                IsStatePropertyCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("is_state"), IsStateCondition.class, IsStateCondition.CODEC, IsStateCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("is_tool"), IsToolCondition.class, IsToolCondition.CODEC, IsToolCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("all"), AndCondition.class, AndCondition.CODEC, AndCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("any"), AnyCondition.class, AnyCondition.CODEC, AnyCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("not"), NotCondition.class, NotCondition.CODEC, NotCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("always"), AlwaysCondition.class, AlwaysCondition.CODEC, AlwaysCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("can_see_sky"),
-                CanSeeSkyCondition.class,
-                CanSeeSkyCondition.CODEC,
-                CanSeeSkyCondition::fromNetwork);
-        LittleJoysAPI.registerEventCondition(Identifier.withDefaultNamespace("is_dimension"),
-                IsDimensionCondition.class,
-                IsDimensionCondition.CODEC,
-                IsDimensionCondition::fromNetwork);
+        LittleJoysRules.initialize();
 
         LittleJoysConfig.initialize();
         registrars.blocks(ModBlocks::initialize);

@@ -1,16 +1,11 @@
 package net.blay09.mods.littlejoys.api;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
-import java.util.function.Function;
 
 public class LittleJoysAPI {
     public static final String MOD_ID = "littlejoys";
@@ -22,10 +17,6 @@ public class LittleJoysAPI {
      */
     public static void __setupAPI(InternalMethods internalMethods) {
         LittleJoysAPI.internalMethods = internalMethods;
-    }
-
-    public static <T extends EventCondition> void registerEventCondition(Identifier identifier, Class<T> clazz, MapCodec<T> codec, Function<RegistryFriendlyByteBuf, T> networkDeserializer) {
-        internalMethods.registerEventCondition(identifier, clazz, codec, networkDeserializer);
     }
 
     public static Optional<BlockPos> findFishingSpot(ServerLevel level, BlockPos pos) {

@@ -3,8 +3,8 @@ package net.blay09.mods.littlejoys.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.blay09.mods.littlejoys.api.EventCondition;
-import net.blay09.mods.littlejoys.recipe.condition.EventConditionRegistry;
+import net.blay09.mods.littlejoys.recipe.condition.LittleJoysRules;
+import net.blay09.mods.shogi.effect.ShogiEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -14,7 +14,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record DropRushRecipe(EventCondition eventCondition, float chanceMultiplier, ResourceKey<LootTable> lootTable,
+public record DropRushRecipe(ShogiEffect<?> eventCondition, float chanceMultiplier, ResourceKey<LootTable> lootTable,
                              int rolls, float seconds, int range, int weight) implements Recipe<RecipeInput> {
 
     @Override
@@ -63,7 +63,7 @@ public record DropRushRecipe(EventCondition eventCondition, float chanceMultipli
     }
 
     private static final MapCodec<DropRushRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            EventConditionRegistry.CODEC.fieldOf("eventCondition").forGetter(DropRushRecipe::eventCondition),
+            LittleJoysRules.EVENT_CONDITIONS.getEffectCodec().fieldOf("eventCondition").forGetter(DropRushRecipe::eventCondition),
             Codec.FLOAT.fieldOf("chanceMultiplier").orElse(1f).forGetter(DropRushRecipe::chanceMultiplier),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(DropRushRecipe::lootTable),
             Codec.INT.fieldOf("rolls").orElse(8).forGetter(DropRushRecipe::rolls),
@@ -75,18 +75,16 @@ public record DropRushRecipe(EventCondition eventCondition, float chanceMultipli
     private static final StreamCodec<RegistryFriendlyByteBuf, DropRushRecipe> STREAM_CODEC = StreamCodec.of(DropRushRecipe::toNetwork, DropRushRecipe::fromNetwork);
 
     private static DropRushRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-        final var eventCondition = EventConditionRegistry.conditionFromNetwork(buf);
         final var chance = buf.readFloat();
         final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
         final var rolls = buf.readVarInt();
         final var seconds = buf.readFloat();
         final var range = buf.readVarInt();
         final var weight = buf.readVarInt();
-        return new DropRushRecipe(eventCondition, chance, lootTable, rolls, seconds, range, weight);
+        return new DropRushRecipe(LittleJoysRules.UNSYNCED_EVENT_CONDITION, chance, lootTable, rolls, seconds, range, weight);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buf, DropRushRecipe recipe) {
-        EventConditionRegistry.conditionToNetwork(buf, recipe.eventCondition);
         buf.writeFloat(recipe.chanceMultiplier);
         buf.writeResourceKey(recipe.lootTable);
         buf.writeVarInt(recipe.rolls);
