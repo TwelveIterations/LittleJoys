@@ -1,7 +1,7 @@
 {
   "type": "littlejoys:drop_rush",
   "eventCondition": {
-    "type": "is_state",
+    "type": "littlejoys:is_state",
     "state": {
       "Name": "minecraft:potatoes",
       "Properties": {

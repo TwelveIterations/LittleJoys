@@ -1,22 +1,22 @@
 {
   "type": "littlejoys:gold_rush",
   "eventCondition": {
-    "type": "all",
+    "type": "shogi:and",
     "conditions": [
       {
-        "type": "is_state",
+        "type": "littlejoys:is_state",
         "state": {
           "Name": "minecraft:emerald_ore"
         }
       },
       {
-        "type": "is_tool",
+        "type": "littlejoys:is_tool",
         "item": "#littlejoys:can_trigger_goldrush"
       },
       {
-        "type": "not",
+        "type": "shogi:not",
         "condition": {
-          "type": "is_tool",
+          "type": "littlejoys:is_tool",
           "item": "#littlejoys:cannot_trigger_goldrush"
         }
       }
