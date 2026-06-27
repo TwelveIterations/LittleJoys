@@ -1,2 +1,1 @@
-- Fixed potential chunk loads while trying to spawn dig spots
-- Fixed potential chunk loads while trying to spawn fishing spots
+- Updated to Minecraft 26.3
