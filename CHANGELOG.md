@@ -1,12 +1,1 @@
-- Hotfixed crash on startup on NeoForge
-
-- Added Fallen Star
-  - A star will occasionally fall from the sky.
-  - Picking it up grants one of four blessings:
-    - Star of Abundance: some specific block, mob, and fishing drops will duplicate occasionally
-    - Star of Propserity: better healing and food, breeding may result in twins, planting occasionally causes a growth spurt
-    - Star of Fate: all Little Joys events are more likely to occur
-    - Star of Serenity: everything is a bit more peaceful; less environmental damage, some mobs are more calm
-  - Blessings are subtle and do not run out of time; they will naturally expire once you've been sufficiently blessed
-- Data Packs: Added `is_block` and `is_state_property` event conditions
-  - These are useful for adding support for blocks with many block properties, since they don't require all permutations to be specified
+- Updated to Minecraft 26.3
