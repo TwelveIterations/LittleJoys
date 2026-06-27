@@ -2,4 +2,8 @@ dependencies {
     implementation(libs.balmForge) {
         changing = libs.versions.balm.get().endsWith("SNAPSHOT")
     }
+    api(libs.shogiApi)
+    implementation(libs.shogiForge) {
+        changing = libs.versions.shogi.get().contains("SNAPSHOT")
+    }
 }
