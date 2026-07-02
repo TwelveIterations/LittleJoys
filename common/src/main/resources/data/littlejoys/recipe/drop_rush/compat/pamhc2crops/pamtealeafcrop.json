@@ -1,0 +1,31 @@
+{
+  "type": "littlejoys:drop_rush",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "pamhc2crops"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "pamhc2crops"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "pamhc2crops"
+    }
+  ],
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "pamhc2crops:pamtealeafcrop",
+      "Properties": {
+        "age": "7"
+      }
+    }
+  },
+  "lootTable": "pamhc2crops:blocks/pamtealeafcrop"
+}
