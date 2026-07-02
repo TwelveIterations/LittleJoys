@@ -1,0 +1,44 @@
+{
+  "type": "littlejoys:gold_rush",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "oritech"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "oritech"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "oritech"
+    }
+  ],
+  "eventCondition": {
+    "type": "all",
+    "conditions": [
+      {
+        "type": "is_state",
+        "state": {
+          "Name": "oritech:deepslate_nickel_ore"
+        }
+      },
+      {
+        "type": "is_tool",
+        "item": "#littlejoys:can_trigger_goldrush"
+      },
+      {
+        "type": "not",
+        "condition": {
+          "type": "is_tool",
+          "item": "#littlejoys:cannot_trigger_goldrush"
+        }
+      }
+    ]
+  },
+  "lootTable": "oritech:blocks/deepslate_nickel_ore"
+}
