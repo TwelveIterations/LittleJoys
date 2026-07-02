@@ -12,20 +12,16 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jspecify.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class FishingSpotLootModifier implements BalmLootModifier {
 
-    private static final Set<LootContext> activeContexts = new HashSet<>();
+    private static final ThreadLocal<Boolean> isApplyingLoot = ThreadLocal.withInitial(() -> false);
 
     @Override
     public void apply(LootContext context, List<ItemStack> list, @Nullable ResourceKey<LootTable> lootTableId) {
-        synchronized (activeContexts) {
-            if (activeContexts.contains(context)) {
-                return;
-            }
+        if (isApplyingLoot.get()) {
+            return;
         }
 
         final var level = context.getLevel();
@@ -44,12 +40,11 @@ public class FishingSpotLootModifier implements BalmLootModifier {
             FishingSpotHandler.resolveRecipe(level, fishingSpotPos.get(), fishingSpot.getRecipeId(), player).ifPresent(recipeHolder -> {
                 final var recipeLootTableId = recipeHolder.value().lootTable();
                 final var lootTable = level.getServer().reloadableRegistries().getLootTable(recipeLootTableId);
-                synchronized (activeContexts) {
-                    activeContexts.add(context);
-                }
-                lootTable.getRandomItems(context, list::add);
-                synchronized (activeContexts) {
-                    activeContexts.remove(context);
+                isApplyingLoot.set(true);
+                try {
+                    lootTable.getRandomItems(context, list::add);
+                } finally {
+                    isApplyingLoot.set(false);
                 }
             });
         }
