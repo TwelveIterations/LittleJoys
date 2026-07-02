@@ -1,0 +1,31 @@
+{
+  "type": "littlejoys:drop_rush",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "supplementaries"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "supplementaries"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "supplementaries"
+    }
+  ],
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "supplementaries:flax",
+      "Properties": {
+        "age": "7"
+      }
+    }
+  },
+  "lootTable": "supplementaries:blocks/flax"
+}

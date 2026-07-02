@@ -1,0 +1,31 @@
+{
+  "type": "littlejoys:drop_rush",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "biomeswevegone"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "biomeswevegone"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "biomeswevegone"
+    }
+  ],
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "biomeswevegone:oddion_crop",
+      "Properties": {
+        "age": "3"
+      }
+    }
+  },
+  "lootTable": "biomeswevegone:blocks/oddion_crop"
+}

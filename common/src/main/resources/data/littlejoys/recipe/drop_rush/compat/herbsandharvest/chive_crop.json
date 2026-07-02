@@ -1,0 +1,31 @@
+{
+  "type": "littlejoys:drop_rush",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "herbsandharvest"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "herbsandharvest"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "herbsandharvest"
+    }
+  ],
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "herbsandharvest:chive_crop",
+      "Properties": {
+        "age": "3"
+      }
+    }
+  },
+  "lootTable": "herbsandharvest:blocks/chive_crop"
+}
