@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "theurgy"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "theurgy"
+    }
+  ],
+  "type": "littlejoys:gold_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "theurgy:sal_ammoniac_ore"
+    }
+  },
+  "lootTable": "theurgy:blocks/sal_ammoniac_ore",
+  "chanceMultiplier": 1.0
+}

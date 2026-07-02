@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "silentgear"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "silentgear"
+    }
+  ],
+  "type": "littlejoys:gold_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "silentgear:blackstone_crimson_iron_ore"
+    }
+  },
+  "lootTable": "silentgear:blocks/blackstone_crimson_iron_ore",
+  "chanceMultiplier": 0.8
+}

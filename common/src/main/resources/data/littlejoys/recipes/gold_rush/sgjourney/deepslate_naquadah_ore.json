@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "sgjourney"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "sgjourney"
+    }
+  ],
+  "type": "littlejoys:gold_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "sgjourney:deepslate_naquadah_ore"
+    }
+  },
+  "lootTable": "sgjourney:blocks/deepslate_naquadah_ore",
+  "chanceMultiplier": 1.0
+}

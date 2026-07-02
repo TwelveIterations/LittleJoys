@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "powah"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "powah"
+    }
+  ],
+  "type": "littlejoys:gold_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "powah:deepslate_uraninite_ore_poor"
+    }
+  },
+  "lootTable": "powah:blocks/deepslate_uraninite_ore_poor",
+  "chanceMultiplier": 1.0
+}

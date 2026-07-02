@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "forbidden_arcanus"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "forbidden_arcanus"
+    }
+  ],
+  "type": "littlejoys:gold_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "forbidden_arcanus:deepslate_arcane_crystal_ore"
+    }
+  },
+  "lootTable": "forbidden_arcanus:blocks/deepslate_arcane_crystal_ore",
+  "chanceMultiplier": 1.0
+}

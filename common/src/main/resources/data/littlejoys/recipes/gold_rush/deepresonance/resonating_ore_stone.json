@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "deepresonance"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "deepresonance"
+    }
+  ],
+  "type": "littlejoys:gold_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "deepresonance:resonating_ore_stone"
+    }
+  },
+  "lootTable": "deepresonance:blocks/resonating_ore_stone",
+  "chanceMultiplier": 1.0
+}
