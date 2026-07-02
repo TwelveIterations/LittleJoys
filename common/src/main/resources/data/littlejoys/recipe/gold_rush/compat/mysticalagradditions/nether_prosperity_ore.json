@@ -1,0 +1,44 @@
+{
+  "type": "littlejoys:gold_rush",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mysticalagradditions"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "mysticalagradditions"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "mysticalagradditions"
+    }
+  ],
+  "eventCondition": {
+    "type": "all",
+    "conditions": [
+      {
+        "type": "is_state",
+        "state": {
+          "Name": "mysticalagradditions:nether_prosperity_ore"
+        }
+      },
+      {
+        "type": "is_tool",
+        "item": "#littlejoys:can_trigger_goldrush"
+      },
+      {
+        "type": "not",
+        "condition": {
+          "type": "is_tool",
+          "item": "#littlejoys:cannot_trigger_goldrush"
+        }
+      }
+    ]
+  },
+  "lootTable": "mysticalagradditions:blocks/nether_prosperity_ore"
+}
