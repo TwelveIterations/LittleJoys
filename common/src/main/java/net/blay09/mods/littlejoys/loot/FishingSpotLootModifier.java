@@ -10,20 +10,16 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class FishingSpotLootModifier implements BalmLootModifier {
 
-    private static final Set<LootContext> activeContexts = new HashSet<>();
+    private static final ThreadLocal<Boolean> isApplyingLoot = ThreadLocal.withInitial(() -> false);
 
     @Override
     public void apply(LootContext context, List<ItemStack> list) {
-        synchronized (activeContexts) {
-            if (activeContexts.contains(context)) {
-                return;
-            }
+        if (isApplyingLoot.get()) {
+            return;
         }
 
         final var level = context.getLevel();
@@ -39,12 +35,11 @@ public class FishingSpotLootModifier implements BalmLootModifier {
                 final var lootTableId = recipe.lootTable();
                 if (lootTableId != BuiltInLootTables.EMPTY) {
                     final var lootTable = level.getServer().getLootData().getLootTable(lootTableId);
-                    synchronized (activeContexts) {
-                        activeContexts.add(context);
-                    }
-                    lootTable.getRandomItems(context, list::add);
-                    synchronized (activeContexts) {
-                        activeContexts.remove(context);
+                    isApplyingLoot.set(true);
+                    try {
+                        lootTable.getRandomItems(context, list::add);
+                    } finally {
+                        isApplyingLoot.set(false);
                     }
                 }
             });
