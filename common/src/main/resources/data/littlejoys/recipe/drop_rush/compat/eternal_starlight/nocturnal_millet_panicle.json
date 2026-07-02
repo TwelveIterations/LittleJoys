@@ -1,0 +1,31 @@
+{
+  "type": "littlejoys:drop_rush",
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "eternal_starlight"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "eternal_starlight"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "eternal_starlight"
+    }
+  ],
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "eternal_starlight:nocturnal_millet_panicle",
+      "Properties": {
+        "age": "2"
+      }
+    }
+  },
+  "lootTable": "eternal_starlight:blocks/nocturnal_millet_panicle"
+}
