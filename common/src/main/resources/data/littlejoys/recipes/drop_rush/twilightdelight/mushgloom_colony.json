@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "twilightdelight"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "twilightdelight"
+    }
+  ],
+  "type": "littlejoys:drop_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "twilightdelight:mushgloom_colony",
+      "Properties": {
+        "age": "3"
+      }
+    }
+  },
+  "lootTable": "twilightdelight:blocks/mushgloom_colony"
+}

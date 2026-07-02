@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ars_nouveau"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ars_nouveau"
+    }
+  ],
+  "type": "littlejoys:drop_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "ars_nouveau:bombegranate_pod",
+      "Properties": {
+        "age": "2"
+      }
+    }
+  },
+  "lootTable": "ars_nouveau:blocks/bombegranate_pod"
+}

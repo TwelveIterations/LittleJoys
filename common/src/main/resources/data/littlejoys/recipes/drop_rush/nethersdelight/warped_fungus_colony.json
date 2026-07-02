@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "nethersdelight"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "nethersdelight"
+    }
+  ],
+  "type": "littlejoys:drop_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "nethersdelight:warped_fungus_colony",
+      "Properties": {
+        "age": "3"
+      }
+    }
+  },
+  "lootTable": "nethersdelight:blocks/warped_fungus_colony"
+}

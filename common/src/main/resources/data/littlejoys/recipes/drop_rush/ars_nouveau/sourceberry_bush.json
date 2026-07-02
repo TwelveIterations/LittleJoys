@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ars_nouveau"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ars_nouveau"
+    }
+  ],
+  "type": "littlejoys:drop_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "ars_nouveau:sourceberry_bush",
+      "Properties": {
+        "age": "3"
+      }
+    }
+  },
+  "lootTable": "ars_nouveau:blocks/sourceberry_bush"
+}

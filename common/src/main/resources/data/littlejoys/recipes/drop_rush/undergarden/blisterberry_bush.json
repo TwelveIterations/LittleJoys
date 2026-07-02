@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "undergarden"
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "undergarden"
+    }
+  ],
+  "type": "littlejoys:drop_rush",
+  "eventCondition": {
+    "type": "is_state",
+    "state": {
+      "Name": "undergarden:blisterberry_bush",
+      "Properties": {
+        "age": "3"
+      }
+    }
+  },
+  "lootTable": "undergarden:blocks/blisterberry_bush"
+}
