@@ -1,1 +1,44 @@
-- Fixed crash with Tide
+- Added Gold Rush support for various mods
+    - actuallyadditions
+    - aether
+    - allthemodium
+    - alltheores
+    - bigreactors
+    - create
+    - deeperdarker
+    - draconicevolution
+    - eternal_starlight
+    - evilcraft
+    - forbidden_arcanus
+    - iceandfire
+    - immersiveengineering
+    - irons_spellbooks
+    - justdirethings
+    - mekanism
+    - modern_industrialization
+    - mysticalagradditions
+    - mysticalagriculture
+    - occultism
+    - oritech
+    - powah
+    - railcraft
+    - silentgear
+    - silentgems
+    - theurgy
+    - undergarden
+    - xycraft_world
+- Added Drop Rush support for various mods
+    - actuallyadditions
+    - ars_nouveau
+    - biomeswevegone
+    - eternal_starlight
+    - farmersdelight
+    - herbsandharvest
+    - immersiveengineering
+    - minecolonies
+    - occultism
+    - oritech
+    - pamhc2crops
+    - silentgear
+    - supplementaries
+    - sushigocrafting
