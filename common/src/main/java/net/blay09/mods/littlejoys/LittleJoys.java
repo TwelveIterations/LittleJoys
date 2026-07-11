@@ -38,6 +38,14 @@ public class LittleJoys {
                 AboveStateCondition.class,
                 AboveStateCondition.CODEC,
                 AboveStateCondition::fromNetwork);
+        LittleJoysAPI.registerEventCondition(new ResourceLocation("is_block"),
+                IsBlockCondition.class,
+                IsBlockCondition.CODEC,
+                IsBlockCondition::fromNetwork);
+        LittleJoysAPI.registerEventCondition(new ResourceLocation("is_state_property"),
+                IsStatePropertyCondition.class,
+                IsStatePropertyCondition.CODEC,
+                IsStatePropertyCondition::fromNetwork);
         LittleJoysAPI.registerEventCondition(new ResourceLocation("is_state"), IsStateCondition.class, IsStateCondition.CODEC, IsStateCondition::fromNetwork);
         LittleJoysAPI.registerEventCondition(new ResourceLocation("all"), AndCondition.class, AndCondition.CODEC, AndCondition::fromNetwork);
         LittleJoysAPI.registerEventCondition(new ResourceLocation("any"), AnyCondition.class, AnyCondition.CODEC, AnyCondition::fromNetwork);
