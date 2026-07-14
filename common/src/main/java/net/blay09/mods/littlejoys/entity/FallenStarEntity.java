@@ -195,13 +195,17 @@ public class FallenStarEntity extends Entity {
     @Override
     public void playerTouch(Player player) {
         if (level() instanceof ServerLevel serverLevel) {
-            playCollectionEffects(serverLevel);
+            playCollectionEffects(serverLevel, player);
             discard();
         }
     }
 
-    private void playCollectionEffects(ServerLevel level) {
+    private void playCollectionEffects(ServerLevel level, Player player) {
+        final var movement = player.getKnownSpeed();
+        final var particleX = player.getX() + movement.x() * 4f;
+        final var particleZ = player.getZ() + movement.z() * 4f;
         level.sendParticles(ModParticles.fallenStarTrail.value(), getX(), getY() + 0.5f, getZ(), 12, 0.25f, 0.35f, 0.25f, 0.02f);
+        level.sendParticles(ParticleTypes.HAPPY_VILLAGER, particleX, player.getY() + player.getBbHeight() * 0.5f, particleZ, 24, player.getBbWidth(), player.getBbHeight() * 0.5f, player.getBbWidth(), 0f);
         level.playSound(null, getX(), getY(), getZ(), ModSounds.fallenStarBlessing, SoundSource.AMBIENT, 1f, 1f);
     }
 
