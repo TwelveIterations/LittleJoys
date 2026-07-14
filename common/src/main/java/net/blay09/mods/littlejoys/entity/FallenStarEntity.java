@@ -1,5 +1,6 @@
 package net.blay09.mods.littlejoys.entity;
 
+import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.blessing.BlessingManager;
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.blay09.mods.littlejoys.sound.ModSounds;
@@ -199,6 +200,7 @@ public class FallenStarEntity extends Entity {
         if (level() instanceof ServerLevel serverLevel) {
             if (player instanceof ServerPlayer serverPlayer) {
                 BlessingManager.applyRandomBlessing(serverPlayer);
+                ModAdvancements.awardFallenStarBlessing(serverPlayer);
             }
             playCollectionEffects(serverLevel, player);
             discard();

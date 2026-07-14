@@ -1,8 +1,8 @@
 package net.blay09.mods.littlejoys.loot;
 
 import net.blay09.mods.balm.world.level.storage.loot.BalmLootModifier;
-import net.blay09.mods.littlejoys.blessing.Blessing;
 import net.blay09.mods.littlejoys.blessing.BlessingManager;
+import net.blay09.mods.littlejoys.blessing.Blessings;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
 import net.blay09.mods.littlejoys.tag.ModItemTags;
 import net.minecraft.resources.ResourceKey;
@@ -27,7 +27,7 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
         }
 
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        if (activeBlessing.filter(it -> it == Blessing.STAR_OF_ABUNDANCE).isEmpty()) {
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_ABUNDANCE)) {
             return;
         }
 
@@ -41,7 +41,7 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
         if (!validStacks.isEmpty()) {
             final var duplicate = validStacks.get(context.getRandom().nextInt(validStacks.size())).copy();
             list.add(duplicate);
-            BlessingManager.consumeUse(player);
+            activeBlessing.consumeUse();
         }
     }
 }
