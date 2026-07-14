@@ -70,13 +70,23 @@ public class FallenStarEntity extends Entity {
         rotateTowardsClosestPlayer();
 
         if (level().isClientSide()) {
-            if (!landed && !onGround()) {
-                level().addParticle(ModParticles.fallenStar.value(), getX(), getY() + 0.1f, getZ(), 0f, 0.02f, 0f);
-            } else if (tickCount % 30 == 0) {
-                level().addParticle(ModParticles.fallenStar.value(), getX() - 0.25 + Math.random() * 0.5, getY() + 1.25f, getZ() - 0.25 + Math.random() * 0.5, 0f, 0.01f, 0f);
-            }
+            spawnParticles();
         } else if (onGround() && !landed && level() instanceof ServerLevel serverLevel) {
             land(serverLevel, blockPosition());
+        }
+    }
+
+    private void spawnParticles() {
+        if (!landed && !onGround()) {
+            for (int i = 0; i < 4; i++) {
+                final var progress = (i + Math.random()) / 4.0;
+                final var x = Mth.lerp(progress, xo, getX()) + (Math.random() - 0.5) * 0.18;
+                final var y = Mth.lerp(progress, yo, getY()) + 0.1f + (Math.random() - 0.5) * 0.18;
+                final var z = Mth.lerp(progress, zo, getZ()) + (Math.random() - 0.5) * 0.18;
+                level().addParticle(ModParticles.fallenStarTrail.value(), x, y, z, (Math.random() - 0.5) * 0.015, 0.015f, (Math.random() - 0.5) * 0.015);
+            }
+        } else if (tickCount % 30 == 0) {
+            level().addParticle(ModParticles.fallenStar.value(), getX() - 0.25 + Math.random() * 0.5, getY() + 1.25f, getZ() - 0.25 + Math.random() * 0.5, 0f, 0.01f, 0f);
         }
     }
 
@@ -150,13 +160,13 @@ public class FallenStarEntity extends Entity {
     }
 
     private void playCollectionEffects(ServerLevel level) {
-        level.sendParticles(ModParticles.fallenStar.value(), getX(), getY() + 0.5f, getZ(), 12, 0.25f, 0.35f, 0.25f, 0.02f);
+        level.sendParticles(ModParticles.fallenStarTrail.value(), getX(), getY() + 0.5f, getZ(), 12, 0.25f, 0.35f, 0.25f, 0.02f);
         level.playSound(null, this, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.AMBIENT, 1f, 1f);
     }
 
     private void playImpactEffects(ServerLevel level, BlockPos pos) {
         final var impactPos = Vec3.atBottomCenterOf(pos);
-        level.sendParticles(ModParticles.fallenStar.value(), impactPos.x(), impactPos.y() + 0.25f, impactPos.z(), 32, 0.45f, 0.25f, 0.45f, 0.08f);
+        level.sendParticles(ModParticles.fallenStarTrail.value(), impactPos.x(), impactPos.y() + 0.25f, impactPos.z(), 32, 0.45f, 0.25f, 0.45f, 0.08f);
         level.sendParticles(ParticleTypes.POOF, impactPos.x(), impactPos.y() + 0.05f, impactPos.z(), 12, 0.35f, 0.05f, 0.35f, 0.03f);
     }
 
@@ -203,7 +213,7 @@ public class FallenStarEntity extends Entity {
     }
 
     public @Nullable BlockPos getLandingTarget() {
-        final var landingTarget = getEntityData().get(DATA_LANDING_TARGET);
+        final long landingTarget = getEntityData().get(DATA_LANDING_TARGET);
         return landingTarget != NO_LANDING_TARGET ? BlockPos.of(landingTarget) : null;
     }
 
