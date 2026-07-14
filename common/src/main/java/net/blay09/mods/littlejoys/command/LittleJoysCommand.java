@@ -15,12 +15,14 @@ import net.blay09.mods.littlejoys.recipe.FishingSpotRecipe;
 import net.blay09.mods.littlejoys.recipe.GoldRushRecipe;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
@@ -50,6 +52,11 @@ public class LittleJoysCommand {
                             final var player = context.getSource().getPlayerOrException();
                             return FallenStarHandler.startFallingStar(level, player) ? 1 : 0;
                         })
+                        .then(Commands.argument("player", EntityArgument.player())
+                                .executes(context -> {
+                                    final var player = EntityArgument.getPlayer(context, "player");
+                                    return FallenStarHandler.startFallingStar(player.level(), player) ? 1 : 0;
+                                }))
                         .then(Commands.argument("position", BlockPosArgument.blockPos())
                                 .executes(context -> {
                                     final var level = context.getSource().getLevel();
