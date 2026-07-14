@@ -9,8 +9,10 @@ import net.blay09.mods.littlejoys.command.LittleJoysCommand;
 import net.blay09.mods.littlejoys.entity.ModEntities;
 import net.blay09.mods.littlejoys.handler.DigSpotHandler;
 import net.blay09.mods.littlejoys.handler.DropRushHandler;
+import net.blay09.mods.littlejoys.handler.FallenStarHandler;
 import net.blay09.mods.littlejoys.handler.FishingSpotHandler;
 import net.blay09.mods.littlejoys.handler.GoldRushHandler;
+import net.blay09.mods.littlejoys.item.ModItems;
 import net.blay09.mods.littlejoys.loot.ModLoot;
 import net.blay09.mods.littlejoys.network.ModNetworking;
 import net.blay09.mods.littlejoys.particle.ModParticles;
@@ -65,6 +67,7 @@ public class LittleJoys {
 
         LittleJoysConfig.initialize();
         registrars.blocks(ModBlocks::initialize);
+        registrars.items(ModItems::initialize);
         registrars.blockEntityTypes(ModBlockEntities::initialize);
         registrars.entityTypes(ModEntities::initialize);
         ModLoot.initialize(Balm.lootModifiers());
@@ -80,6 +83,7 @@ public class LittleJoys {
         GoldRushHandler.initialize();
         DigSpotHandler.initialize();
         FishingSpotHandler.initialize();
+        FallenStarHandler.initialize();
     }
 
     public static Identifier id(String path) {

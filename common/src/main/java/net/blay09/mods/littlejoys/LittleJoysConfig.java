@@ -21,6 +21,7 @@ public class LittleJoysConfig {
     public GoldRush goldRush = new GoldRush();
     public FishingSpots fishingSpots = new FishingSpots();
     public DigSpots digSpots = new DigSpots();
+    public FallenStars fallenStars = new FallenStars();
     public StardewFishing stardewFishing = new StardewFishing();
 
     public static class FishingSpots {
@@ -73,6 +74,23 @@ public class LittleJoysConfig {
 
         @Comment("The offset applied to the spawn area in the direction the player is facing. Set to 0 to center it around the player.")
         public int projectForwardDistance = 25;
+    }
+
+    public static class FallenStars {
+        @Comment("If disabled, fallen stars will not spawn.")
+        public boolean enabled = true;
+
+        @Comment("The chance per second for a fallen star to start falling once the player cooldown has elapsed.")
+        public float chancePerSecond = 0.02f;
+
+        @Comment("The minimum distance between fallen stars, preventing them from spawning too close together.")
+        public int minimumDistanceBetween = 128;
+
+        @Comment("The maximum distance fallen stars can spawn in front of the player.")
+        public int spawnRange = 64;
+
+        @Comment("The seconds that must pass after a fallen star appeared before another fallen star can appear for a player.")
+        public float spawnIntervalSeconds = 300;
     }
 
     public static class StardewFishing {

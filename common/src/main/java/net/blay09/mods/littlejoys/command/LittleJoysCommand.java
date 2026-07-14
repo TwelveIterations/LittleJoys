@@ -6,6 +6,7 @@ import net.blay09.mods.balm.commands.BalmCommands;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.handler.DigSpotHandler;
 import net.blay09.mods.littlejoys.handler.DropRushHandler;
+import net.blay09.mods.littlejoys.handler.FallenStarHandler;
 import net.blay09.mods.littlejoys.handler.FishingSpotHandler;
 import net.blay09.mods.littlejoys.handler.GoldRushHandler;
 import net.blay09.mods.littlejoys.recipe.DigSpotRecipe;
@@ -29,6 +30,7 @@ public class LittleJoysCommand {
     private static final Identifier PERMISSION_LITTLEJOYS_FISHINGSPOT = LittleJoys.id("command.littlejoys.fishingspot");
     private static final Identifier PERMISSION_LITTLEJOYS_GOLDRUSH = LittleJoys.id("command.littlejoys.goldrush");
     private static final Identifier PERMISSION_LITTLEJOYS_DROPRUSH = LittleJoys.id("command.littlejoys.droprush");
+    private static final Identifier PERMISSION_LITTLEJOYS_FALLENSTAR = LittleJoys.id("command.littlejoys.fallenstar");
 
     private static final DynamicCommandExceptionType ERROR_UNKNOWN_RECIPE = new DynamicCommandExceptionType((arg) -> Component.translatable("recipe.notFound", arg));
 
@@ -38,8 +40,23 @@ public class LittleJoysCommand {
         BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_FISHINGSPOT, Permissions.COMMANDS_GAMEMASTER);
         BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_GOLDRUSH, Permissions.COMMANDS_GAMEMASTER);
         BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_DROPRUSH, Permissions.COMMANDS_GAMEMASTER);
+        BalmCommands.registerPermission(PERMISSION_LITTLEJOYS_FALLENSTAR, Permissions.COMMANDS_GAMEMASTER);
 
         dispatcher.register(Commands.literal("littlejoys")
+                .then(Commands.literal("fallenstar")
+                        .requires(BalmCommands.requirePermission(PERMISSION_LITTLEJOYS_FALLENSTAR))
+                        .executes(context -> {
+                            final var level = context.getSource().getLevel();
+                            final var player = context.getSource().getPlayerOrException();
+                            return FallenStarHandler.startFallingStar(level, player) ? 1 : 0;
+                        })
+                        .then(Commands.argument("position", BlockPosArgument.blockPos())
+                                .executes(context -> {
+                                    final var level = context.getSource().getLevel();
+                                    final var pos = BlockPosArgument.getBlockPos(context, "position");
+                                    FallenStarHandler.startFallingStar(level, pos);
+                                    return 1;
+                                })))
                 .then(Commands.literal("digspot")
                         .requires(BalmCommands.requirePermission(PERMISSION_LITTLEJOYS_DIGSPOT))
                         .then(Commands.argument("position", BlockPosArgument.blockPos())
