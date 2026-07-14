@@ -2,6 +2,7 @@ package net.blay09.mods.littlejoys.entity;
 
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -110,6 +111,7 @@ public class FallenStarEntity extends Entity {
                 lightPos = pos;
             }
         }
+        playImpactEffects(serverLevel, pos);
         serverLevel.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_FALL, SoundSource.NEUTRAL, 1f, 1f);
     }
 
@@ -150,6 +152,12 @@ public class FallenStarEntity extends Entity {
     private void playCollectionEffects(ServerLevel level) {
         level.sendParticles(ModParticles.fallenStar.value(), getX(), getY() + 0.5f, getZ(), 12, 0.25f, 0.35f, 0.25f, 0.02f);
         level.playSound(null, this, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.AMBIENT, 1f, 1f);
+    }
+
+    private void playImpactEffects(ServerLevel level, BlockPos pos) {
+        final var impactPos = Vec3.atBottomCenterOf(pos);
+        level.sendParticles(ModParticles.fallenStar.value(), impactPos.x(), impactPos.y() + 0.25f, impactPos.z(), 32, 0.45f, 0.25f, 0.45f, 0.08f);
+        level.sendParticles(ParticleTypes.POOF, impactPos.x(), impactPos.y() + 0.05f, impactPos.z(), 12, 0.35f, 0.05f, 0.35f, 0.03f);
     }
 
     @Override
