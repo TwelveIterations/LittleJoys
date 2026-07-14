@@ -36,11 +36,14 @@ public class FallenStarEntity extends Entity {
     private static final String TAG_LANDING_TARGET = "LandingTarget";
     private static final String TAG_SOURCE_PLAYER = "SourcePlayer";
     private static final String TAG_FALL_TICKS = "FallTicks";
+    private static final String TAG_LANDED_TICKS = "LandedTicks";
     private static final int FALL_DURATION_TICKS = 80;
+    private static final int LIFETIME_TICKS = 6000;
     private static final float LAND_SOUND_VOLUME = 0.5f;
 
     private boolean landed;
     private int fallTicks;
+    private int landedTicks;
     private @Nullable Vec3 startVec;
     private @Nullable BlockPos lightPos;
     private @Nullable UUID sourcePlayerId;
@@ -81,7 +84,21 @@ public class FallenStarEntity extends Entity {
             spawnParticles();
         } else if (onGround() && !landed && level() instanceof ServerLevel serverLevel) {
             land(serverLevel, blockPosition());
+        } else if (landed && level() instanceof ServerLevel serverLevel) {
+            tickDespawn(serverLevel);
         }
+    }
+
+    private void tickDespawn(ServerLevel level) {
+        landedTicks++;
+        if (landedTicks >= LIFETIME_TICKS && !hasNearbyPlayer(level)) {
+            playDespawnEffects(level);
+            discard();
+        }
+    }
+
+    private boolean hasNearbyPlayer(ServerLevel level) {
+        return !level.getEntitiesOfClass(Player.class, getBoundingBox().inflate(32), Player::isAlive).isEmpty();
     }
 
     private void spawnParticles() {
@@ -194,6 +211,11 @@ public class FallenStarEntity extends Entity {
         level.sendParticles(ParticleTypes.POOF, impactPos.x(), impactPos.y() + 0.05f, impactPos.z(), 12, 0.35f, 0.05f, 0.35f, 0.03f);
     }
 
+    private void playDespawnEffects(ServerLevel level) {
+        level.sendParticles(ModParticles.fallenStarTrail.value(), getX(), getY() + 0.5f, getZ(), 16, 0.35f, 0.35f, 0.35f, 0.04f);
+        level.sendParticles(ParticleTypes.POOF, getX(), getY() + 0.25f, getZ(), 8, 0.25f, 0.2f, 0.25f, 0.02f);
+    }
+
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(DATA_LANDING_TARGET, NO_LANDING_TARGET);
@@ -227,6 +249,7 @@ public class FallenStarEntity extends Entity {
             output.putString(TAG_SOURCE_PLAYER, sourcePlayerId.toString());
         }
         output.putInt(TAG_FALL_TICKS, fallTicks);
+        output.putInt(TAG_LANDED_TICKS, landedTicks);
     }
 
     @Override
@@ -238,6 +261,7 @@ public class FallenStarEntity extends Entity {
         setLandingTarget(input.getLong(TAG_LANDING_TARGET).map(BlockPos::of).orElse(null));
         sourcePlayerId = input.getString(TAG_SOURCE_PLAYER).map(UUID::fromString).orElse(null);
         fallTicks = input.getIntOr(TAG_FALL_TICKS, 0);
+        landedTicks = input.getIntOr(TAG_LANDED_TICKS, 0);
     }
 
     public @Nullable BlockPos getLandingTarget() {
