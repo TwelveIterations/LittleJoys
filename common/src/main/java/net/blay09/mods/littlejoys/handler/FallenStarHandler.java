@@ -5,9 +5,9 @@ import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.entity.FallenStarEntity;
+import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.attribute.EnvironmentAttributes;
@@ -15,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -59,7 +60,7 @@ public class FallenStarHandler {
 
             final var targetPos = findTargetPos(level, player);
             if (targetPos.isPresent()) {
-                startFallingStar(level, targetPos.get());
+                startFallingStar(level, targetPos.get(), player);
                 littleJoysData.putInt(FALLEN_STAR_COOLDOWN, Math.round(config.spawnIntervalSeconds * 20));
             } else {
                 littleJoysData.putInt(FALLEN_STAR_COOLDOWN, 20);
@@ -73,16 +74,26 @@ public class FallenStarHandler {
             return false;
         }
 
-        startFallingStar(level, targetPos.get());
+        startFallingStar(level, targetPos.get(), player);
         return true;
     }
 
     public static void startFallingStar(ServerLevel level, BlockPos pos) {
+        startFallingStar(level, pos, null);
+    }
+
+    public static void startFallingStar(ServerLevel level, BlockPos pos, @Nullable Player player) {
         final var offsetX = random.nextBoolean() ? FALLING_STAR_HORIZONTAL_OFFSET : -FALLING_STAR_HORIZONTAL_OFFSET;
         final var offsetZ = random.nextBoolean() ? FALLING_STAR_HORIZONTAL_OFFSET : -FALLING_STAR_HORIZONTAL_OFFSET;
         final var fallenStar = new FallenStarEntity(level, pos.getX() + 0.5f + offsetX, pos.getY() + FALLING_STAR_VERTICAL_OFFSET, pos.getZ() + 0.5f + offsetZ, pos);
+        if (player != null) {
+            fallenStar.setSourcePlayerId(player.getUUID());
+        }
         level.addFreshEntity(fallenStar);
-        level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1f, 1.5f);
+
+        if (player != null) {
+            fallenStar.playPlayerAwareSound(level, fallenStar.position(), ModSounds.fallenStar, SoundSource.AMBIENT, 1f, 1f);
+        }
     }
 
     private static Optional<BlockPos> findTargetPos(ServerLevel level, Player player) {

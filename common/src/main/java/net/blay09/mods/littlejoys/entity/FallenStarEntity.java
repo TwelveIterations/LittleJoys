@@ -1,13 +1,16 @@
 package net.blay09.mods.littlejoys.entity;
 
 import net.blay09.mods.littlejoys.particle.ModParticles;
+import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,19 +26,24 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
+import java.util.UUID;
+
 public class FallenStarEntity extends Entity {
 
     private static final EntityDataAccessor<Long> DATA_LANDING_TARGET = SynchedEntityData.defineId(FallenStarEntity.class, EntityDataSerializers.LONG);
     private static final long NO_LANDING_TARGET = Long.MAX_VALUE;
     private static final String TAG_LIGHT_POS = "LightPos";
     private static final String TAG_LANDING_TARGET = "LandingTarget";
+    private static final String TAG_SOURCE_PLAYER = "SourcePlayer";
     private static final String TAG_FALL_TICKS = "FallTicks";
     private static final int FALL_DURATION_TICKS = 80;
+    private static final float LAND_SOUND_VOLUME = 0.5f;
 
     private boolean landed;
     private int fallTicks;
     private @Nullable Vec3 startVec;
     private @Nullable BlockPos lightPos;
+    private @Nullable UUID sourcePlayerId;
 
     public FallenStarEntity(EntityType<? extends FallenStarEntity> entityType, Level level) {
         super(entityType, level);
@@ -122,7 +130,23 @@ public class FallenStarEntity extends Entity {
             }
         }
         playImpactEffects(serverLevel, pos);
-        serverLevel.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_FALL, SoundSource.NEUTRAL, 1f, 1f);
+        playPlayerAwareSound(serverLevel, Vec3.atCenterOf(pos), ModSounds.fallenStarLand, SoundSource.NEUTRAL, LAND_SOUND_VOLUME, 1f);
+    }
+
+    public void playPlayerAwareSound(ServerLevel serverLevel, Vec3 pos, Holder<SoundEvent> sound, SoundSource source, float volume, float pitch) {
+        serverLevel.playSound(null, pos.x(), pos.y(), pos.z(), sound, source, volume, pitch);
+
+        if (sourcePlayerId != null) {
+            final var player = serverLevel.getServer().getPlayerList().getPlayer(sourcePlayerId);
+            if (player != null && player.level() == serverLevel) {
+                final var audibleRange = sound.value().getRange(volume);
+                if (player.distanceToSqr(pos) > audibleRange * audibleRange) {
+                    final var playerPos = player.position();
+                    final var soundPos = playerPos.add(pos.subtract(playerPos).normalize().scale(12));
+                    player.connection.send(new ClientboundSoundPacket(sound, source, soundPos.x(), soundPos.y(), soundPos.z(), 0.2f, pitch, getRandom().nextLong()));
+                }
+            }
+        }
     }
 
     private void stopAtLandingTarget() {
@@ -161,7 +185,7 @@ public class FallenStarEntity extends Entity {
 
     private void playCollectionEffects(ServerLevel level) {
         level.sendParticles(ModParticles.fallenStarTrail.value(), getX(), getY() + 0.5f, getZ(), 12, 0.25f, 0.35f, 0.25f, 0.02f);
-        level.playSound(null, this, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.AMBIENT, 1f, 1f);
+        level.playSound(null, getX(), getY(), getZ(), ModSounds.fallenStarBlessing, SoundSource.AMBIENT, 1f, 1f);
     }
 
     private void playImpactEffects(ServerLevel level, BlockPos pos) {
@@ -199,6 +223,9 @@ public class FallenStarEntity extends Entity {
         if (landingTarget != null) {
             output.putLong(TAG_LANDING_TARGET, landingTarget.asLong());
         }
+        if (sourcePlayerId != null) {
+            output.putString(TAG_SOURCE_PLAYER, sourcePlayerId.toString());
+        }
         output.putInt(TAG_FALL_TICKS, fallTicks);
     }
 
@@ -209,6 +236,7 @@ public class FallenStarEntity extends Entity {
             stopAtLandingTarget();
         }
         setLandingTarget(input.getLong(TAG_LANDING_TARGET).map(BlockPos::of).orElse(null));
+        sourcePlayerId = input.getString(TAG_SOURCE_PLAYER).map(UUID::fromString).orElse(null);
         fallTicks = input.getIntOr(TAG_FALL_TICKS, 0);
     }
 
@@ -219,6 +247,10 @@ public class FallenStarEntity extends Entity {
 
     public void setLandingTarget(@Nullable BlockPos landingTarget) {
         getEntityData().set(DATA_LANDING_TARGET, landingTarget != null ? landingTarget.asLong() : NO_LANDING_TARGET);
+    }
+
+    public void setSourcePlayerId(@Nullable UUID sourcePlayerId) {
+        this.sourcePlayerId = sourcePlayerId;
     }
 
     @Override

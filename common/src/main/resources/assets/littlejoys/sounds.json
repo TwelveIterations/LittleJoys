@@ -11,6 +11,18 @@
     "subtitle": "subtitle.littlejoys.drop_rush_stop",
     "sounds": [ "littlejoys:drop_rush_stop" ]
   },
+  "fallen_star": {
+    "subtitle": "subtitle.littlejoys.fallen_star",
+    "sounds": [ "littlejoys:fallen_star" ]
+  },
+  "fallen_star_blessing": {
+    "subtitle": "subtitle.littlejoys.fallen_star_blessing",
+    "sounds": [ "littlejoys:fallen_star_blessing" ]
+  },
+  "fallen_star_land": {
+    "subtitle": "subtitle.littlejoys.fallen_star_land",
+    "sounds": [ "littlejoys:fallen_star_land" ]
+  },
   "gold_rush": {
     "subtitle": "subtitle.littlejoys.gold_rush",
     "sounds": [ "littlejoys:gold_rush" ]
