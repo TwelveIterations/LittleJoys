@@ -1,5 +1,6 @@
 package net.blay09.mods.littlejoys.entity;
 
+import net.blay09.mods.littlejoys.blessing.BlessingManager;
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -10,6 +11,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -195,6 +197,9 @@ public class FallenStarEntity extends Entity {
     @Override
     public void playerTouch(Player player) {
         if (level() instanceof ServerLevel serverLevel) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                BlessingManager.applyRandomBlessing(serverPlayer);
+            }
             playCollectionEffects(serverLevel, player);
             discard();
         }

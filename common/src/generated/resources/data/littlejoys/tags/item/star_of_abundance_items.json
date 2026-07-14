@@ -1,0 +1,21 @@
+{
+  "values": [
+    "minecraft:coal",
+    "minecraft:diamond",
+    "minecraft:emerald",
+    "minecraft:lapis_lazuli",
+    "minecraft:quartz",
+    "minecraft:raw_copper",
+    "minecraft:raw_gold",
+    "minecraft:raw_iron",
+    "minecraft:redstone",
+    {
+      "id": "#c:gems",
+      "required": false
+    },
+    {
+      "id": "#c:raw_materials",
+      "required": false
+    }
+  ]
+}
