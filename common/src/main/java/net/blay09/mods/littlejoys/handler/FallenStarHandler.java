@@ -22,6 +22,8 @@ public class FallenStarHandler {
 
     private static final RandomSource random = RandomSource.create();
     private static final String FALLEN_STAR_COOLDOWN = "fallenStarCooldown";
+    private static final int FALLING_STAR_HORIZONTAL_OFFSET = 24;
+    private static final int FALLING_STAR_VERTICAL_OFFSET = 128;
 
     public static void initialize() {
         ServerTickCallback.ServerPlayerTick.AFTER.register(player -> {
@@ -76,7 +78,9 @@ public class FallenStarHandler {
     }
 
     public static void startFallingStar(ServerLevel level, BlockPos pos) {
-        final var fallenStar = new FallenStarEntity(level, pos.getX() + 0.5f, pos.getY() + 128f, pos.getZ() + 0.5f, 0f, -0.45f, 0f);
+        final var offsetX = random.nextBoolean() ? FALLING_STAR_HORIZONTAL_OFFSET : -FALLING_STAR_HORIZONTAL_OFFSET;
+        final var offsetZ = random.nextBoolean() ? FALLING_STAR_HORIZONTAL_OFFSET : -FALLING_STAR_HORIZONTAL_OFFSET;
+        final var fallenStar = new FallenStarEntity(level, pos.getX() + 0.5f + offsetX, pos.getY() + FALLING_STAR_VERTICAL_OFFSET, pos.getZ() + 0.5f + offsetZ, pos);
         level.addFreshEntity(fallenStar);
         level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1f, 1.5f);
     }

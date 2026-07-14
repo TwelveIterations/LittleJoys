@@ -2,38 +2,48 @@ package net.blay09.mods.littlejoys.entity;
 
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 public class FallenStarEntity extends Entity {
 
-    private static final String TAG_PLACED_LIGHT_POS = "PlacedLightPos";
+    private static final EntityDataAccessor<Long> DATA_LANDING_TARGET = SynchedEntityData.defineId(FallenStarEntity.class, EntityDataSerializers.LONG);
+    private static final long NO_LANDING_TARGET = Long.MAX_VALUE;
+    private static final String TAG_LIGHT_POS = "LightPos";
+    private static final String TAG_LANDING_TARGET = "LandingTarget";
+    private static final String TAG_FALL_TICKS = "FallTicks";
+    private static final int FALL_DURATION_TICKS = 80;
 
     private boolean landed;
-    private @Nullable BlockPos placedLightPos;
+    private int fallTicks;
+    private @Nullable Vec3 startVec;
+    private @Nullable BlockPos lightPos;
 
     public FallenStarEntity(EntityType<? extends FallenStarEntity> entityType, Level level) {
         super(entityType, level);
     }
 
-    public FallenStarEntity(Level level, double posX, double posY, double posZ, double deltaX, double deltaY, double deltaZ) {
+    public FallenStarEntity(Level level, double posX, double posY, double posZ, BlockPos landingTarget) {
         this(ModEntities.fallenStar.value(), level);
         setPos(posX, posY, posZ);
-        setDeltaMovement(deltaX, deltaY, deltaZ);
+        setLandingTarget(landingTarget);
     }
 
     @Override
@@ -44,40 +54,68 @@ public class FallenStarEntity extends Entity {
         yo = getY();
         zo = getZ();
 
-        if (!isNoGravity()) {
-            applyGravity();
+        final var landingTarget = getLandingTarget();
+        if (landingTarget != null && !landed) {
+            moveTowardsLandingTarget(landingTarget);
+        } else if (!onGround()) {
+            if (!isNoGravity()) {
+                applyGravity();
+            }
+            move(MoverType.SELF, getDeltaMovement());
+        } else {
+            setDeltaMovement(Vec3.ZERO);
         }
 
-        move(MoverType.SELF, getDeltaMovement());
         rotateTowardsClosestPlayer();
 
-        final var airDrag = getAirDrag();
-        var drag = airDrag;
-        if (onGround()) {
-            drag *= level().getBlockState(getBlockPosBelowThatAffectsMyMovement()).getBlock().getFriction();
-        }
-
-        setDeltaMovement(getDeltaMovement().multiply(drag, airDrag, drag));
-        if (onGround() && getDeltaMovement().y < 0) {
-            setDeltaMovement(getDeltaMovement().multiply(1, -0.5, 1));
-        }
-
         if (level().isClientSide()) {
-            if (!onGround()) {
+            if (!landed && !onGround()) {
                 level().addParticle(ModParticles.fallenStar.value(), getX(), getY() + 0.1f, getZ(), 0f, 0.02f, 0f);
             } else if (tickCount % 30 == 0) {
                 level().addParticle(ModParticles.fallenStar.value(), getX() - 0.25 + Math.random() * 0.5, getY() + 1.25f, getZ() - 0.25 + Math.random() * 0.5, 0f, 0.01f, 0f);
             }
         } else if (onGround() && !landed && level() instanceof ServerLevel serverLevel) {
-            landed = true;
-            final var pos = blockPosition();
-            if (serverLevel.getBlockState(pos).canBeReplaced()) {
-                if (serverLevel.setBlock(pos, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, LightBlock.MAX_LEVEL), 3)) {
-                    placedLightPos = pos;
-                }
-            }
-            serverLevel.playSound(null, blockPosition(), SoundEvents.AMETHYST_BLOCK_FALL, SoundSource.NEUTRAL, 1f, 1f);
+            land(serverLevel, blockPosition());
         }
+    }
+
+    private void moveTowardsLandingTarget(BlockPos landingTarget) {
+        if (startVec == null) {
+            startVec = position();
+        }
+
+        fallTicks++;
+        final var target = getImpactTarget(landingTarget);
+        final var progress = Math.min(1f, fallTicks / (float) FALL_DURATION_TICKS);
+        final var nextPos = startVec.lerp(target, progress);
+        setDeltaMovement(nextPos.subtract(position()));
+        setPos(nextPos);
+
+        if (progress >= 1f) {
+            stopAtLandingTarget();
+            if (level() instanceof ServerLevel serverLevel) {
+                land(serverLevel, landingTarget);
+            }
+        }
+    }
+
+    private Vec3 getImpactTarget(BlockPos landingTarget) {
+        return Vec3.atBottomCenterOf(landingTarget);
+    }
+
+    private void land(ServerLevel serverLevel, BlockPos pos) {
+        stopAtLandingTarget();
+        if (serverLevel.getBlockState(pos).canBeReplaced()) {
+            if (serverLevel.setBlock(pos, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, LightBlock.MAX_LEVEL), 3)) {
+                lightPos = pos;
+            }
+        }
+        serverLevel.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_FALL, SoundSource.NEUTRAL, 1f, 1f);
+    }
+
+    private void stopAtLandingTarget() {
+        landed = true;
+        setDeltaMovement(Vec3.ZERO);
     }
 
     private void rotateTowardsClosestPlayer() {
@@ -116,6 +154,7 @@ public class FallenStarEntity extends Entity {
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(DATA_LANDING_TARGET, NO_LANDING_TARGET);
     }
 
     @Override
@@ -127,25 +166,41 @@ public class FallenStarEntity extends Entity {
     }
 
     private void removePlacedLight() {
-        if (placedLightPos != null && level() instanceof ServerLevel serverLevel && serverLevel.getBlockState(placedLightPos).is(Blocks.LIGHT)) {
-            serverLevel.setBlock(placedLightPos, Blocks.AIR.defaultBlockState(), LightBlock.UPDATE_ALL);
-            placedLightPos = null;
+        if (lightPos != null && level() instanceof ServerLevel serverLevel && serverLevel.getBlockState(lightPos).is(Blocks.LIGHT)) {
+            serverLevel.setBlock(lightPos, Blocks.AIR.defaultBlockState(), LightBlock.UPDATE_ALL);
+            lightPos = null;
         }
     }
 
     @Override
     protected void addAdditionalSaveData(ValueOutput output) {
-        if (placedLightPos != null) {
-            output.putLong(TAG_PLACED_LIGHT_POS, placedLightPos.asLong());
+        if (lightPos != null) {
+            output.putLong(TAG_LIGHT_POS, lightPos.asLong());
         }
+        final var landingTarget = getLandingTarget();
+        if (landingTarget != null) {
+            output.putLong(TAG_LANDING_TARGET, landingTarget.asLong());
+        }
+        output.putInt(TAG_FALL_TICKS, fallTicks);
     }
 
     @Override
     protected void readAdditionalSaveData(ValueInput input) {
-        placedLightPos = input.getLong(TAG_PLACED_LIGHT_POS).map(BlockPos::of).orElse(null);
-        if (placedLightPos != null) {
-            landed = true;
+        lightPos = input.getLong(TAG_LIGHT_POS).map(BlockPos::of).orElse(null);
+        if (lightPos != null) {
+            stopAtLandingTarget();
         }
+        setLandingTarget(input.getLong(TAG_LANDING_TARGET).map(BlockPos::of).orElse(null));
+        fallTicks = input.getIntOr(TAG_FALL_TICKS, 0);
+    }
+
+    public @Nullable BlockPos getLandingTarget() {
+        final var landingTarget = getEntityData().get(DATA_LANDING_TARGET);
+        return landingTarget != NO_LANDING_TARGET ? BlockPos.of(landingTarget) : null;
+    }
+
+    public void setLandingTarget(@Nullable BlockPos landingTarget) {
+        getEntityData().set(DATA_LANDING_TARGET, landingTarget != null ? landingTarget.asLong() : NO_LANDING_TARGET);
     }
 
     @Override
