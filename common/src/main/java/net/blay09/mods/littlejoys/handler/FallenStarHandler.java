@@ -38,21 +38,25 @@ public class FallenStarHandler {
                 return;
             }
 
+            final var config = LittleJoysConfig.getActive().fallenStars;
             final var playerData = Balm.hooks().getPersistentData(player);
             final var littleJoysData = playerData.getCompoundOrEmpty(LittleJoys.MOD_ID);
+            if (!littleJoysData.contains(FALLEN_STAR_COOLDOWN)) {
+                littleJoysData.putInt(FALLEN_STAR_COOLDOWN, (int) Math.round(72000 * Math.random()));
+            }
             playerData.put(LittleJoys.MOD_ID, littleJoysData);
+
             final var cooldown = littleJoysData.getIntOr(FALLEN_STAR_COOLDOWN, 0);
             if (cooldown > 0) {
                 littleJoysData.putInt(FALLEN_STAR_COOLDOWN, cooldown - 1);
                 return;
             }
 
-            if (random.nextFloat() >= LittleJoysConfig.getActive().fallenStars.chancePerSecond) {
-                littleJoysData.putInt(FALLEN_STAR_COOLDOWN, 20);
+            if (random.nextFloat() >= LittleJoysConfig.getActive().fallenStars.chancePerRoll) {
+                littleJoysData.putInt(FALLEN_STAR_COOLDOWN, Math.round(config.rollIntervalSeconds * 20));
                 return;
             }
 
-            final var config = LittleJoysConfig.getActive().fallenStars;
             if (hasFallenStarInRange(level, player.blockPosition(), config.minimumDistanceBetween)) {
                 littleJoysData.putInt(FALLEN_STAR_COOLDOWN, 200);
                 return;
@@ -61,7 +65,7 @@ public class FallenStarHandler {
             final var targetPos = findTargetPos(level, player);
             if (targetPos.isPresent()) {
                 startFallingStar(level, targetPos.get(), player);
-                littleJoysData.putInt(FALLEN_STAR_COOLDOWN, Math.round(config.spawnIntervalSeconds * 20));
+                littleJoysData.putInt(FALLEN_STAR_COOLDOWN, Math.round(config.cooldownSeconds * 20));
             } else {
                 littleJoysData.putInt(FALLEN_STAR_COOLDOWN, 20);
             }

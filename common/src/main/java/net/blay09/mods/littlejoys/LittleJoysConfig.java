@@ -80,8 +80,8 @@ public class LittleJoysConfig {
         @Comment("If disabled, fallen stars will not spawn.")
         public boolean enabled = true;
 
-        @Comment("The chance per second for a fallen star to start falling once the player cooldown has elapsed.")
-        public float chancePerSecond = 0.02f;
+        @Comment("The chance per roll for a fallen star to start falling once the player cooldown has elapsed.")
+        public float chancePerRoll = 0.2f;
 
         @Comment("The minimum distance between fallen stars, preventing them from spawning too close together.")
         public int minimumDistanceBetween = 128;
@@ -90,7 +90,10 @@ public class LittleJoysConfig {
         public int spawnRange = 64;
 
         @Comment("The seconds that must pass after a fallen star appeared before another fallen star can appear for a player.")
-        public float spawnIntervalSeconds = 300;
+        public float cooldownSeconds = 10800;
+
+        @Comment("The seconds that must pass before another fallen star chance is rolled for a player.")
+        public float rollIntervalSeconds = 900;
     }
 
     public static class StardewFishing {
