@@ -4,6 +4,7 @@ import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.event.callback.LivingEntityCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
+import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -34,6 +35,7 @@ public class BlessingManager {
     public static void applyBlessing(ServerPlayer player, Blessing blessing) {
         setActiveBlessing(player, blessing, blessing.defaultUses());
         syncBlessingEffect(player);
+        ModAdvancements.awardFallenStarBlessing(player);
     }
 
     public static Optional<Blessing> getActiveBlessing(ServerPlayer player) {

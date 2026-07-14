@@ -16,6 +16,7 @@ public class ModAdvancements {
     public static final Identifier fishingSpot = id("littlejoys/fishing_spot");
     public static final Identifier dropRushComplete = id("littlejoys/drop_rush_complete");
     public static final Identifier goldRush = id("littlejoys/gold_rush");
+    public static final Identifier fallenStarBlessing = id("littlejoys/fallen_star_blessing");
 
     public static void awardDigSpot(ServerPlayer player) {
         awardRootAnd(player, digSpot);
@@ -31,6 +32,10 @@ public class ModAdvancements {
 
     public static void awardGoldRush(ServerPlayer player) {
         awardRootAnd(player, goldRush);
+    }
+
+    public static void awardFallenStarBlessing(ServerPlayer player) {
+        awardRootAnd(player, fallenStarBlessing);
     }
 
     private static void awardRootAnd(ServerPlayer player, Identifier id) {
