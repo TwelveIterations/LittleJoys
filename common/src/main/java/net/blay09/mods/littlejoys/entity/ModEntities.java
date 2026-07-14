@@ -23,7 +23,7 @@ public class ModEntities {
                 () -> EntityType.Builder.of((EntityType<FallenStarEntity> type, Level level) -> new FallenStarEntity(type, level), MobCategory.MISC)
                         .sized(0.25f, 0.25f)
                         .clientTrackingRange(8)
-                        .updateInterval(2)).asHolder();
+                        .updateInterval(20)).asHolder();
     }
 
 }
