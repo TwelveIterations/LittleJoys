@@ -110,8 +110,8 @@ public class FallenStarEntity extends Entity {
                 final var z = Mth.lerp(progress, zo, getZ()) + (Math.random() - 0.5) * 0.18;
                 level().addParticle(ModParticles.fallenStarTrail.value(), x, y, z, (Math.random() - 0.5) * 0.015, 0.015f, (Math.random() - 0.5) * 0.015);
             }
-        } else if (tickCount % 30 == 0) {
-            level().addParticle(ModParticles.fallenStar.value(), getX() - 0.25 + Math.random() * 0.5, getY() + 1.25f, getZ() - 0.25 + Math.random() * 0.5, 0f, 0.01f, 0f);
+        } else if (tickCount % 4 == 0) {
+            level().addParticle(ModParticles.fallenStar.value(), getX() - 1 + Math.random() * 2, getY() + Math.random(), getZ() - 1 + Math.random() * 2, 0f, 0.01f, 0f);
         }
     }
 
@@ -201,11 +201,7 @@ public class FallenStarEntity extends Entity {
     }
 
     private void playCollectionEffects(ServerLevel level, Player player) {
-        final var movement = player.getKnownSpeed();
-        final var particleX = player.getX() + movement.x() * 4f;
-        final var particleZ = player.getZ() + movement.z() * 4f;
         level.sendParticles(ModParticles.fallenStarTrail.value(), getX(), getY() + 0.5f, getZ(), 12, 0.25f, 0.35f, 0.25f, 0.02f);
-        level.sendParticles(ParticleTypes.HAPPY_VILLAGER, particleX, player.getY() + player.getBbHeight() * 0.5f, particleZ, 24, player.getBbWidth(), player.getBbHeight() * 0.5f, player.getBbWidth(), 0f);
         level.playSound(null, getX(), getY(), getZ(), ModSounds.fallenStarBlessing, SoundSource.AMBIENT, 1f, 1f);
     }
 

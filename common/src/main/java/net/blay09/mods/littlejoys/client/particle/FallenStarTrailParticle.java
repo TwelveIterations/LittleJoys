@@ -11,7 +11,7 @@ import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 
-public class FallenStarParticle extends SingleQuadParticle {
+public class FallenStarTrailParticle extends SingleQuadParticle {
 
     private static final float RAINBOW_TRAIL_CHANCE = 0.08f;
     private static final ColorStop[] TRAIL_GRADIENT = {
@@ -30,7 +30,7 @@ public class FallenStarParticle extends SingleQuadParticle {
 
     private final ColorStop[] gradient;
 
-    private FallenStarParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, TextureAtlasSprite sprite) {
+    private FallenStarTrailParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, TextureAtlasSprite sprite) {
         super(level, x, y, z, xd, yd, zd, sprite);
         gradient = random.nextFloat() < RAINBOW_TRAIL_CHANCE ? RAINBOW_TRAIL_GRADIENT : TRAIL_GRADIENT;
         hasPhysics = false;
@@ -97,7 +97,7 @@ public class FallenStarParticle extends SingleQuadParticle {
 
         @Override
         public Particle createParticle(SimpleParticleType options, ClientLevel level, double x, double y, double z, double xAux, double yAux, double zAux, RandomSource random) {
-            return new FallenStarParticle(level, x, y, z, xAux, yAux, zAux, sprite.get(random));
+            return new FallenStarTrailParticle(level, x, y, z, xAux, yAux, zAux, sprite.get(random));
         }
     }
 
