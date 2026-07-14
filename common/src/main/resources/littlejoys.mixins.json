@@ -9,7 +9,8 @@
     "RecipeManagerAccessor"
   ],
   "client": [
-    "ClientPacketListenerMixin"
+    "ClientPacketListenerMixin",
+    "MobEffectUtilMixin"
   ],
   "injectors": {
     "defaultRequire": 1
