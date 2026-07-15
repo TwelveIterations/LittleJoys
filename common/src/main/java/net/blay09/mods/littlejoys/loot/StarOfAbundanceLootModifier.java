@@ -7,6 +7,7 @@ import net.blay09.mods.littlejoys.blessing.Blessings;
 import net.blay09.mods.littlejoys.handler.FishingSpotHolder;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
+import net.blay09.mods.littlejoys.tag.ModEntityTags;
 import net.blay09.mods.littlejoys.tag.ModItemTags;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -48,7 +49,7 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
         }
 
         final var random = context.getRandom();
-        final var duplicateChance = LittleJoysConfig.getActive().blessings.starOfAbundanceUseChance;
+        final var duplicateChance = getDuplicateChance(lootSource);
         if (random.nextFloat() < duplicateChance) {
             final var duplicate = validStacks.get(random.nextInt(validStacks.size())).copy();
             list.add(duplicate);
@@ -67,10 +68,25 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
             return AbundanceSource.BLOCK_DROP;
         }
 
+        final var entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        if (entity != null && entity.is(ModEntityTags.STAR_OF_ABUNDANCE_MOBS)) {
+            return AbundanceSource.MOB_DROP;
+        }
+
         return null;
     }
 
     private static @Nullable ServerPlayer getPlayer(LootContext context) {
+        final var lastDamagePlayer = context.getOptionalParameter(LootContextParams.LAST_DAMAGE_PLAYER);
+        if (lastDamagePlayer instanceof ServerPlayer player) {
+            return player;
+        }
+
+        final var attackingEntity = context.getOptionalParameter(LootContextParams.ATTACKING_ENTITY);
+        if (attackingEntity instanceof ServerPlayer player) {
+            return player;
+        }
+
         final var entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (entity instanceof ServerPlayer player) {
             return player;
@@ -94,8 +110,18 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
         return validStacks;
     }
 
+    private static float getDuplicateChance(AbundanceSource lootSource) {
+        final var blessings = LittleJoysConfig.getActive().blessings;
+        return switch (lootSource) {
+            case BLOCK_DROP -> blessings.starOfAbundanceBlockDropChance;
+            case FISHING -> blessings.starOfAbundanceFishingDropChance;
+            case MOB_DROP -> blessings.starOfAbundanceMobDropChance;
+        };
+    }
+
     private enum AbundanceSource {
         BLOCK_DROP,
-        FISHING
+        FISHING,
+        MOB_DROP
     }
 }

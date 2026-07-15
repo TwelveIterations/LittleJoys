@@ -8,4 +8,5 @@ import static net.blay09.mods.littlejoys.LittleJoys.id;
 
 public class ModEntityTags {
     public static final TagKey<EntityType<?>> CALMED_BY_SERENITY = TagKey.create(Registries.ENTITY_TYPE, id("calmed_by_serenity"));
+    public static final TagKey<EntityType<?>> STAR_OF_ABUNDANCE_MOBS = TagKey.create(Registries.ENTITY_TYPE, id("star_of_abundance_mobs"));
 }
