@@ -3,6 +3,7 @@ package net.blay09.mods.littlejoys.blessing;
 import net.blay09.mods.balm.platform.event.callback.LivingEntityCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
+import net.blay09.mods.littlejoys.mixin.LivingEntityAccessor;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -62,10 +63,10 @@ public class StarOfSerenity {
     private static void calmNearbyAnimals(ServerPlayer player, BlessingInstance activeBlessing) {
         final var searchArea = new AABB(player.blockPosition()).inflate(16);
         for (final var animal : player.level().getEntitiesOfClass(Animal.class, searchArea, Entity::isAlive)) {
-            if (calmPanic(animal)) {
+            if (animal.tickCount % 20 == 0 && calmPanic(animal)) {
                 activeBlessing.consumeUse();
             }
-            if (calmAggressiveWolf(animal)) {
+            if (animal.tickCount % 20 == 0 && calmAggressiveWolf(animal)) {
                 activeBlessing.consumeUse();
             }
         }
@@ -76,6 +77,8 @@ public class StarOfSerenity {
             final var lastDamageSource = animal.getLastDamageSource();
             if (lastDamageSource.is(DamageTypeTags.PANIC_CAUSES) || lastDamageSource.is(DamageTypeTags.PANIC_ENVIRONMENTAL_CAUSES)) {
                 mob.getNavigation().stop();
+                mob.stopInPlace();
+                ((LivingEntityAccessor) mob).setLastDamageSource(null);
                 return true;
             }
         }
@@ -87,6 +90,7 @@ public class StarOfSerenity {
             wolf.stopBeingAngry();
             wolf.setAggressive(false);
             wolf.getNavigation().stop();
+            wolf.stopInPlace();
             return true;
         }
         return false;

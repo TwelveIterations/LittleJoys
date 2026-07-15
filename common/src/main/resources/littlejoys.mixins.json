@@ -9,6 +9,7 @@
     "FoodPropertiesMixin",
     "FishingHookMixin",
     "SweetBerryBushBlockMixin",
+    "LivingEntityAccessor",
     "RecipeManagerAccessor"
   ],
   "client": [
