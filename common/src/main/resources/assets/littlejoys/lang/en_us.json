@@ -18,6 +18,7 @@
   "subtitle.littlejoys.fallen_star_blessing": "Fallen Star collected",
   "subtitle.littlejoys.fallen_star_land": "Fallen Star lands",
   "subtitle.littlejoys.gold_rush": "Infinite Drops",
+  "commands.littlejoys.blessing.success": "Applied %s to %s",
   "stat.littlejoys.dig_spots": "Dig Spots Found",
   "stat.littlejoys.drop_rushes": "Drop Rushes Found",
   "stat.littlejoys.drop_rushes_completed": "Drop Rushes Completed",
