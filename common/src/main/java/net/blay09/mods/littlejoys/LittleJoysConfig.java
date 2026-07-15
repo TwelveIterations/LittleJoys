@@ -106,6 +106,9 @@ public class LittleJoysConfig {
 
         @Comment("The chance for Star of Prosperity to cause animals breeding nearby to have twins. No use is consumed when the roll fails.")
         public float starOfProsperityTwinChance = 0.2f;
+
+        @Comment("The chance per second for Star of Serenity to extinguish the player when on fire. No use is consumed when the roll fails.")
+        public float starOfSerenityExtinguishChance = 0.1f;
     }
 
     public static class StardewFishing {

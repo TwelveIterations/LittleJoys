@@ -2,6 +2,7 @@ package net.blay09.mods.littlejoys.blessing;
 
 import net.blay09.mods.balm.platform.event.callback.LivingEntityCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
+import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -16,7 +17,7 @@ import net.minecraft.world.phys.AABB;
 public class StarOfSerenity {
     public static void initialize() {
         LivingEntityCallback.Fall.Before.EVENT.register(StarOfSerenity::computeFallDamage);
-        ServerTickCallback.ServerPlayerTick.AFTER.register(StarOfSerenity::calmNearbyAnimals);
+        ServerTickCallback.ServerPlayerTick.AFTER.register(StarOfSerenity::tickPlayer);
     }
 
     public static boolean preventSweetBerryBushDamage(Entity entity) {
@@ -33,12 +34,32 @@ public class StarOfSerenity {
         return true;
     }
 
-    private static void calmNearbyAnimals(ServerPlayer player) {
+    private static void tickPlayer(ServerPlayer player) {
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
         if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_SERENITY)) {
             return;
         }
 
+        tryExtinguishPlayerOnFire(player, activeBlessing);
+        calmNearbyAnimals(player, activeBlessing);
+    }
+
+    private static void tryExtinguishPlayerOnFire(ServerPlayer player, BlessingInstance activeBlessing) {
+        if (!player.isOnFire() || player.tickCount % 20 != 0) {
+            return;
+        }
+
+        final var random = player.level().getRandom();
+        if (random.nextFloat() >= LittleJoysConfig.getActive().blessings.starOfSerenityExtinguishChance) {
+            return;
+        }
+
+        player.clearFire();
+        activeBlessing.consumeUse();
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.blessingUsed, SoundSource.PLAYERS, 0.5f, (float) (0.9 + Math.random() * 0.2));
+    }
+
+    private static void calmNearbyAnimals(ServerPlayer player, BlessingInstance activeBlessing) {
         final var searchArea = new AABB(player.blockPosition()).inflate(16);
         for (final var animal : player.level().getEntitiesOfClass(Animal.class, searchArea, Entity::isAlive)) {
             if (calmPanic(animal)) {
