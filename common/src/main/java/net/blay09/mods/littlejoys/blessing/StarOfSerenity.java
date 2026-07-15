@@ -37,6 +37,20 @@ public class StarOfSerenity {
         return true;
     }
 
+    public static boolean preventCactusDamage(Entity entity) {
+        if (!(entity instanceof ServerPlayer player)) {
+            return false;
+        }
+
+        final var activeBlessing = getSerenityBlessing(player);
+        if (activeBlessing == null) {
+            return false;
+        }
+
+        activeBlessing.consumeUse();
+        return true;
+    }
+
     public static boolean shouldIgnoreTarget(LivingEntity entity, LivingEntity target) {
         return entity.is(ModEntityTags.CALMED_BY_SERENITY)
                 && target instanceof ServerPlayer player && getSerenityBlessing(player) != null;
