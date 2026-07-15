@@ -108,7 +108,7 @@ public class LittleJoysConfig {
         public float starOfProsperityTwinChance = 0.2f;
 
         @Comment("The chance per second for Star of Serenity to extinguish the player when on fire. No use is consumed when the roll fails.")
-        public float starOfSerenityExtinguishChance = 0.1f;
+        public float starOfSerenityExtinguishChance = 0.5f;
     }
 
     public static class StardewFishing {
