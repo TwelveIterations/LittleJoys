@@ -1,4 +1,8 @@
 {
+  "blessing_used": {
+    "subtitle": "subtitle.littlejoys.blessing_used",
+    "sounds": [ "littlejoys:blessing_used" ]
+  },
   "drop_rush": {
     "subtitle": "subtitle.littlejoys.drop_rush",
     "sounds": [ "littlejoys:drop_rush" ]

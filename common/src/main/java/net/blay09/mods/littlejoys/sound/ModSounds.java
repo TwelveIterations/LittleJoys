@@ -5,6 +5,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 
 public class ModSounds {
+    public static Holder<SoundEvent> blessingUsed;
     public static Holder<SoundEvent> goldRush;
     public static Holder<SoundEvent> dropRushStart;
     public static Holder<SoundEvent> dropRush;
@@ -14,6 +15,7 @@ public class ModSounds {
     public static Holder<SoundEvent> fallenStarLand;
 
     public static void initialize(BalmRegistrar.Scoped<SoundEvent> sounds) {
+        blessingUsed = sounds.register("blessing_used", SoundEvent::createVariableRangeEvent);
         goldRush = sounds.register("gold_rush", SoundEvent::createVariableRangeEvent);
         dropRushStart = sounds.register("drop_rush_start", SoundEvent::createVariableRangeEvent);
         dropRush = sounds.register("drop_rush", SoundEvent::createVariableRangeEvent);
