@@ -21,13 +21,15 @@ public class Blessings {
     private static boolean effectLookupInitialized;
 
     public static Blessing STAR_OF_ABUNDANCE;
+    public static Blessing STAR_OF_FORTUNE;
     public static Blessing STAR_OF_VITALITY;
 
     public static void initialize(BalmRegistrar registrar) {
         registry = registrar.createCustomRegistry(REGISTRY_KEY);
 
-        STAR_OF_ABUNDANCE = registrar.register(key("star_of_abundance"), it -> new Blessing(it, () -> ModMobEffects.starOfAbundance, 1)).value();
-        STAR_OF_VITALITY = registrar.register(key("star_of_vitality"), it -> new Blessing(it, () -> ModMobEffects.starOfVitality, 1)).value();
+        STAR_OF_ABUNDANCE = registrar.register(key("star_of_abundance"), it -> new Blessing(it, () -> ModMobEffects.starOfAbundance, 30)).value();
+        STAR_OF_FORTUNE = registrar.register(key("star_of_fortune"), it -> new Blessing(it, () -> ModMobEffects.starOfFortune, 30)).value();
+        STAR_OF_VITALITY = registrar.register(key("star_of_vitality"), it -> new Blessing(it, () -> ModMobEffects.starOfVitality, 30)).value();
 
         byEffect = Map.of();
         effectLookupInitialized = false;

@@ -3,7 +3,6 @@ package net.blay09.mods.littlejoys.blessing;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
-import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 

@@ -4,6 +4,7 @@ import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
+import net.blay09.mods.littlejoys.blessing.StarOfFortune;
 import net.blay09.mods.littlejoys.entity.FallenStarEntity;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -52,7 +53,8 @@ public class FallenStarHandler {
                 return;
             }
 
-            if (random.nextFloat() >= LittleJoysConfig.getActive().fallenStars.chancePerRoll) {
+            final var chancePerRoll = StarOfFortune.applyChanceBonus(player, config.chancePerRoll);
+            if (random.nextFloat() >= chancePerRoll) {
                 littleJoysData.putInt(FALLEN_STAR_COOLDOWN, Math.round(config.rollIntervalSeconds * 20));
                 return;
             }

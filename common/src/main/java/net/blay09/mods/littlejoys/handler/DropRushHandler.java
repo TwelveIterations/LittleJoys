@@ -7,6 +7,7 @@ import net.blay09.mods.balm.platform.event.callback.BlockCallback;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
+import net.blay09.mods.littlejoys.blessing.StarOfFortune;
 import net.blay09.mods.littlejoys.entity.DropRushItemEntity;
 import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundStartDropRushPacket;
@@ -169,9 +170,10 @@ public class DropRushHandler {
         final var recipes = recipeMap.byType(ModRecipeTypes.dropRush.type());
         final var candidates = new ArrayList<RecipeHolder<DropRushRecipe>>();
         final var baseChance = LittleJoysConfig.getActive().dropRush.baseChance;
+        final var effectiveBaseChance = force ? baseChance : StarOfFortune.applyChanceBonus(player, baseChance);
         final var roll = random.nextFloat();
         for (final var recipeHolder : recipes) {
-            if (isValidRecipeFor(recipeHolder, level, pos, state, player) && (force || roll <= baseChance * recipeHolder.value().chanceMultiplier())) {
+            if (isValidRecipeFor(recipeHolder, level, pos, state, player) && (force || roll <= effectiveBaseChance * recipeHolder.value().chanceMultiplier())) {
                 candidates.add(recipeHolder);
             }
         }
