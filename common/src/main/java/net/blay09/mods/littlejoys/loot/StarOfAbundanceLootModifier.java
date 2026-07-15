@@ -4,9 +4,11 @@ import net.blay09.mods.balm.world.level.storage.loot.BalmLootModifier;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.blessing.BlessingManager;
 import net.blay09.mods.littlejoys.blessing.Blessings;
+import net.blay09.mods.littlejoys.handler.FishingSpotHolder;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
 import net.blay09.mods.littlejoys.tag.ModItemTags;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -21,11 +23,17 @@ import java.util.List;
 
 public class StarOfAbundanceLootModifier implements BalmLootModifier {
 
+    private static final Identifier FISHING_LOOT_TABLE = Identifier.withDefaultNamespace("gameplay/fishing");
+
     @Override
     public void apply(LootContext context, List<ItemStack> list, @Nullable ResourceKey<LootTable> lootTableId) {
-        final var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
-        final var entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
-        if (state == null || !state.is(ModBlockTags.STAR_OF_ABUNDANCE_BLOCKS) || !(entity instanceof ServerPlayer player)) {
+        final var lootSource = getLootSource(context, lootTableId);
+        if (lootSource == null) {
+            return;
+        }
+
+        final var player = getPlayer(context);
+        if (player == null) {
             return;
         }
 
@@ -34,13 +42,7 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
             return;
         }
 
-        final var validStacks = new ArrayList<ItemStack>();
-        for (final var stack : list) {
-            if (!stack.isEmpty() && stack.is(ModItemTags.STAR_OF_ABUNDANCE_ITEMS)) {
-                validStacks.add(stack);
-            }
-        }
-
+        final var validStacks = getValidStacks(list);
         if (validStacks.isEmpty()) {
             return;
         }
@@ -53,5 +55,47 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
             activeBlessing.consumeUse();
             context.getLevel().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.blessingUsed, SoundSource.PLAYERS, 0.5f, (float) (0.9 + Math.random() * 0.2));
         }
+    }
+
+    private static StarOfAbundanceLootModifier.@Nullable AbundanceSource getLootSource(LootContext context, @Nullable ResourceKey<LootTable> lootTableId) {
+        if (lootTableId != null && lootTableId.identifier().equals(FISHING_LOOT_TABLE)) {
+            return AbundanceSource.FISHING;
+        }
+
+        final var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
+        if (state != null && state.is(ModBlockTags.STAR_OF_ABUNDANCE_BLOCKS)) {
+            return AbundanceSource.BLOCK_DROP;
+        }
+
+        return null;
+    }
+
+    private static @Nullable ServerPlayer getPlayer(LootContext context) {
+        final var entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        if (entity instanceof ServerPlayer player) {
+            return player;
+        }
+
+        if (entity instanceof FishingSpotHolder fishingSpotHolder && fishingSpotHolder.littlejoys$getPlayerOwner() instanceof ServerPlayer player) {
+            return player;
+        }
+
+        return null;
+    }
+
+    private static List<ItemStack> getValidStacks(List<ItemStack> list) {
+        final var validStacks = new ArrayList<ItemStack>();
+        for (final var stack : list) {
+            if (!stack.isEmpty() && stack.is(ModItemTags.STAR_OF_ABUNDANCE_ITEMS)) {
+                validStacks.add(stack);
+            }
+        }
+
+        return validStacks;
+    }
+
+    private enum AbundanceSource {
+        BLOCK_DROP,
+        FISHING
     }
 }

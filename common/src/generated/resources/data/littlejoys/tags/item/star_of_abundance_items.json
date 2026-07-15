@@ -1,13 +1,17 @@
 {
   "values": [
     "minecraft:coal",
+    "minecraft:cod",
     "minecraft:diamond",
     "minecraft:emerald",
     "minecraft:lapis_lazuli",
+    "minecraft:pufferfish",
     "minecraft:quartz",
     "minecraft:raw_copper",
     "minecraft:raw_gold",
     "minecraft:raw_iron",
+    "minecraft:salmon",
+    "minecraft:tropical_fish",
     "minecraft:redstone",
     {
       "id": "#c:gems",

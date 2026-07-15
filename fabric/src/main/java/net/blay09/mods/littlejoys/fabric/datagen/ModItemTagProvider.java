@@ -22,13 +22,17 @@ public class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
         getOrCreateRawBuilder(ModItemTags.CANNOT_TRIGGER_GOLDRUSH).addOptionalTag(Identifier.fromNamespaceAndPath("justhammers", "hammer"));
         builder(ModItemTags.STAR_OF_ABUNDANCE_ITEMS)
                 .add(ItemIds.COAL)
+                .add(ItemIds.COD)
                 .add(ItemIds.DIAMOND)
                 .add(ItemIds.EMERALD)
                 .add(ItemIds.LAPIS_LAZULI)
+                .add(ItemIds.PUFFERFISH)
                 .add(ItemIds.QUARTZ)
                 .add(ItemIds.RAW_COPPER)
                 .add(ItemIds.RAW_GOLD)
                 .add(ItemIds.RAW_IRON)
+                .add(ItemIds.SALMON)
+                .add(ItemIds.TROPICAL_FISH)
                 .add(BlockItemIds.REDSTONE_DUST);
         final var rawBuilder = getOrCreateRawBuilder(ModItemTags.STAR_OF_ABUNDANCE_ITEMS);
         rawBuilder.addOptionalTag(Identifier.fromNamespaceAndPath("c", "gems"));
