@@ -53,8 +53,7 @@ public class FallenStarHandler {
                 return;
             }
 
-            final var chancePerRoll = StarOfFortune.applyChanceBonus(player, config.chancePerRoll);
-            if (random.nextFloat() >= chancePerRoll) {
+            if (random.nextFloat() >= config.chancePerRoll) {
                 littleJoysData.putInt(FALLEN_STAR_COOLDOWN, Math.round(config.rollIntervalSeconds * 20));
                 return;
             }
