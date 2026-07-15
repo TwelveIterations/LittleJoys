@@ -6,6 +6,7 @@ import net.blay09.mods.littlejoys.api.LittleJoysAPI;
 import net.blay09.mods.littlejoys.blessing.Blessings;
 import net.blay09.mods.littlejoys.blessing.ModMobEffects;
 import net.blay09.mods.littlejoys.blessing.StarOfProsperity;
+import net.blay09.mods.littlejoys.blessing.StarOfSerenity;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.blay09.mods.littlejoys.block.entity.ModBlockEntities;
 import net.blay09.mods.littlejoys.command.LittleJoysCommand;
@@ -85,6 +86,7 @@ public class LittleJoys {
         Balm.commands().register(LittleJoysCommand::register);
 
         StarOfProsperity.initialize();
+        StarOfSerenity.initialize();
         DropRushHandler.initialize();
         GoldRushHandler.initialize();
         DigSpotHandler.initialize();
