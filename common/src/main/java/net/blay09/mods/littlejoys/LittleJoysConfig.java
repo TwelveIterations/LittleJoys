@@ -22,6 +22,7 @@ public class LittleJoysConfig {
     public FishingSpots fishingSpots = new FishingSpots();
     public DigSpots digSpots = new DigSpots();
     public FallenStars fallenStars = new FallenStars();
+    public Blessings blessings = new Blessings();
     public StardewFishing stardewFishing = new StardewFishing();
 
     public static class FishingSpots {
@@ -94,6 +95,11 @@ public class LittleJoysConfig {
 
         @Comment("The seconds that must pass before another fallen star chance is rolled for a player.")
         public float rollIntervalSeconds = 900;
+    }
+
+    public static class Blessings {
+        @Comment("The chance for Star of Abundance to duplicate a valid block drop. No use is consumed when the roll fails.")
+        public float starOfAbundanceUseChance = 0.5f;
     }
 
     public static class StardewFishing {

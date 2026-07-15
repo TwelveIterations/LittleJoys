@@ -1,6 +1,7 @@
 package net.blay09.mods.littlejoys.loot;
 
 import net.blay09.mods.balm.world.level.storage.loot.BalmLootModifier;
+import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.blessing.BlessingManager;
 import net.blay09.mods.littlejoys.blessing.Blessings;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
@@ -38,8 +39,14 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
             }
         }
 
-        if (!validStacks.isEmpty()) {
-            final var duplicate = validStacks.get(context.getRandom().nextInt(validStacks.size())).copy();
+        if (validStacks.isEmpty()) {
+            return;
+        }
+
+        final var random = context.getRandom();
+        final var duplicateChance = LittleJoysConfig.getActive().blessings.starOfAbundanceUseChance;
+        if (random.nextFloat() < duplicateChance) {
+            final var duplicate = validStacks.get(random.nextInt(validStacks.size())).copy();
             list.add(duplicate);
             activeBlessing.consumeUse();
         }
