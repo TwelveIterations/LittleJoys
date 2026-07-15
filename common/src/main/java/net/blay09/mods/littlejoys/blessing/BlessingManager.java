@@ -37,7 +37,7 @@ public class BlessingManager {
 
     public static void addBlessing(ServerPlayer player, Blessing blessing, int usesLeft) {
         if (usesLeft > 0) {
-            player.addEffect(new MobEffectInstance(blessing.effect(), -1, usesLeft - 1, false, false, true));
+            player.addEffect(new MobEffectInstance(blessing.effect(), -1, usesLeft - 1, false, false, false));
         }
     }
 
