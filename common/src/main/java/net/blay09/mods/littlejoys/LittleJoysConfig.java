@@ -100,6 +100,9 @@ public class LittleJoysConfig {
     public static class Blessings {
         @Comment("The chance for Star of Abundance to duplicate a valid block drop. No use is consumed when the roll fails.")
         public float starOfAbundanceUseChance = 0.1f;
+
+        @Comment("The chance for Star of Prosperity to bonemeal a placed bonemealable block. No use is consumed when the roll fails.")
+        public float starOfProsperityBonemealChance = 0.1f;
     }
 
     public static class StardewFishing {

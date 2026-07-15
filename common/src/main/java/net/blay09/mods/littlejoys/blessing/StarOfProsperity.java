@@ -1,10 +1,15 @@
 package net.blay09.mods.littlejoys.blessing;
 
 import net.blay09.mods.balm.platform.event.callback.LivingEntityCallback;
+import net.blay09.mods.littlejoys.LittleJoysConfig;
+import net.blay09.mods.littlejoys.sound.ModSounds;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.level.block.BonemealableBlock;
 
 public class StarOfProsperity {
 
@@ -56,5 +61,32 @@ public class StarOfProsperity {
 
         foodData.eat(foodProperties);
         activeBlessing.consumeUses(foodData.getFoodLevel() - foodBeforeExtra);
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.blessingUsed, SoundSource.PLAYERS, 0.5f, (float) (0.9 + Math.random() * 0.2));
+    }
+
+    public static void tryBonemealPlacedBlock(ServerPlayer player, BlockPos pos) {
+        final var activeBlessing = BlessingManager.getActiveBlessing(player);
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY)) {
+            return;
+        }
+
+        final var level = player.level();
+        final var state = level.getBlockState(pos);
+        if (!(state.getBlock() instanceof BonemealableBlock bonemealableBlock)) {
+            return;
+        }
+
+        final var random = level.getRandom();
+        if (random.nextFloat() >= LittleJoysConfig.getActive().blessings.starOfProsperityBonemealChance) {
+            return;
+        }
+
+        if (!bonemealableBlock.isValidBonemealTarget(level, pos, state) || !bonemealableBlock.isBonemealSuccess(level, random, pos, state)) {
+            return;
+        }
+
+        bonemealableBlock.performBonemeal(level, random, pos, state);
+        activeBlessing.consumeUse();
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.blessingUsed, SoundSource.PLAYERS, 0.5f, (float) (0.9 + Math.random() * 0.2));
     }
 }
