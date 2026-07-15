@@ -10,6 +10,7 @@
     "FishingHookMixin",
     "SweetBerryBushBlockMixin",
     "LivingEntityAccessor",
+    "MobMixin",
     "RecipeManagerAccessor"
   ],
   "client": [
