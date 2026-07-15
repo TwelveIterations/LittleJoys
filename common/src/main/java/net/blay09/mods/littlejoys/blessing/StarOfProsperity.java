@@ -6,10 +6,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
 
-public class StarOfVitality {
+public class StarOfProsperity {
 
     public static void initialize() {
-        LivingEntityCallback.Heal.Before.EVENT.register(StarOfVitality::computeHeal);
+        LivingEntityCallback.Heal.Before.EVENT.register(StarOfProsperity::computeHeal);
     }
 
     private static float computeHeal(LivingEntity entity, float healAmount) {
@@ -18,7 +18,7 @@ public class StarOfVitality {
         }
 
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_VITALITY)) {
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY)) {
             return healAmount;
         }
 
@@ -45,7 +45,7 @@ public class StarOfVitality {
         }
 
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_VITALITY)) {
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY)) {
             return;
         }
 

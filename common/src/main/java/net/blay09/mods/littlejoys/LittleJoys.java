@@ -5,7 +5,7 @@ import net.blay09.mods.balm.core.BalmRegistrars;
 import net.blay09.mods.littlejoys.api.LittleJoysAPI;
 import net.blay09.mods.littlejoys.blessing.Blessings;
 import net.blay09.mods.littlejoys.blessing.ModMobEffects;
-import net.blay09.mods.littlejoys.blessing.StarOfVitality;
+import net.blay09.mods.littlejoys.blessing.StarOfProsperity;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.blay09.mods.littlejoys.block.entity.ModBlockEntities;
 import net.blay09.mods.littlejoys.command.LittleJoysCommand;
@@ -84,7 +84,7 @@ public class LittleJoys {
         registrars.poiTypes(ModPoiTypes::initialize);
         Balm.commands().register(LittleJoysCommand::register);
 
-        StarOfVitality.initialize();
+        StarOfProsperity.initialize();
         DropRushHandler.initialize();
         GoldRushHandler.initialize();
         DigSpotHandler.initialize();
