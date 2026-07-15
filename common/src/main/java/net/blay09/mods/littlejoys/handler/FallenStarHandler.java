@@ -4,7 +4,6 @@ import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
-import net.blay09.mods.littlejoys.blessing.StarOfFortune;
 import net.blay09.mods.littlejoys.entity.FallenStarEntity;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.core.BlockPos;

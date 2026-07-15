@@ -21,7 +21,7 @@ public class Blessings {
     private static boolean effectLookupInitialized;
 
     public static Blessing STAR_OF_ABUNDANCE;
-    public static Blessing STAR_OF_FORTUNE;
+    public static Blessing STAR_OF_FATE;
     public static Blessing STAR_OF_PROSPERITY;
     public static Blessing STAR_OF_SERENITY;
 
@@ -29,7 +29,7 @@ public class Blessings {
         registry = registrar.createCustomRegistry(REGISTRY_KEY);
 
         STAR_OF_ABUNDANCE = registrar.register(key("star_of_abundance"), it -> new Blessing(it, () -> ModMobEffects.starOfAbundance, 77)).value();
-        STAR_OF_FORTUNE = registrar.register(key("star_of_fortune"), it -> new Blessing(it, () -> ModMobEffects.starOfFortune, 77)).value();
+        STAR_OF_FATE = registrar.register(key("star_of_fate"), it -> new Blessing(it, () -> ModMobEffects.starOfFate, 77)).value();
         STAR_OF_PROSPERITY = registrar.register(key("star_of_prosperity"), it -> new Blessing(it, () -> ModMobEffects.starOfProsperity, 77)).value();
         STAR_OF_SERENITY = registrar.register(key("star_of_serenity"), it -> new Blessing(it, () -> ModMobEffects.starOfSerenity, 77)).value();
 

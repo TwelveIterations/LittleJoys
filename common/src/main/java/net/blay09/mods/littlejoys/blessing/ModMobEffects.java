@@ -9,13 +9,13 @@ import net.minecraft.world.effect.MobEffectCategory;
 public class ModMobEffects {
 
     public static Holder<MobEffect> starOfAbundance;
-    public static Holder<MobEffect> starOfFortune;
+    public static Holder<MobEffect> starOfFate;
     public static Holder<MobEffect> starOfProsperity;
     public static Holder<MobEffect> starOfSerenity;
 
     public static void initialize(BalmRegistrar.Scoped<MobEffect> effects) {
         starOfAbundance = effects.register("star_of_abundance", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xFFD35A));
-        starOfFortune = effects.register("star_of_fortune", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xFFEF8A));
+        starOfFate = effects.register("star_of_fate", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xFFEF8A));
         starOfProsperity = effects.register("star_of_prosperity", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xF05F6D));
         starOfSerenity = effects.register("star_of_serenity", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xA7E7FF));
     }
