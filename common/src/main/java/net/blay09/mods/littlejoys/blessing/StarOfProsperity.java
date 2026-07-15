@@ -4,9 +4,12 @@ import net.blay09.mods.balm.platform.event.callback.LivingEntityCallback;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -88,5 +91,33 @@ public class StarOfProsperity {
         bonemealableBlock.performBonemeal(level, random, pos, state);
         activeBlessing.consumeUse();
         level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.blessingUsed, SoundSource.PLAYERS, 0.5f, (float) (0.9 + Math.random() * 0.2));
+    }
+
+    public static void trySpawnTwinOffspring(ServerLevel level, Animal parent, Animal partner) {
+        final var random = level.getRandom();
+        if (random.nextFloat() >= LittleJoysConfig.getActive().blessings.starOfProsperityTwinChance) {
+            return;
+        }
+
+        BlessingInstance activeBlessing = null;
+        final var nearbyPlayers = level.getEntitiesOfClass(ServerPlayer.class, parent.getBoundingBox().inflate(8), player -> {
+            final var blessing = BlessingManager.getActiveBlessing(player);
+            return blessing != null && blessing.is(Blessings.STAR_OF_PROSPERITY);
+        });
+        if (!nearbyPlayers.isEmpty()) {
+            activeBlessing = BlessingManager.getActiveBlessing(nearbyPlayers.getFirst());
+        }
+        if (activeBlessing == null) {
+            return;
+        }
+
+        final var twin = parent.getBreedOffspring(level, partner);
+        if (twin != null) {
+            twin.setBaby(true);
+            twin.snapTo(parent.getX(), parent.getY(), parent.getZ(), 0f, 0f);
+            level.addFreshEntityWithPassengers(twin);
+            activeBlessing.consumeUse();
+            level.playSound(null, parent.getX(), parent.getY(), parent.getZ(), ModSounds.blessingUsed, SoundSource.PLAYERS, 0.5f, (float) (0.9 + Math.random() * 0.2));
+        }
     }
 }

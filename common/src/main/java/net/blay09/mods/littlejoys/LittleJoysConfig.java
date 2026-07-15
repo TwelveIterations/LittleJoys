@@ -103,6 +103,9 @@ public class LittleJoysConfig {
 
         @Comment("The chance for Star of Prosperity to bonemeal a placed bonemealable block. No use is consumed when the roll fails.")
         public float starOfProsperityBonemealChance = 0.1f;
+
+        @Comment("The chance for Star of Prosperity to cause animals breeding nearby to have twins. No use is consumed when the roll fails.")
+        public float starOfProsperityTwinChance = 0.1f;
     }
 
     public static class StardewFishing {
