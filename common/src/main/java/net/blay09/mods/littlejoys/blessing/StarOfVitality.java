@@ -3,6 +3,8 @@ package net.blay09.mods.littlejoys.blessing;
 import net.blay09.mods.balm.platform.event.callback.LivingEntityCallback;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.food.FoodProperties;
 
 public class StarOfVitality {
 
@@ -35,5 +37,24 @@ public class StarOfVitality {
 
         activeBlessing.consumeUses((int) Math.ceil(extraHeal / 2f));
         return healAmount + extraHeal;
+    }
+
+    public static void eatExtraFood(LivingEntity entity, FoodData foodData, FoodProperties foodProperties) {
+        if (!(entity instanceof ServerPlayer player) || foodProperties.nutrition() <= 0) {
+            return;
+        }
+
+        final var activeBlessing = BlessingManager.getActiveBlessing(player);
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_VITALITY)) {
+            return;
+        }
+
+        final var foodBeforeExtra = foodData.getFoodLevel();
+        if (foodBeforeExtra >= 20) {
+            return;
+        }
+
+        foodData.eat(foodProperties);
+        activeBlessing.consumeUses(foodData.getFoodLevel() - foodBeforeExtra);
     }
 }
