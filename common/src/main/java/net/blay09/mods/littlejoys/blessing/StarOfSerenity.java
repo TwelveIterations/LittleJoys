@@ -5,10 +5,12 @@ import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.mixin.LivingEntityAccessor;
 import net.blay09.mods.littlejoys.sound.ModSounds;
+import net.blay09.mods.littlejoys.tag.ModDamageTypeTags;
 import net.blay09.mods.littlejoys.tag.ModEntityTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -19,36 +21,9 @@ import net.minecraft.world.phys.AABB;
 
 public class StarOfSerenity {
     public static void initialize() {
+        LivingEntityCallback.Damage.Before.EVENT.register(StarOfSerenity::computeDamage);
         LivingEntityCallback.Fall.Before.EVENT.register(StarOfSerenity::computeFallDamage);
         ServerTickCallback.ServerPlayerTick.AFTER.register(StarOfSerenity::tickPlayer);
-    }
-
-    public static boolean preventSweetBerryBushDamage(Entity entity) {
-        if (!(entity instanceof ServerPlayer player)) {
-            return false;
-        }
-
-        final var activeBlessing = getSerenityBlessing(player);
-        if (activeBlessing == null) {
-            return false;
-        }
-
-        activeBlessing.consumeUse();
-        return true;
-    }
-
-    public static boolean preventCactusDamage(Entity entity) {
-        if (!(entity instanceof ServerPlayer player)) {
-            return false;
-        }
-
-        final var activeBlessing = getSerenityBlessing(player);
-        if (activeBlessing == null) {
-            return false;
-        }
-
-        activeBlessing.consumeUse();
-        return true;
     }
 
     public static boolean shouldIgnoreTarget(LivingEntity entity, LivingEntity target) {
@@ -153,6 +128,20 @@ public class StarOfSerenity {
         activeBlessing.consumeUse();
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.blessingUsed, SoundSource.PLAYERS, 0.5f, (float) (0.9 + Math.random() * 0.2));
         return Math.max(0f, fallDamage - 8f);
+    }
+
+    private static float computeDamage(LivingEntity entity, DamageSource damageSource, float damageAmount) {
+        if (!(entity instanceof ServerPlayer player) || damageAmount <= 0f || !damageSource.is(ModDamageTypeTags.PREVENTED_BY_STAR_OF_SERENITY)) {
+            return damageAmount;
+        }
+
+        final var activeBlessing = getSerenityBlessing(player);
+        if (activeBlessing == null) {
+            return damageAmount;
+        }
+
+        activeBlessing.consumeUse();
+        return 0f;
     }
 
     private static BlessingInstance getSerenityBlessing(ServerPlayer player) {

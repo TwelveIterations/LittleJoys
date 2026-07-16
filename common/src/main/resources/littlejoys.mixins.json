@@ -6,7 +6,6 @@
   "mixins": [
     "AnimalMixin",
     "BlockItemMixin",
-    "CactusBlockMixin",
     "FoodPropertiesMixin",
     "FishingHookMixin",
     "SweetBerryBushBlockMixin",
