@@ -21,6 +21,8 @@ public class LittleJoysConfig {
     public GoldRush goldRush = new GoldRush();
     public FishingSpots fishingSpots = new FishingSpots();
     public DigSpots digSpots = new DigSpots();
+    public FallenStars fallenStars = new FallenStars();
+    public Blessings blessings = new Blessings();
     public StardewFishing stardewFishing = new StardewFishing();
 
     public static class FishingSpots {
@@ -73,6 +75,46 @@ public class LittleJoysConfig {
 
         @Comment("The offset applied to the spawn area in the direction the player is facing. Set to 0 to center it around the player.")
         public int projectForwardDistance = 25;
+    }
+
+    public static class FallenStars {
+        @Comment("If disabled, fallen stars will not spawn.")
+        public boolean enabled = true;
+
+        @Comment("The chance per roll for a fallen star to start falling once the player cooldown has elapsed.")
+        public float chancePerRoll = 0.2f;
+
+        @Comment("The minimum distance between fallen stars, preventing them from spawning too close together.")
+        public int minimumDistanceBetween = 128;
+
+        @Comment("The maximum distance fallen stars can spawn in front of the player.")
+        public int spawnRange = 64;
+
+        @Comment("The seconds that must pass after a fallen star appeared before another fallen star can appear for a player.")
+        public float cooldownSeconds = 10800;
+
+        @Comment("The seconds that must pass before another fallen star chance is rolled for a player.")
+        public float rollIntervalSeconds = 900;
+    }
+
+    public static class Blessings {
+        @Comment("The chance for Star of Abundance to duplicate a valid block drop. No use is consumed when the roll fails.")
+        public float starOfAbundanceBlockDropChance = 0.1f;
+
+        @Comment("The chance for Star of Abundance to duplicate a valid fishing drop. No use is consumed when the roll fails.")
+        public float starOfAbundanceFishingDropChance = 0.3f;
+
+        @Comment("The chance for Star of Abundance to duplicate a valid mob drop. No use is consumed when the roll fails.")
+        public float starOfAbundanceMobDropChance = 0.2f;
+
+        @Comment("The chance for Star of Prosperity to bonemeal a placed bonemealable block. No use is consumed when the roll fails.")
+        public float starOfProsperityBonemealChance = 0.1f;
+
+        @Comment("The chance for Star of Prosperity to cause animals breeding nearby to have twins. No use is consumed when the roll fails.")
+        public float starOfProsperityTwinChance = 0.2f;
+
+        @Comment("The chance per second for Star of Serenity to extinguish the player when on fire. No use is consumed when the roll fails.")
+        public float starOfSerenityExtinguishChance = 0.5f;
     }
 
     public static class StardewFishing {

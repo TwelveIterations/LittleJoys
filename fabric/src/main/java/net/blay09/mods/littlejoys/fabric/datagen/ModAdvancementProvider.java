@@ -2,6 +2,7 @@ package net.blay09.mods.littlejoys.fabric.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
+import net.blay09.mods.littlejoys.item.ModItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
@@ -99,6 +100,21 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                 )
                 .addCriterion("trigger", impossible())
                 .save(consumer, id("littlejoys/gold_rush").toString());
+
+        Advancement.Builder.advancement()
+                .parent(root)
+                .display(
+                        ModItems.fallenStar.asItem(),
+                        Component.translatable("advancements.littlejoys.fallen_star_blessing.title"),
+                        Component.translatable("advancements.littlejoys.fallen_star_blessing.description"),
+                        null,
+                        AdvancementType.TASK,
+                        true,
+                        true,
+                        false
+                )
+                .addCriterion("trigger", impossible())
+                .save(consumer, id("littlejoys/fallen_star_blessing").toString());
     }
 
     private static Criterion<ImpossibleTrigger.TriggerInstance> impossible() {

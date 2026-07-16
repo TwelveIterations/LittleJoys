@@ -1,0 +1,25 @@
+{
+  "parent": "littlejoys:littlejoys/root",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.littlejoys.fallen_star_blessing.description"
+    },
+    "icon": {
+      "id": "littlejoys:fallen_star"
+    },
+    "title": {
+      "translate": "advancements.littlejoys.fallen_star_blessing.title"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

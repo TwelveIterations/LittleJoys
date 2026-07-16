@@ -10,6 +10,8 @@ public class ModDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(ModBlockTagProvider::new);
         pack.addProvider(ModPoiTypeTagProvider::new);
         pack.addProvider(ModItemTagProvider::new);
+        pack.addProvider(ModEntityTagProvider::new);
+        pack.addProvider(ModDamageTypeTagProvider::new);
         pack.addProvider(ModBlockLootTableProvider::new);
         pack.addProvider(ModGenericLootTableProvider::new);
         pack.addProvider(ModModelProvider::new);
