@@ -4,12 +4,19 @@
   "package": "net.blay09.mods.littlejoys.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AnimalMixin",
+    "BlockItemMixin",
+    "FoodPropertiesMixin",
     "FishingHookMixin",
     "SweetBerryBushBlockMixin",
+    "LivingEntityAccessor",
+    "MobMixin",
     "RecipeManagerAccessor"
   ],
   "client": [
-    "ClientPacketListenerMixin"
+    "ClientPacketListenerMixin",
+    "EffectsInInventoryMixin",
+    "MobEffectUtilMixin"
   ],
   "injectors": {
     "defaultRequire": 1

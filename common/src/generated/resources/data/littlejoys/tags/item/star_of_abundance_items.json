@@ -1,0 +1,49 @@
+{
+  "values": [
+    "minecraft:arrow",
+    "minecraft:beef",
+    "minecraft:bone",
+    "minecraft:chicken",
+    "minecraft:cod",
+    "minecraft:cooked_beef",
+    "minecraft:cooked_chicken",
+    "minecraft:cooked_cod",
+    "minecraft:cooked_mutton",
+    "minecraft:cooked_porkchop",
+    "minecraft:cooked_rabbit",
+    "minecraft:cooked_salmon",
+    "minecraft:ender_pearl",
+    "minecraft:feather",
+    "minecraft:ghast_tear",
+    "minecraft:glow_ink_sac",
+    "minecraft:glowstone_dust",
+    "minecraft:gunpowder",
+    "minecraft:ink_sac",
+    "minecraft:leather",
+    "minecraft:magma_cream",
+    "minecraft:mutton",
+    "minecraft:nautilus_shell",
+    "minecraft:phantom_membrane",
+    "minecraft:porkchop",
+    "minecraft:pufferfish",
+    "minecraft:rabbit",
+    "minecraft:rabbit_foot",
+    "minecraft:rabbit_hide",
+    "minecraft:rotten_flesh",
+    "minecraft:salmon",
+    "minecraft:slime_ball",
+    "minecraft:spider_eye",
+    "minecraft:stick",
+    "minecraft:sugar",
+    "minecraft:tropical_fish",
+    {
+      "id": "#minecraft:wool",
+      "required": false
+    },
+    "minecraft:string",
+    {
+      "id": "#c:foods/raw_meat",
+      "required": false
+    }
+  ]
+}

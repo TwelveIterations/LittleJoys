@@ -9,6 +9,7 @@ public class ModLoot {
     public static void initialize(BalmLootTables lootTables) {
         lootTables.registerLootModifier(id("dig_spot"), new DigSpotLootModifier());
         lootTables.registerLootModifier(id("fishing_spot"), new FishingSpotLootModifier());
+        lootTables.registerLootModifier(id("star_of_abundance"), new StarOfAbundanceLootModifier());
     }
 
 }
