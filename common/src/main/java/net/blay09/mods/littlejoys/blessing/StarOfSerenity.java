@@ -146,7 +146,7 @@ public class StarOfSerenity {
 
     private static BlessingInstance getSerenityBlessing(ServerPlayer player) {
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        return activeBlessing != null && activeBlessing.is(Blessings.STAR_OF_SERENITY) ? activeBlessing : null;
+        return activeBlessing != null && activeBlessing.is(Blessings.STAR_OF_SERENITY.value()) ? activeBlessing : null;
     }
 
 }

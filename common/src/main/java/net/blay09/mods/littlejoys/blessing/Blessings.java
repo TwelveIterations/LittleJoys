@@ -20,18 +20,18 @@ public class Blessings {
     private static Map<Holder<MobEffect>, Blessing> byEffect = Map.of();
     private static boolean effectLookupInitialized;
 
-    public static Blessing STAR_OF_ABUNDANCE;
-    public static Blessing STAR_OF_FATE;
-    public static Blessing STAR_OF_PROSPERITY;
-    public static Blessing STAR_OF_SERENITY;
+    public static Holder<Blessing> STAR_OF_ABUNDANCE;
+    public static Holder<Blessing> STAR_OF_FATE;
+    public static Holder<Blessing> STAR_OF_PROSPERITY;
+    public static Holder<Blessing> STAR_OF_SERENITY;
 
     public static void initialize(BalmRegistrar registrar) {
         registry = registrar.createCustomRegistry(REGISTRY_KEY);
 
-        STAR_OF_ABUNDANCE = registrar.register(key("star_of_abundance"), it -> new Blessing(it, () -> ModMobEffects.starOfAbundance, 77)).value();
-        STAR_OF_FATE = registrar.register(key("star_of_fate"), it -> new Blessing(it, () -> ModMobEffects.starOfFate, 77)).value();
-        STAR_OF_PROSPERITY = registrar.register(key("star_of_prosperity"), it -> new Blessing(it, () -> ModMobEffects.starOfProsperity, 77)).value();
-        STAR_OF_SERENITY = registrar.register(key("star_of_serenity"), it -> new Blessing(it, () -> ModMobEffects.starOfSerenity, 77)).value();
+        STAR_OF_ABUNDANCE = registrar.register(key("star_of_abundance"), it -> new Blessing(it, () -> ModMobEffects.starOfAbundance, 77));
+        STAR_OF_FATE = registrar.register(key("star_of_fate"), it -> new Blessing(it, () -> ModMobEffects.starOfFate, 77));
+        STAR_OF_PROSPERITY = registrar.register(key("star_of_prosperity"), it -> new Blessing(it, () -> ModMobEffects.starOfProsperity, 77));
+        STAR_OF_SERENITY = registrar.register(key("star_of_serenity"), it -> new Blessing(it, () -> ModMobEffects.starOfSerenity, 77));
 
         byEffect = Map.of();
         effectLookupInitialized = false;

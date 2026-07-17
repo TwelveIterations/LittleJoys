@@ -26,7 +26,7 @@ public class StarOfProsperity {
         }
 
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY)) {
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY.value())) {
             return healAmount;
         }
 
@@ -53,7 +53,7 @@ public class StarOfProsperity {
         }
 
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY)) {
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY.value())) {
             return;
         }
 
@@ -69,7 +69,7 @@ public class StarOfProsperity {
 
     public static void tryBonemealPlacedBlock(ServerPlayer player, BlockPos pos) {
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY)) {
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_PROSPERITY.value())) {
             return;
         }
 
@@ -102,7 +102,7 @@ public class StarOfProsperity {
         BlessingInstance activeBlessing = null;
         final var nearbyPlayers = level.getEntitiesOfClass(ServerPlayer.class, parent.getBoundingBox().inflate(8), player -> {
             final var blessing = BlessingManager.getActiveBlessing(player);
-            return blessing != null && blessing.is(Blessings.STAR_OF_PROSPERITY);
+            return blessing != null && blessing.is(Blessings.STAR_OF_PROSPERITY.value());
         });
         if (!nearbyPlayers.isEmpty()) {
             activeBlessing = BlessingManager.getActiveBlessing(nearbyPlayers.getFirst());

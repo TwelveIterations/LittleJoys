@@ -39,7 +39,7 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
         }
 
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_ABUNDANCE)) {
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_ABUNDANCE.value())) {
             return;
         }
 

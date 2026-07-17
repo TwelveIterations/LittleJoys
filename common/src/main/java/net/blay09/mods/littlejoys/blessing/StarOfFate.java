@@ -6,7 +6,7 @@ public class StarOfFate {
 
     public static float applyChanceBonus(ServerPlayer player, float chance) {
         final var activeBlessing = BlessingManager.getActiveBlessing(player);
-        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_FATE)) {
+        if (activeBlessing == null || !activeBlessing.is(Blessings.STAR_OF_FATE.value())) {
             return chance;
         }
 
