@@ -1,3 +1,5 @@
+- Hotfixed crash on startup on NeoForge
+
 - Added Fallen Star
   - A star will occasionally fall from the sky.
   - Picking it up grants one of four blessings:
