@@ -28,7 +28,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
     @Override
     public void generateAdvancement(HolderLookup.Provider registryLookup, Consumer<AdvancementHolder> consumer) {
         final var root = Advancement.Builder.advancement()
-                .display(
+                .rootDisplay(
                         Items.COOKIE,
                         Component.translatable("advancements.littlejoys.root.title"),
                         Component.translatable("advancements.littlejoys.root.description"),
@@ -39,7 +39,7 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         false
                 )
                 .addCriterion("trigger", impossible())
-                .save(consumer, id("littlejoys/root").toString());
+                .save(consumer, id("littlejoys/root"));
 
         Advancement.Builder.advancement()
                 .parent(root)
@@ -47,14 +47,13 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         Items.ARMS_UP_POTTERY_SHERD,
                         Component.translatable("advancements.littlejoys.dig_spot.title"),
                         Component.translatable("advancements.littlejoys.dig_spot.description"),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
                 .addCriterion("trigger", impossible())
-                .save(consumer, id("littlejoys/dig_spot").toString());
+                .save(consumer, id("littlejoys/dig_spot"));
 
         Advancement.Builder.advancement()
                 .parent(root)
@@ -62,14 +61,13 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         Items.PUFFERFISH,
                         Component.translatable("advancements.littlejoys.fishing_spot.title"),
                         Component.translatable("advancements.littlejoys.fishing_spot.description"),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
                 .addCriterion("trigger", impossible())
-                .save(consumer, id("littlejoys/fishing_spot").toString());
+                .save(consumer, id("littlejoys/fishing_spot"));
 
         Advancement.Builder.advancement()
                 .parent(root)
@@ -77,14 +75,13 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         Items.SWEET_BERRIES,
                         Component.translatable("advancements.littlejoys.drop_rush_complete.title"),
                         Component.translatable("advancements.littlejoys.drop_rush_complete.description"),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
                 .addCriterion("trigger", impossible())
-                .save(consumer, id("littlejoys/drop_rush_complete").toString());
+                .save(consumer, id("littlejoys/drop_rush_complete"));
 
         Advancement.Builder.advancement()
                 .parent(root)
@@ -92,14 +89,13 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         Items.RAW_GOLD,
                         Component.translatable("advancements.littlejoys.gold_rush.title"),
                         Component.translatable("advancements.littlejoys.gold_rush.description"),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
                 .addCriterion("trigger", impossible())
-                .save(consumer, id("littlejoys/gold_rush").toString());
+                .save(consumer, id("littlejoys/gold_rush"));
 
         Advancement.Builder.advancement()
                 .parent(root)
@@ -107,14 +103,13 @@ public class ModAdvancementProvider extends FabricAdvancementProvider {
                         ModItems.fallenStar.asItem(),
                         Component.translatable("advancements.littlejoys.fallen_star_blessing.title"),
                         Component.translatable("advancements.littlejoys.fallen_star_blessing.description"),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
                         false
                 )
                 .addCriterion("trigger", impossible())
-                .save(consumer, id("littlejoys/fallen_star_blessing").toString());
+                .save(consumer, id("littlejoys/fallen_star_blessing"));
     }
 
     private static Criterion<ImpossibleTrigger.TriggerInstance> impossible() {
