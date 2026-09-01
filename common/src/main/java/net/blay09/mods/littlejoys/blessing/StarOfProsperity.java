@@ -7,11 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
 
 public class StarOfProsperity {
@@ -84,11 +84,11 @@ public class StarOfProsperity {
             return;
         }
 
-        if (!bonemealableBlock.isValidBonemealTarget(level, pos, state) || !bonemealableBlock.isBonemealSuccess(level, random, pos, state)) {
+        if (!bonemealableBlock.isValidBonemealTarget(level, pos, state, BonemealSource.INTERACTION) || !bonemealableBlock.isBonemealSuccess(level, random, pos, state, BonemealSource.INTERACTION)) {
             return;
         }
 
-        bonemealableBlock.performBonemeal(level, random, pos, state);
+        bonemealableBlock.performBonemeal(level, random, pos, state, BonemealSource.INTERACTION);
         activeBlessing.consumeUse();
         level.playSound(null, player.getX(), player.getY(), player.getZ(), ModSounds.blessingUsed, SoundSource.PLAYERS, 0.5f, (float) (0.9 + Math.random() * 0.2));
     }

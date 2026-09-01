@@ -20,8 +20,6 @@ import org.jspecify.annotations.Nullable;
 
 public class FishingSpotBlock extends BaseEntityBlock {
 
-    public static final MapCodec<FishingSpotBlock> CODEC = simpleCodec(FishingSpotBlock::new);
-
     private static final VoxelShape SHAPE = Shapes.empty();
 
     public FishingSpotBlock(Properties properties) {
@@ -62,11 +60,6 @@ public class FishingSpotBlock extends BaseEntityBlock {
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FishingSpotBlockEntity(pos, state);
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return CODEC;
     }
 
     @Override
