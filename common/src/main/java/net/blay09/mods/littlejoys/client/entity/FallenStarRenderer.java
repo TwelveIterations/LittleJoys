@@ -58,7 +58,7 @@ public class FallenStarRenderer extends EntityRenderer<FallenStarEntity, FallenS
         final var yOffset = (float) -modelBounds.minY * scale + 0.0625f;
         final var bob = Mth.sin(renderState.ageInTicks / 10f) * 0.1f + 0.1f;
         poseStack.translate(0f, renderState.bobOffset + bob + yOffset, 0f);
-        poseStack.mulPose(Axis.YP.rotationDegrees(-renderState.yRot));
+        poseStack.rotate(Axis.YP.rotationDegrees(-renderState.yRot));
         poseStack.scale(scale, scale, scale);
         renderState.item.submit(poseStack, nodeCollector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, renderState.outlineColor);
         poseStack.popPose();
