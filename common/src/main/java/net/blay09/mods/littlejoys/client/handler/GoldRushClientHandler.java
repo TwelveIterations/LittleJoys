@@ -33,14 +33,14 @@ public class GoldRushClientHandler {
                 final var randomOffsetY = random.nextFloat();
                 final var randomOffsetZ = random.nextFloat();
                 final var state = level.getBlockState(pos);
-                if (state.isViewBlocking(level, pos)) {
+                if (state.isCollisionShapeFullBlock(level, pos)) {
                     for (final var direction : Direction.values()) {
                         final var directionalOffset = 0.5f + 0.6f * direction.getAxisDirection().getStep();
                         final var offsetX = direction.getAxis() == Direction.Axis.X ? directionalOffset : randomOffsetX;
                         final var offsetY = direction.getAxis() == Direction.Axis.Y ? directionalOffset : randomOffsetY;
                         final var offsetZ = direction.getAxis() == Direction.Axis.Z ? directionalOffset : randomOffsetZ;
                         final var offsetPos = pos.relative(direction);
-                        if (!level.getBlockState(offsetPos).isViewBlocking(level, offsetPos)) {
+                        if (!level.getBlockState(offsetPos).isCollisionShapeFullBlock(level, offsetPos)) {
                             level.addParticle(ModParticles.goldRush.value(), x + offsetX, y + offsetY, z + offsetZ, 0f, 0f, 0f);
                         }
                     }
