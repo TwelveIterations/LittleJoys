@@ -2,9 +2,7 @@
   "type": "littlejoys:dig_spot",
   "eventCondition": {
     "type": "littlejoys:above_state",
-    "state": {
-      "Name": "minecraft:netherrack"
-    }
+    "state": "minecraft:netherrack"
   },
   "lootTable": "littlejoys:dig_spot/netherrack"
 }

@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "minecolonies:corn",
-      "Properties": {
-        "age": "6"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "minecolonies:corn"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "6"
       }
-    }
+    ]
   },
   "lootTable": "minecolonies:blocks/corn"
 }

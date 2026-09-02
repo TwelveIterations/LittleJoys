@@ -2,9 +2,7 @@
   "type": "littlejoys:dig_spot",
   "eventCondition": {
     "type": "littlejoys:above_state",
-    "state": {
-      "Name": "minecraft:moss_block"
-    }
+    "state": "minecraft:moss_block"
   },
   "lootTable": "littlejoys:dig_spot/moss_block"
 }

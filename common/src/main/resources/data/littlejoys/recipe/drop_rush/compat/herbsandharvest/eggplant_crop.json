@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "herbsandharvest:eggplant_crop",
-      "Properties": {
-        "age": "12"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "herbsandharvest:eggplant_crop"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "12"
       }
-    }
+    ]
   },
   "lootTable": "herbsandharvest:blocks/eggplant_crop"
 }

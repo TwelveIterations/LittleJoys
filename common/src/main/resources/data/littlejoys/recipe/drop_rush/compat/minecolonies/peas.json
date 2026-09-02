@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "minecolonies:peas",
-      "Properties": {
-        "age": "6"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "minecolonies:peas"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "6"
       }
-    }
+    ]
   },
   "lootTable": "minecolonies:blocks/peas"
 }

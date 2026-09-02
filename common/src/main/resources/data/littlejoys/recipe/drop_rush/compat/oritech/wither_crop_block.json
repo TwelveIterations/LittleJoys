@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "oritech:wither_crop_block",
-      "Properties": {
-        "age": "7"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "oritech:wither_crop_block"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "7"
       }
-    }
+    ]
   },
   "lootTable": "oritech:blocks/wither_crop_block"
 }

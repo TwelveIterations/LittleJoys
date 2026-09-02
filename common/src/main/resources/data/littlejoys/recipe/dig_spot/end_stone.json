@@ -2,9 +2,7 @@
   "type": "littlejoys:dig_spot",
   "eventCondition": {
     "type": "littlejoys:above_state",
-    "state": {
-      "Name": "minecraft:end_stone"
-    }
+    "state": "minecraft:end_stone"
   },
   "lootTable": "littlejoys:dig_spot/end_stone"
 }

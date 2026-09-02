@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "minecolonies:mint",
-      "Properties": {
-        "age": "6"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "minecolonies:mint"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "6"
       }
-    }
+    ]
   },
   "lootTable": "minecolonies:blocks/mint"
 }

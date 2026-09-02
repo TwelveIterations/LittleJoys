@@ -19,22 +19,20 @@
     }
   ],
   "eventCondition": {
-    "type": "all",
+    "type": "and",
     "conditions": [
       {
-        "type": "is_state",
-        "state": {
-          "Name": "railcraft:deepslate_sulfur_ore"
-        }
+        "type": "shogi:is_block",
+        "block": "railcraft:deepslate_sulfur_ore"
       },
       {
-        "type": "is_tool",
+        "type": "is_item",
         "item": "#littlejoys:can_trigger_goldrush"
       },
       {
         "type": "not",
         "condition": {
-          "type": "is_tool",
+          "type": "is_item",
           "item": "#littlejoys:cannot_trigger_goldrush"
         }
       }

@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "herbsandharvest:peppercorn_crop",
-      "Properties": {
-        "age": "3"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "herbsandharvest:peppercorn_crop"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "3"
       }
-    }
+    ]
   },
   "lootTable": "herbsandharvest:blocks/peppercorn_crop"
 }
