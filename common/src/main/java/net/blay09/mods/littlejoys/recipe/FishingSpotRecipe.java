@@ -63,7 +63,7 @@ public record FishingSpotRecipe(ShogiEffect<?> eventCondition, ResourceKey<LootT
     }
 
     private static final MapCodec<FishingSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            LittleJoysRules.EVENT_CONDITIONS.getEffectCodec().fieldOf("eventCondition").forGetter(FishingSpotRecipe::eventCondition),
+            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("eventCondition").forGetter(FishingSpotRecipe::eventCondition),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(FishingSpotRecipe::lootTable),
             Codec.INT.fieldOf("weight").orElse(1).forGetter(FishingSpotRecipe::weight)
     ).apply(instance, FishingSpotRecipe::new));

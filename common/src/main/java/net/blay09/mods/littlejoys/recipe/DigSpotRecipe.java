@@ -63,7 +63,7 @@ public record DigSpotRecipe(ShogiEffect<?> eventCondition, ResourceKey<LootTable
     }
 
     private static final MapCodec<DigSpotRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            LittleJoysRules.EVENT_CONDITIONS.getEffectCodec().fieldOf("eventCondition").forGetter(DigSpotRecipe::eventCondition),
+            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("eventCondition").forGetter(DigSpotRecipe::eventCondition),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(DigSpotRecipe::lootTable),
             Codec.INT.fieldOf("weight").orElse(1).forGetter(DigSpotRecipe::weight)
     ).apply(instance, DigSpotRecipe::new));

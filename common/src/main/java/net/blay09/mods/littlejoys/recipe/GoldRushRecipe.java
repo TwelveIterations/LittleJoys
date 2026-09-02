@@ -67,7 +67,7 @@ public record GoldRushRecipe(ShogiEffect<?> eventCondition,
     }
 
     private static final MapCodec<GoldRushRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            LittleJoysRules.EVENT_CONDITIONS.getEffectCodec().fieldOf("eventCondition").forGetter(GoldRushRecipe::eventCondition),
+            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("eventCondition").forGetter(GoldRushRecipe::eventCondition),
             Codec.FLOAT.fieldOf("chanceMultiplier").orElse(1f).forGetter(GoldRushRecipe::chanceMultiplier),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(GoldRushRecipe::lootTable),
             Codec.FLOAT.fieldOf("seconds").orElse(7f).forGetter(GoldRushRecipe::seconds),

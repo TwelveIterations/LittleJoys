@@ -63,7 +63,7 @@ public record DropRushRecipe(ShogiEffect<?> eventCondition, float chanceMultipli
     }
 
     private static final MapCodec<DropRushRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            LittleJoysRules.EVENT_CONDITIONS.getEffectCodec().fieldOf("eventCondition").forGetter(DropRushRecipe::eventCondition),
+            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("eventCondition").forGetter(DropRushRecipe::eventCondition),
             Codec.FLOAT.fieldOf("chanceMultiplier").orElse(1f).forGetter(DropRushRecipe::chanceMultiplier),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(DropRushRecipe::lootTable),
             Codec.INT.fieldOf("rolls").orElse(8).forGetter(DropRushRecipe::rolls),
