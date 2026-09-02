@@ -28,10 +28,10 @@ public class Blessings {
     public static void initialize(BalmRegistrar registrar) {
         registry = registrar.createCustomRegistry(REGISTRY_KEY);
 
-        STAR_OF_ABUNDANCE = registrar.register(key("star_of_abundance"), it -> new Blessing(it, () -> ModMobEffects.starOfAbundance, 77));
-        STAR_OF_FATE = registrar.register(key("star_of_fate"), it -> new Blessing(it, () -> ModMobEffects.starOfFate, 77));
-        STAR_OF_PROSPERITY = registrar.register(key("star_of_prosperity"), it -> new Blessing(it, () -> ModMobEffects.starOfProsperity, 77));
-        STAR_OF_SERENITY = registrar.register(key("star_of_serenity"), it -> new Blessing(it, () -> ModMobEffects.starOfSerenity, 77));
+        STAR_OF_ABUNDANCE = registrar.register(key("star_of_abundance"), it -> new Blessing(it, () -> ModMobEffects.starOfAbundance, 77)).asHolder();
+        STAR_OF_FATE = registrar.register(key("star_of_fate"), it -> new Blessing(it, () -> ModMobEffects.starOfFate, 77)).asHolder();
+        STAR_OF_PROSPERITY = registrar.register(key("star_of_prosperity"), it -> new Blessing(it, () -> ModMobEffects.starOfProsperity, 77)).asHolder();
+        STAR_OF_SERENITY = registrar.register(key("star_of_serenity"), it -> new Blessing(it, () -> ModMobEffects.starOfSerenity, 77)).asHolder();
 
         byEffect = Map.of();
         effectLookupInitialized = false;

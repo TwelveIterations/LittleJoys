@@ -15,13 +15,13 @@ public class ModSounds {
     public static Holder<SoundEvent> fallenStarLand;
 
     public static void initialize(BalmRegistrar.Scoped<SoundEvent> sounds) {
-        blessingUsed = sounds.register("blessing_used", SoundEvent::createVariableRangeEvent);
-        goldRush = sounds.register("gold_rush", SoundEvent::createVariableRangeEvent);
-        dropRushStart = sounds.register("drop_rush_start", SoundEvent::createVariableRangeEvent);
-        dropRush = sounds.register("drop_rush", SoundEvent::createVariableRangeEvent);
-        dropRushStop = sounds.register("drop_rush_stop", SoundEvent::createVariableRangeEvent);
-        fallenStar = sounds.register("fallen_star", SoundEvent::createVariableRangeEvent);
-        fallenStarBlessing = sounds.register("fallen_star_blessing", SoundEvent::createVariableRangeEvent);
-        fallenStarLand = sounds.register("fallen_star_land", SoundEvent::createVariableRangeEvent);
+        blessingUsed = sounds.register("blessing_used", SoundEvent::createVariableRangeEvent).asHolder();
+        goldRush = sounds.register("gold_rush", SoundEvent::createVariableRangeEvent).asHolder();
+        dropRushStart = sounds.register("drop_rush_start", SoundEvent::createVariableRangeEvent).asHolder();
+        dropRush = sounds.register("drop_rush", SoundEvent::createVariableRangeEvent).asHolder();
+        dropRushStop = sounds.register("drop_rush_stop", SoundEvent::createVariableRangeEvent).asHolder();
+        fallenStar = sounds.register("fallen_star", SoundEvent::createVariableRangeEvent).asHolder();
+        fallenStarBlessing = sounds.register("fallen_star_blessing", SoundEvent::createVariableRangeEvent).asHolder();
+        fallenStarLand = sounds.register("fallen_star_land", SoundEvent::createVariableRangeEvent).asHolder();
     }
 }

@@ -14,9 +14,9 @@ public class ModMobEffects {
     public static Holder<MobEffect> starOfSerenity;
 
     public static void initialize(BalmRegistrar.Scoped<MobEffect> effects) {
-        starOfAbundance = effects.register("star_of_abundance", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xFFD35A));
-        starOfFate = effects.register("star_of_fate", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xFFEF8A));
-        starOfProsperity = effects.register("star_of_prosperity", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xF05F6D));
-        starOfSerenity = effects.register("star_of_serenity", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xA7E7FF));
+        starOfAbundance = effects.register("star_of_abundance", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xFFD35A)).asHolder();
+        starOfFate = effects.register("star_of_fate", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xFFEF8A)).asHolder();
+        starOfProsperity = effects.register("star_of_prosperity", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xF05F6D)).asHolder();
+        starOfSerenity = effects.register("star_of_serenity", _ -> new CustomMobEffect(MobEffectCategory.BENEFICIAL, 0xA7E7FF)).asHolder();
     }
 }
