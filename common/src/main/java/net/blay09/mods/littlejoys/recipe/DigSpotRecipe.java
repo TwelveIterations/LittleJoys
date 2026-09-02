@@ -1,9 +1,12 @@
 package net.blay09.mods.littlejoys.recipe;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.recipe.condition.LittleJoysRules;
+import net.blay09.mods.shogi.effect.ConstantEffect;
+import net.blay09.mods.shogi.effect.EmptyEffect;
 import net.blay09.mods.shogi.effect.ShogiEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -74,7 +77,7 @@ public record DigSpotRecipe(ShogiEffect<?> eventCondition, ResourceKey<LootTable
     private static DigSpotRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
         final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
         final var weight = buf.readInt();
-        return new DigSpotRecipe(LittleJoysRules.UNSYNCED_EVENT_CONDITION, lootTable, weight);
+        return new DigSpotRecipe(EmptyEffect.INSTANCE, lootTable, weight);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buf, DigSpotRecipe recipe) {

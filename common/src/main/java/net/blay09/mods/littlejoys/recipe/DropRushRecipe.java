@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.recipe.condition.LittleJoysRules;
+import net.blay09.mods.shogi.effect.EmptyEffect;
 import net.blay09.mods.shogi.effect.ShogiEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -81,7 +82,7 @@ public record DropRushRecipe(ShogiEffect<?> eventCondition, float chanceMultipli
         final var seconds = buf.readFloat();
         final var range = buf.readVarInt();
         final var weight = buf.readVarInt();
-        return new DropRushRecipe(LittleJoysRules.UNSYNCED_EVENT_CONDITION, chance, lootTable, rolls, seconds, range, weight);
+        return new DropRushRecipe(EmptyEffect.INSTANCE, chance, lootTable, rolls, seconds, range, weight);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buf, DropRushRecipe recipe) {
