@@ -38,7 +38,6 @@ public class LittleJoys {
 
     public static void initialize(BalmRegistrars registrars) {
         LittleJoysAPI.__setupAPI(new InternalMethodsImpl());
-        LittleJoysRules.initialize();
 
         LittleJoysConfig.initialize();
         registrars.blocks(ModBlocks::initialize);

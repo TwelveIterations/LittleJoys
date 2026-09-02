@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.recipe.condition.LittleJoysRules;
+import net.blay09.mods.shogi.effect.EmptyEffect;
 import net.blay09.mods.shogi.effect.ShogiEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -74,7 +75,7 @@ public record FishingSpotRecipe(ShogiEffect<?> eventCondition, ResourceKey<LootT
     private static FishingSpotRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
         final var lootTable = buf.readResourceKey(Registries.LOOT_TABLE);
         final var weight = buf.readVarInt();
-        return new FishingSpotRecipe(LittleJoysRules.UNSYNCED_EVENT_CONDITION, lootTable, weight);
+        return new FishingSpotRecipe(EmptyEffect.INSTANCE, lootTable, weight);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buf, FishingSpotRecipe recipe) {

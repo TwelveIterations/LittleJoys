@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.blay09.mods.littlejoys.recipe.condition.LittleJoysRules;
+import net.blay09.mods.shogi.effect.EmptyEffect;
 import net.blay09.mods.shogi.effect.ShogiEffect;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -83,7 +84,7 @@ public record GoldRushRecipe(ShogiEffect<?> eventCondition,
         final var seconds = buf.readFloat();
         final var maxDropsPerSecond = buf.readFloat();
         final var weight = buf.readVarInt();
-        return new GoldRushRecipe(LittleJoysRules.UNSYNCED_EVENT_CONDITION, chanceMultiplier, lootTable, seconds, maxDropsPerSecond, weight);
+        return new GoldRushRecipe(EmptyEffect.INSTANCE, chanceMultiplier, lootTable, seconds, maxDropsPerSecond, weight);
     }
 
     private static void toNetwork(RegistryFriendlyByteBuf buf, GoldRushRecipe recipe) {
