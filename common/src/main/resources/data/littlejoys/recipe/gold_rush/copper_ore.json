@@ -8,13 +8,13 @@
         "block": "minecraft:copper_ore"
       },
       {
-        "type": "is_item",
+        "type": "shogi:is_item",
         "item": "#littlejoys:can_trigger_goldrush"
       },
       {
         "type": "shogi:not",
         "condition": {
-          "type": "is_item",
+          "type": "shogi:is_item",
           "item": "#littlejoys:cannot_trigger_goldrush"
         }
       }
