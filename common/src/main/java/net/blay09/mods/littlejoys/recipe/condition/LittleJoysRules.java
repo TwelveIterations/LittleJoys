@@ -28,11 +28,6 @@ public final class LittleJoysRules {
         scope.registerEffect(AboveFluidSource.IDENTIFIER, AboveFluidSource.MAP_CODEC);
         scope.registerEffect(AboveState.IDENTIFIER, AboveState.MAP_CODEC, List.of("state"));
         scope.registerEffect(IsTool.IDENTIFIER, IsTool.MAP_CODEC, List.of("item"));
-        scope.registerEffectAlias(id("all"), Identifier.fromNamespaceAndPath("shogi", "and"));
-        scope.registerEffectAlias(id("any"), Identifier.fromNamespaceAndPath("shogi", "any"));
-        scope.registerEffectAlias(id("always"), Identifier.fromNamespaceAndPath("shogi", "constant"));
-        scope.registerEffectAlias(id("can_see_sky"), Identifier.fromNamespaceAndPath("shogi", "can_see_sky"));
-        scope.registerEffectAlias(id("is_dimension"), Identifier.fromNamespaceAndPath("shogi", "is_dimension"));
     });
     public static final ShogiEffect<Boolean> UNSYNCED_EVENT_CONDITION = ShogiEffect.simple(id("unsynced_event_condition"), () -> false);
 
