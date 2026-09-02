@@ -1,8 +1,11 @@
 {
   "type": "littlejoys:dig_spot",
   "eventCondition": {
-    "type": "littlejoys:above_state",
-    "state": "minecraft:dirt"
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:dirt"
+    }
   },
   "lootTable": "littlejoys:dig_spot/dirt"
 }

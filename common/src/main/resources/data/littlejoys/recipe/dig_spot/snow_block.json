@@ -1,8 +1,11 @@
 {
   "type": "littlejoys:dig_spot",
   "eventCondition": {
-    "type": "littlejoys:above_state",
-    "state": "minecraft:snow_block"
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:snow_block"
+    }
   },
   "lootTable": "littlejoys:dig_spot/snow_block"
 }

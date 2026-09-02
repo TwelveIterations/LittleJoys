@@ -1,8 +1,11 @@
 {
   "type": "littlejoys:dig_spot",
   "eventCondition": {
-    "type": "littlejoys:above_state",
-    "state": "minecraft:soul_soil"
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:soul_soil"
+    }
   },
   "lootTable": "littlejoys:dig_spot/soul_soil"
 }
