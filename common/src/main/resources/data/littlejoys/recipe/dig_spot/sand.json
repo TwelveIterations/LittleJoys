@@ -1,8 +1,11 @@
 {
   "type": "littlejoys:dig_spot",
   "eventCondition": {
-    "type": "littlejoys:above_state",
-    "state": "minecraft:sand"
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:sand"
+    }
   },
   "lootTable": "littlejoys:dig_spot/sand"
 }
