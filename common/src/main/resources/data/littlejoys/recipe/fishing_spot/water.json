@@ -4,7 +4,25 @@
     "type": "shogi:and",
     "conditions": [
       {
-        "type": "littlejoys:above_fluid_source"
+        "type": "shogi:below",
+        "effect": {
+          "type": "shogi:and",
+          "conditions": [
+            {
+              "type": "shogi:is_fluid",
+              "fluid": "minecraft:water"
+            },
+            {
+              "type": "shogi:is_fluid_source"
+            },
+            {
+              "type": "shogi:not",
+              "condition": {
+                "type": "shogi:is_waterlogged"
+              }
+            }
+          ]
+        }
       },
       {
         "type": "shogi:can_see_sky"
