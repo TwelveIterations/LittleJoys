@@ -1,5 +1,6 @@
 package net.blay09.mods.littlejoys.recipe.condition;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -26,7 +27,6 @@ public final class LittleJoysRules {
         scope.setDefaultNamespaces(List.of("littlejoys", "shogi"));
         scope.registerEffect(AboveFluidSource.IDENTIFIER, AboveFluidSource.MAP_CODEC);
         scope.registerEffect(AboveState.IDENTIFIER, AboveState.MAP_CODEC, List.of("state"));
-        scope.registerEffect(IsState.IDENTIFIER, IsState.MAP_CODEC, List.of("state"));
         scope.registerEffect(IsTool.IDENTIFIER, IsTool.MAP_CODEC, List.of("item"));
         scope.registerEffectAlias(id("all"), Identifier.fromNamespaceAndPath("shogi", "and"));
         scope.registerEffectAlias(id("any"), Identifier.fromNamespaceAndPath("shogi", "any"));
@@ -51,14 +51,14 @@ public final class LittleJoysRules {
         ).apply(instance, AboveFluidSource::new));
 
         @Override
-        public com.mojang.datafixers.util.Either<Boolean, Throwable> apply(ShogiContext context) {
+        public Either<Boolean, Throwable> apply(ShogiContext context) {
             final var groundState = context.requireLevel().getBlockState(context.requireBlockPos().below());
             if (!allowWaterlogged && groundState.getValueOrElse(BlockStateProperties.WATERLOGGED, false)) {
-                return com.mojang.datafixers.util.Either.left(false);
+                return Either.left(false);
             }
 
             final var fluidState = groundState.getFluidState();
-            return com.mojang.datafixers.util.Either.left(fluid.test(fluidState) && fluidState.isSource());
+            return Either.left(fluid.test(fluidState) && fluidState.isSource());
         }
 
         @Override
@@ -74,25 +74,8 @@ public final class LittleJoysRules {
         ).apply(instance, AboveState::new));
 
         @Override
-        public com.mojang.datafixers.util.Either<Boolean, Throwable> apply(ShogiContext context) {
-            return com.mojang.datafixers.util.Either.left(context.requireLevel().getBlockState(context.requireBlockPos().below()).equals(state));
-        }
-
-        @Override
-        public Identifier identifier() {
-            return IDENTIFIER;
-        }
-    }
-
-    public record IsState(BlockState state) implements ShogiEffect<Boolean> {
-        public static final Identifier IDENTIFIER = id("is_state");
-        public static final MapCodec<IsState> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                BlockState.CODEC.fieldOf("state").forGetter(IsState::state)
-        ).apply(instance, IsState::new));
-
-        @Override
-        public com.mojang.datafixers.util.Either<Boolean, Throwable> apply(ShogiContext context) {
-            return com.mojang.datafixers.util.Either.left(context.requireBlockState().equals(state));
+        public Either<Boolean, Throwable> apply(ShogiContext context) {
+            return Either.left(context.requireLevel().getBlockState(context.requireBlockPos().below()).equals(state));
         }
 
         @Override
@@ -108,8 +91,8 @@ public final class LittleJoysRules {
         ).apply(instance, IsTool::new));
 
         @Override
-        public com.mojang.datafixers.util.Either<Boolean, Throwable> apply(ShogiContext context) {
-            return com.mojang.datafixers.util.Either.left(context.itemStack().is(item::contains));
+        public Either<Boolean, Throwable> apply(ShogiContext context) {
+            return Either.left(context.itemStack().is(item::contains));
         }
 
         @Override
