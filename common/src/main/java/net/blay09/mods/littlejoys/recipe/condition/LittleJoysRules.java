@@ -9,12 +9,7 @@ import net.blay09.mods.shogi.Shogi;
 import net.blay09.mods.shogi.context.ShogiContext;
 import net.blay09.mods.shogi.effect.ShogiEffect;
 import net.blay09.mods.shogi.scope.ShogiScope;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.core.registries.codec.HolderSetCodec;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
@@ -27,7 +22,6 @@ public final class LittleJoysRules {
         scope.setDefaultNamespaces(List.of("littlejoys", "shogi"));
         scope.registerEffect(AboveFluidSource.IDENTIFIER, AboveFluidSource.MAP_CODEC);
         scope.registerEffect(AboveState.IDENTIFIER, AboveState.MAP_CODEC, List.of("state"));
-        scope.registerEffect(IsTool.IDENTIFIER, IsTool.MAP_CODEC, List.of("item"));
     });
     public static final ShogiEffect<Boolean> UNSYNCED_EVENT_CONDITION = ShogiEffect.simple(id("unsynced_event_condition"), () -> false);
 
@@ -71,23 +65,6 @@ public final class LittleJoysRules {
         @Override
         public Either<Boolean, Throwable> apply(ShogiContext context) {
             return Either.left(context.requireLevel().getBlockState(context.requireBlockPos().below()).equals(state));
-        }
-
-        @Override
-        public Identifier identifier() {
-            return IDENTIFIER;
-        }
-    }
-
-    public record IsTool(HolderSet<Item> item) implements ShogiEffect<Boolean> {
-        public static final Identifier IDENTIFIER = id("is_tool");
-        public static final MapCodec<IsTool> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                HolderSetCodec.create(Registries.ITEM, BuiltInRegistries.ITEM.holderByNameCodec(), false).fieldOf("item").forGetter(IsTool::item)
-        ).apply(instance, IsTool::new));
-
-        @Override
-        public Either<Boolean, Throwable> apply(ShogiContext context) {
-            return Either.left(context.itemStack().is(item::contains));
         }
 
         @Override
