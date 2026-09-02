@@ -4,22 +4,27 @@
     "type": "shogi:and",
     "conditions": [
       {
-        "type": "littlejoys:is_state",
-        "state": {
-          "Name": "minecraft:deepslate_redstone_ore",
-          "Properties": {
-            "lit": "true"
+        "type": "shogi:and",
+        "conditions": [
+          {
+            "type": "shogi:is_block",
+            "block": "minecraft:deepslate_redstone_ore"
+          },
+          {
+            "type": "shogi:is_block_state_property",
+            "property": "lit",
+            "value": "true"
           }
-        }
+        ]
       },
       {
-        "type": "littlejoys:is_tool",
+        "type": "is_item",
         "item": "#littlejoys:can_trigger_goldrush"
       },
       {
         "type": "shogi:not",
         "condition": {
-          "type": "littlejoys:is_tool",
+          "type": "is_item",
           "item": "#littlejoys:cannot_trigger_goldrush"
         }
       }

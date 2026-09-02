@@ -2,9 +2,7 @@
   "type": "littlejoys:dig_spot",
   "eventCondition": {
     "type": "littlejoys:above_state",
-    "state": {
-      "Name": "minecraft:soul_soil"
-    }
+    "state": "minecraft:soul_soil"
   },
   "lootTable": "littlejoys:dig_spot/soul_soil"
 }

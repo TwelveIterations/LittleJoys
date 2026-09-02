@@ -19,22 +19,20 @@
     }
   ],
   "eventCondition": {
-    "type": "all",
+    "type": "and",
     "conditions": [
       {
-        "type": "is_state",
-        "state": {
-          "Name": "forbidden_arcanus:deepslate_arcane_crystal_ore"
-        }
+        "type": "shogi:is_block",
+        "block": "forbidden_arcanus:deepslate_arcane_crystal_ore"
       },
       {
-        "type": "is_tool",
+        "type": "is_item",
         "item": "#littlejoys:can_trigger_goldrush"
       },
       {
         "type": "not",
         "condition": {
-          "type": "is_tool",
+          "type": "is_item",
           "item": "#littlejoys:cannot_trigger_goldrush"
         }
       }

@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "eternal_starlight:pungency_fruit_vines",
-      "Properties": {
-        "age": "7"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "eternal_starlight:pungency_fruit_vines"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "7"
       }
-    }
+    ]
   },
   "lootTable": "eternal_starlight:blocks/pungency_fruit_vines"
 }

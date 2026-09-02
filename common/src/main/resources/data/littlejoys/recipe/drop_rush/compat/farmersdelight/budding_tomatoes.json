@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "farmersdelight:budding_tomatoes",
-      "Properties": {
-        "age": "4"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "farmersdelight:budding_tomatoes"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "4"
       }
-    }
+    ]
   },
   "lootTable": "farmersdelight:blocks/budding_tomatoes"
 }

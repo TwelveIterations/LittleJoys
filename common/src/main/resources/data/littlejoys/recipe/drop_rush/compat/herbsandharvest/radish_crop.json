@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "herbsandharvest:radish_crop",
-      "Properties": {
-        "age": "3"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "herbsandharvest:radish_crop"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "3"
       }
-    }
+    ]
   },
   "lootTable": "herbsandharvest:blocks/radish_crop"
 }

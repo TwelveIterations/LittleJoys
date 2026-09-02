@@ -19,22 +19,20 @@
     }
   ],
   "eventCondition": {
-    "type": "all",
+    "type": "and",
     "conditions": [
       {
-        "type": "is_state",
-        "state": {
-          "Name": "occultism:silver_ore_deepslate"
-        }
+        "type": "shogi:is_block",
+        "block": "occultism:silver_ore_deepslate"
       },
       {
-        "type": "is_tool",
+        "type": "is_item",
         "item": "#littlejoys:can_trigger_goldrush"
       },
       {
         "type": "not",
         "condition": {
-          "type": "is_tool",
+          "type": "is_item",
           "item": "#littlejoys:cannot_trigger_goldrush"
         }
       }

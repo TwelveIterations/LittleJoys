@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "pamhc2crops:pamcelerycrop",
-      "Properties": {
-        "age": "7"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "pamhc2crops:pamcelerycrop"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "7"
       }
-    }
+    ]
   },
   "lootTable": "pamhc2crops:blocks/pamcelerycrop"
 }

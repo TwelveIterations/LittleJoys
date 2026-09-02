@@ -1,13 +1,18 @@
 {
   "type": "littlejoys:drop_rush",
   "eventCondition": {
-    "type": "littlejoys:is_state",
-    "state": {
-      "Name": "minecraft:beetroots",
-      "Properties": {
-        "age": "3"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "minecraft:beetroots"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "3"
       }
-    }
+    ]
   },
   "lootTable": "minecraft:blocks/beetroots"
 }

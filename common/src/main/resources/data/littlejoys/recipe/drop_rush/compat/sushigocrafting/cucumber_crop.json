@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "sushigocrafting:cucumber_crop",
-      "Properties": {
-        "age": "3"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "sushigocrafting:cucumber_crop"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "3"
       }
-    }
+    ]
   },
   "lootTable": "sushigocrafting:blocks/cucumber_crop"
 }

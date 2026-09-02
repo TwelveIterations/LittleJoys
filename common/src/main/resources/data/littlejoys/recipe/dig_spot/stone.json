@@ -2,9 +2,7 @@
   "type": "littlejoys:dig_spot",
   "eventCondition": {
     "type": "littlejoys:above_state",
-    "state": {
-      "Name": "minecraft:stone"
-    }
+    "state": "minecraft:stone"
   },
   "lootTable": "littlejoys:dig_spot/stone"
 }

@@ -2,9 +2,7 @@
   "type": "littlejoys:dig_spot",
   "eventCondition": {
     "type": "littlejoys:above_state",
-    "state": {
-      "Name": "minecraft:grass_block"
-    }
+    "state": "minecraft:grass_block"
   },
   "lootTable": "littlejoys:dig_spot/grass_block"
 }

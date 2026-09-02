@@ -19,13 +19,18 @@
     }
   ],
   "eventCondition": {
-    "type": "is_state",
-    "state": {
-      "Name": "silentgear:fluffy_plant",
-      "Properties": {
-        "age": "7"
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "silentgear:fluffy_plant"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "7"
       }
-    }
+    ]
   },
   "lootTable": "silentgear:blocks/fluffy_plant"
 }

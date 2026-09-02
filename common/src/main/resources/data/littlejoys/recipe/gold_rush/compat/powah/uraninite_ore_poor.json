@@ -19,22 +19,20 @@
     }
   ],
   "eventCondition": {
-    "type": "all",
+    "type": "and",
     "conditions": [
       {
-        "type": "is_state",
-        "state": {
-          "Name": "powah:uraninite_ore_poor"
-        }
+        "type": "shogi:is_block",
+        "block": "powah:uraninite_ore_poor"
       },
       {
-        "type": "is_tool",
+        "type": "is_item",
         "item": "#littlejoys:can_trigger_goldrush"
       },
       {
         "type": "not",
         "condition": {
-          "type": "is_tool",
+          "type": "is_item",
           "item": "#littlejoys:cannot_trigger_goldrush"
         }
       }

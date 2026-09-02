@@ -2,9 +2,7 @@
   "type": "littlejoys:dig_spot",
   "eventCondition": {
     "type": "littlejoys:above_state",
-    "state": {
-      "Name": "minecraft:crimson_nylium"
-    }
+    "state": "minecraft:crimson_nylium"
   },
   "lootTable": "littlejoys:dig_spot/crimson_nylium"
 }

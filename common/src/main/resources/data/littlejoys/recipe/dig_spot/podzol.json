@@ -2,9 +2,7 @@
   "type": "littlejoys:dig_spot",
   "eventCondition": {
     "type": "littlejoys:above_state",
-    "state": {
-      "Name": "minecraft:podzol"
-    }
+    "state": "minecraft:podzol"
   },
   "lootTable": "littlejoys:dig_spot/podzol"
 }
