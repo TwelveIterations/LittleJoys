@@ -9,11 +9,10 @@ import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.blessing.StarOfFate;
 import net.blay09.mods.littlejoys.entity.DropRushItemEntity;
-import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundStartDropRushPacket;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundStopDropRushPacket;
-import net.blay09.mods.littlejoys.recipe.DropRushRecipe;
-import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
+import net.blay09.mods.littlejoys.registry.DropRushEvent;
+import net.blay09.mods.littlejoys.registry.ModDynamicRegistries;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.minecraft.core.BlockPos;
@@ -24,7 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -111,35 +110,35 @@ public class DropRushHandler {
     }
 
     public static boolean rollForDropRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
-        return rollRecipe(level, pos, state, player, false).map(recipeHolder -> {
-            startDropRush(level, pos, player, recipeHolder);
+        return rollEvent(level, pos, state, player, false).map(eventHolder -> {
+            startDropRush(level, pos, player, eventHolder);
             return true;
         }).orElse(false);
     }
 
     public static boolean startDropRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
-        return rollRecipe(level, pos, state, player, true).map(recipeHolder -> {
-            startDropRush(level, pos, player, recipeHolder);
+        return rollEvent(level, pos, state, player, true).map(eventHolder -> {
+            startDropRush(level, pos, player, eventHolder);
             return true;
         }).orElse(false);
     }
 
-    public static void startDropRush(ServerLevel level, BlockPos pos, ServerPlayer player, RecipeHolder<DropRushRecipe> recipeHolder) {
-        final var recipe = recipeHolder.value();
+    public static void startDropRush(ServerLevel level, BlockPos pos, ServerPlayer player, Holder.Reference<DropRushEvent> eventHolder) {
+        final var event = eventHolder.value();
         final var dropRushInstance = new DropRushInstance(
                 player.getUUID(),
                 pos,
-                recipe.lootTable(),
-                (int) Math.floor(20 * recipe.seconds()));
+                event.lootTable(),
+                (int) Math.floor(20 * event.seconds()));
         final var lootParamsBuilder = (new LootParams.Builder(level))
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
                 .withOptionalParameter(LootContextParams.BLOCK_ENTITY, level.getBlockEntity(pos));
-        final var lootTableId = recipe.lootTable();
+        final var lootTableId = event.lootTable();
         final var lootParams = lootParamsBuilder.withParameter(LootContextParams.BLOCK_STATE, level.getBlockState(pos))
                 .create(LootContextParamSets.BLOCK);
         final var lootTable = level.getServer().reloadableRegistries().getLootTable(lootTableId);
-        for (int i = 0; i < recipe.rolls(); i++) {
+        for (int i = 0; i < event.rolls(); i++) {
             lootTable.getRandomItems(lootParams).forEach(dropRushInstance::addDrop);
         }
         dropRushInstance.setTicksPerDrop(Math.max(DROP_TICKS / Math.max(1, dropRushInstance.getDrops().size()), 1));
@@ -164,29 +163,27 @@ public class DropRushHandler {
         dropRush.addEntity(itemEntity);
     }
 
-    private static Optional<RecipeHolder<DropRushRecipe>> rollRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, boolean force) {
-        final var recipeManager = level.getServer().getRecipeManager();
-        final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.dropRush.type());
-        final var candidates = new ArrayList<RecipeHolder<DropRushRecipe>>();
+    private static Optional<Holder.Reference<DropRushEvent>> rollEvent(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, boolean force) {
+        final var events = level.registryAccess().lookupOrThrow(ModDynamicRegistries.DROP_RUSH);
+        final var candidates = new ArrayList<Holder.Reference<DropRushEvent>>();
         final var baseChance = LittleJoysConfig.getActive().dropRush.baseChance;
         final var effectiveBaseChance = force ? baseChance : StarOfFate.applyChanceBonus(player, baseChance);
         final var roll = random.nextFloat();
-        for (final var recipeHolder : recipes) {
-            if (isValidRecipeFor(recipeHolder, level, pos, state, player) && (force || roll <= effectiveBaseChance * recipeHolder.value().chanceMultiplier())) {
-                candidates.add(recipeHolder);
+        for (final var eventHolder : events.listElements().toList()) {
+            if (isValidEventFor(eventHolder, level, pos, state, player) && (force || roll <= effectiveBaseChance * eventHolder.value().chanceMultiplier())) {
+                candidates.add(eventHolder);
             }
         }
         return WeightedRandom.getRandomItem(random, candidates, it -> it.value().weight());
     }
 
-    private static boolean isValidRecipeFor(RecipeHolder<DropRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+    private static boolean isValidEventFor(Holder.Reference<DropRushEvent> eventHolder, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
         final var context = MutableShogiContext.of(player)
                 .withLevel(level)
                 .withBlockPos(pos)
                 .withBlockState(state)
                 .withItemStack(player.getMainHandItem());
-        return recipe.value().eventCondition().test(context);
+        return eventHolder.value().eventCondition().test(context);
     }
 
 }

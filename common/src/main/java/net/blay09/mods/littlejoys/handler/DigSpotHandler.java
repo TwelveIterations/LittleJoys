@@ -9,9 +9,8 @@ import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.blay09.mods.littlejoys.block.entity.DigSpotBlockEntity;
-import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
-import net.blay09.mods.littlejoys.recipe.DigSpotRecipe;
-import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
+import net.blay09.mods.littlejoys.registry.DigSpotEvent;
+import net.blay09.mods.littlejoys.registry.ModDynamicRegistries;
 import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
@@ -24,8 +23,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jspecify.annotations.Nullable;
 
@@ -105,16 +103,16 @@ public class DigSpotHandler {
     }
 
     public static boolean createDigSpot(ServerLevel level, BlockPos pos, ServerPlayer player) {
-        return findRecipe(level, pos, player).map(recipeHolder -> {
-            createDigSpot(level, pos, recipeHolder);
+        return findEvent(level, pos, player).map(eventHolder -> {
+            createDigSpot(level, pos, eventHolder);
             return true;
         }).orElse(false);
     }
 
-    public static void createDigSpot(ServerLevel level, BlockPos pos, RecipeHolder<DigSpotRecipe> recipeHolder) {
+    public static void createDigSpot(ServerLevel level, BlockPos pos, Holder.Reference<DigSpotEvent> eventHolder) {
         level.setBlock(pos, ModBlocks.digSpot.defaultBlockState(), 3);
         if (level.getBlockEntity(pos) instanceof DigSpotBlockEntity digSpot) {
-            digSpot.setRecipeId(recipeHolder.id());
+            digSpot.setEventKey(eventHolder.key());
         }
         ChunkLimitManager.get(level).trackDigSpot(pos);
     }
@@ -142,38 +140,31 @@ public class DigSpotHandler {
         return bestPos;
     }
 
-    private static Optional<RecipeHolder<DigSpotRecipe>> findRecipe(ServerLevel level, BlockPos pos, ServerPlayer player) {
-        final var recipeManager = level.getServer().getRecipeManager();
-        final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.digSpot.type());
-        final var candidates = new ArrayList<RecipeHolder<DigSpotRecipe>>();
-        for (final var recipe : recipes) {
-            if (isValidRecipeFor(recipe, level, pos, player)) {
-                candidates.add(recipe);
+    private static Optional<Holder.Reference<DigSpotEvent>> findEvent(ServerLevel level, BlockPos pos, ServerPlayer player) {
+        final var events = level.registryAccess().lookupOrThrow(ModDynamicRegistries.DIG_SPOT);
+        final var candidates = new ArrayList<Holder.Reference<DigSpotEvent>>();
+        for (final var eventHolder : events.listElements().toList()) {
+            if (isValidEventFor(eventHolder, level, pos, player)) {
+                candidates.add(eventHolder);
             }
         }
         return WeightedRandom.getRandomItem(random, candidates, it -> it.value().weight());
     }
 
-    private static boolean isValidRecipeFor(RecipeHolder<DigSpotRecipe> recipe, ServerLevel level, BlockPos pos, ServerPlayer player) {
+    private static boolean isValidEventFor(Holder.Reference<DigSpotEvent> eventHolder, ServerLevel level, BlockPos pos, ServerPlayer player) {
         final var context = MutableShogiContext.of(player)
                 .withLevel(level)
                 .withBlockPos(pos)
                 .withBlockState(level.getBlockState(pos))
                 .withItemStack(player.getMainHandItem());
-        return recipe.value().eventCondition().test(context);
+        return eventHolder.value().eventCondition().test(context);
     }
 
-    public static Optional<DigSpotRecipe> recipeById(ServerLevel level, @Nullable ResourceKey<Recipe<?>> recipeId) {
-        final var recipeManager = level.recipeAccess();
-        if (recipeId == null) {
+    public static Optional<DigSpotEvent> eventByKey(ServerLevel level, @Nullable ResourceKey<DigSpotEvent> eventKey) {
+        if (eventKey == null) {
             return Optional.empty();
         }
-        final var recipeHolder = recipeManager.byKey(recipeId).orElse(null);
-        if (recipeHolder != null && recipeHolder.value() instanceof DigSpotRecipe digSpotRecipe) {
-            return Optional.of(digSpotRecipe);
-        }
-        return Optional.empty();
+        return level.registryAccess().lookupOrThrow(ModDynamicRegistries.DIG_SPOT).get(eventKey).map(Holder::value);
     }
 
     public static void digSpotConsumed(Player player) {

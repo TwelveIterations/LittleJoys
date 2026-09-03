@@ -7,10 +7,9 @@ import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.blay09.mods.littlejoys.block.entity.FishingSpotBlockEntity;
-import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.particle.ModParticles;
-import net.blay09.mods.littlejoys.recipe.FishingSpotRecipe;
-import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
+import net.blay09.mods.littlejoys.registry.FishingSpotEvent;
+import net.blay09.mods.littlejoys.registry.ModDynamicRegistries;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
 import net.blay09.mods.shogi.context.MutableShogiContext;
@@ -23,8 +22,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jspecify.annotations.Nullable;
 
@@ -94,16 +92,16 @@ public class FishingSpotHandler {
     }
 
     public static boolean createFishingSpot(ServerLevel level, BlockPos pos, ServerPlayer player) {
-        return findRecipe(level, pos, player).map(recipeHolder -> {
-            createFishingSpot(level, pos, recipeHolder);
+        return findEvent(level, pos, player).map(eventHolder -> {
+            createFishingSpot(level, pos, eventHolder);
             return true;
         }).orElse(false);
     }
 
-    public static void createFishingSpot(ServerLevel level, BlockPos pos, RecipeHolder<FishingSpotRecipe> recipeHolder) {
+    public static void createFishingSpot(ServerLevel level, BlockPos pos, Holder.Reference<FishingSpotEvent> eventHolder) {
         level.setBlock(pos, ModBlocks.fishingSpot.defaultBlockState(), 3);
         if (level.getBlockEntity(pos) instanceof FishingSpotBlockEntity fishingSpot) {
-            fishingSpot.setRecipeId(recipeHolder.id());
+            fishingSpot.setEventKey(eventHolder.key());
         }
         ChunkLimitManager.get(level).trackFishingSpot(pos);
     }
@@ -114,47 +112,39 @@ public class FishingSpotHandler {
         return player.blockPosition().relative(forwardDirection, projectForwardDistance);
     }
 
-    private static Optional<RecipeHolder<FishingSpotRecipe>> findRecipe(ServerLevel level, BlockPos pos, ServerPlayer player) {
-        final var recipeManager = level.getServer().getRecipeManager();
-        final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.fishingSpot.type());
-        final var candidates = new ArrayList<RecipeHolder<FishingSpotRecipe>>();
-        for (final var recipe : recipes) {
-            if (isValidRecipeFor(recipe, level, pos, player)) {
-                candidates.add(recipe);
+    private static Optional<Holder.Reference<FishingSpotEvent>> findEvent(ServerLevel level, BlockPos pos, ServerPlayer player) {
+        final var events = level.registryAccess().lookupOrThrow(ModDynamicRegistries.FISHING_SPOT);
+        final var candidates = new ArrayList<Holder.Reference<FishingSpotEvent>>();
+        for (final var eventHolder : events.listElements().toList()) {
+            if (isValidEventFor(eventHolder, level, pos, player)) {
+                candidates.add(eventHolder);
             }
         }
         return WeightedRandom.getRandomItem(random, candidates, it -> it.value().weight());
     }
 
-    private static boolean isValidRecipeFor(RecipeHolder<FishingSpotRecipe> recipe, ServerLevel level, BlockPos pos, ServerPlayer player) {
+    private static boolean isValidEventFor(Holder.Reference<FishingSpotEvent> eventHolder, ServerLevel level, BlockPos pos, ServerPlayer player) {
         final var context = MutableShogiContext.of(player)
                 .withLevel(level)
                 .withBlockPos(pos)
                 .withBlockState(level.getBlockState(pos))
                 .withItemStack(player.getMainHandItem());
-        return recipe.value().eventCondition().test(context);
+        return eventHolder.value().eventCondition().test(context);
     }
 
-    @SuppressWarnings("unchecked")
-    private static Optional<RecipeHolder<FishingSpotRecipe>> recipeById(ServerLevel level, @Nullable ResourceKey<Recipe<?>> recipeId) {
-        final var recipeManager = level.recipeAccess();
-        if (recipeId == null) {
+    private static Optional<Holder.Reference<FishingSpotEvent>> eventByKey(ServerLevel level, @Nullable ResourceKey<FishingSpotEvent> eventKey) {
+        if (eventKey == null) {
             return Optional.empty();
         }
-        final var recipeHolder = recipeManager.byKey(recipeId).orElse(null);
-        if (recipeHolder != null && recipeHolder.value() instanceof FishingSpotRecipe) {
-            return Optional.of((RecipeHolder<FishingSpotRecipe>) recipeHolder);
-        }
-        return Optional.empty();
+        return level.registryAccess().lookupOrThrow(ModDynamicRegistries.FISHING_SPOT).get(eventKey);
     }
 
-    public static Optional<RecipeHolder<FishingSpotRecipe>> resolveRecipe(ServerLevel level, BlockPos pos, @Nullable ResourceKey<Recipe<?>> recipeId, ServerPlayer player) {
-        final var optRecipe = FishingSpotHandler.recipeById(level, recipeId);
-        if (optRecipe.isPresent() && FishingSpotHandler.isValidRecipeFor(optRecipe.get(), level, pos, player)) {
-            return optRecipe;
+    public static Optional<Holder.Reference<FishingSpotEvent>> resolveEvent(ServerLevel level, BlockPos pos, @Nullable ResourceKey<FishingSpotEvent> eventKey, ServerPlayer player) {
+        final var foundEventHolder = FishingSpotHandler.eventByKey(level, eventKey);
+        if (foundEventHolder.isPresent() && FishingSpotHandler.isValidEventFor(foundEventHolder.get(), level, pos, player)) {
+            return foundEventHolder;
         }
-        return FishingSpotHandler.findRecipe(level, pos, player);
+        return FishingSpotHandler.findEvent(level, pos, player);
     }
 
     public static Optional<BlockPos> findFishingSpot(ServerLevel serverLevel, BlockPos pos) {
