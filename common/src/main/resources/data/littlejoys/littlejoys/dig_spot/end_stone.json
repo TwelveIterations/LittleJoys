@@ -1,0 +1,10 @@
+{
+  "eventCondition": {
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:end_stone"
+    }
+  },
+  "lootTable": "littlejoys:dig_spot/end_stone"
+}

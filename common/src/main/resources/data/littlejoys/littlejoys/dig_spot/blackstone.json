@@ -1,0 +1,10 @@
+{
+  "eventCondition": {
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:blackstone"
+    }
+  },
+  "lootTable": "littlejoys:dig_spot/blackstone"
+}

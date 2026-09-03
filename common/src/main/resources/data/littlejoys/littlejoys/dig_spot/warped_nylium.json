@@ -1,0 +1,10 @@
+{
+  "eventCondition": {
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:warped_nylium"
+    }
+  },
+  "lootTable": "littlejoys:dig_spot/warped_nylium"
+}

@@ -1,0 +1,10 @@
+{
+  "eventCondition": {
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:moss_block"
+    }
+  },
+  "lootTable": "littlejoys:dig_spot/moss_block"
+}

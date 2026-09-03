@@ -1,0 +1,41 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "irons_spellbooks"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "irons_spellbooks"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "irons_spellbooks"
+    }
+  ],
+  "eventCondition": {
+    "type": "and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "irons_spellbooks:deepslate_mithril_ore"
+      },
+      {
+        "type": "shogi:is_item",
+        "item": "#littlejoys:can_trigger_goldrush"
+      },
+      {
+        "type": "not",
+        "condition": {
+          "type": "shogi:is_item",
+          "item": "#littlejoys:cannot_trigger_goldrush"
+        }
+      }
+    ]
+  },
+  "lootTable": "irons_spellbooks:blocks/deepslate_mithril_ore"
+}

@@ -1,0 +1,10 @@
+{
+  "eventCondition": {
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:grass_block"
+    }
+  },
+  "lootTable": "littlejoys:dig_spot/grass_block"
+}

@@ -1,0 +1,41 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "justdirethings"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "justdirethings"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "justdirethings"
+    }
+  ],
+  "eventCondition": {
+    "type": "and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "justdirethings:raw_coal_t1_ore"
+      },
+      {
+        "type": "shogi:is_item",
+        "item": "#littlejoys:can_trigger_goldrush"
+      },
+      {
+        "type": "not",
+        "condition": {
+          "type": "shogi:is_item",
+          "item": "#littlejoys:cannot_trigger_goldrush"
+        }
+      }
+    ]
+  },
+  "lootTable": "justdirethings:blocks/raw_coal_t1_ore"
+}

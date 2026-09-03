@@ -1,0 +1,10 @@
+{
+  "eventCondition": {
+    "type": "shogi:below",
+    "effect": {
+      "type": "shogi:is_block",
+      "block": "minecraft:gravel"
+    }
+  },
+  "lootTable": "littlejoys:dig_spot/gravel"
+}

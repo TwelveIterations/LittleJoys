@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "farmersdelight"
+      ]
+    }
+  ],
+  "forge:condition": {
+    "type": "forge:mod_loaded",
+    "modid": "farmersdelight"
+  },
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "eventCondition": {
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "farmersdelight:tomatoes"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "3"
+      }
+    ]
+  },
+  "lootTable": "farmersdelight:blocks/tomatoes"
+}
