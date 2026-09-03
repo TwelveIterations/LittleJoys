@@ -1,0 +1,17 @@
+{
+  "eventCondition": {
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "minecraft:beetroots"
+      },
+      {
+        "type": "shogi:is_block_state_property",
+        "property": "age",
+        "value": "3"
+      }
+    ]
+  },
+  "lootTable": "minecraft:blocks/beetroots"
+}

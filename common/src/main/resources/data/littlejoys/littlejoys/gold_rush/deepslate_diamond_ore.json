@@ -1,0 +1,23 @@
+{
+  "eventCondition": {
+    "type": "shogi:and",
+    "conditions": [
+      {
+        "type": "shogi:is_block",
+        "block": "minecraft:deepslate_diamond_ore"
+      },
+      {
+        "type": "shogi:is_item",
+        "item": "#littlejoys:can_trigger_goldrush"
+      },
+      {
+        "type": "shogi:not",
+        "condition": {
+          "type": "shogi:is_item",
+          "item": "#littlejoys:cannot_trigger_goldrush"
+        }
+      }
+    ]
+  },
+  "lootTable": "minecraft:blocks/deepslate_diamond_ore"
+}
