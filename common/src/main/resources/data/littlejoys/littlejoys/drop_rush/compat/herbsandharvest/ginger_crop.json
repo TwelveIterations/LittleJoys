@@ -17,7 +17,7 @@
       "modid": "herbsandharvest"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {

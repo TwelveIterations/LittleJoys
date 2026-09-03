@@ -17,7 +17,7 @@
       "modid": "justdirethings"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

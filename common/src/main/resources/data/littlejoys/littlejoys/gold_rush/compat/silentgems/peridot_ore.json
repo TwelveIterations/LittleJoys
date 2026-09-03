@@ -17,7 +17,7 @@
       "modid": "silentgems"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

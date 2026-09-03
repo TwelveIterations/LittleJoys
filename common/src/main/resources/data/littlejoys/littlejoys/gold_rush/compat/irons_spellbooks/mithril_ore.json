@@ -17,7 +17,7 @@
       "modid": "irons_spellbooks"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

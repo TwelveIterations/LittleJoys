@@ -17,7 +17,7 @@
       "modid": "supplementaries"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {

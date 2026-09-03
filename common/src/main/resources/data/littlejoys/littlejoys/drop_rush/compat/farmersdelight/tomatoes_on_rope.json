@@ -17,7 +17,7 @@
       "modid": "farmersdelight"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {

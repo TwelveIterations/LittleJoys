@@ -17,7 +17,7 @@
       "modid": "forbidden_arcanus"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

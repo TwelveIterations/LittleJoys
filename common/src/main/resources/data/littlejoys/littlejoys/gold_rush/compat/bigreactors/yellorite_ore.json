@@ -17,7 +17,7 @@
       "modid": "bigreactors"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

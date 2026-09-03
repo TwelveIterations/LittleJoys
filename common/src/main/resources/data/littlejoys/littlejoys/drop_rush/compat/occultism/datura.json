@@ -17,7 +17,7 @@
       "modid": "occultism"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {

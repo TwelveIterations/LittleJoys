@@ -17,7 +17,7 @@
       "modid": "iceandfire"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

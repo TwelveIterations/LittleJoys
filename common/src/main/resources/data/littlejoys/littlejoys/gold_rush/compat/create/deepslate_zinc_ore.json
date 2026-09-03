@@ -17,7 +17,7 @@
       "modid": "create"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

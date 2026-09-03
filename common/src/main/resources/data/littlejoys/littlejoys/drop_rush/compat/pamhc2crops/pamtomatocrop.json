@@ -17,7 +17,7 @@
       "modid": "pamhc2crops"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {

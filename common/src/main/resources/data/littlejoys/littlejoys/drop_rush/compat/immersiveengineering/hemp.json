@@ -17,7 +17,7 @@
       "modid": "immersiveengineering"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {
