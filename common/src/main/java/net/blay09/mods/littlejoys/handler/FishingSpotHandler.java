@@ -129,7 +129,7 @@ public class FishingSpotHandler {
                 .withBlockPos(pos)
                 .withBlockState(level.getBlockState(pos))
                 .withItemStack(player.getMainHandItem());
-        return eventHolder.value().eventCondition().test(context);
+        return eventHolder.value().condition().test(context);
     }
 
     private static Optional<Holder.Reference<FishingSpotEvent>> eventByKey(ServerLevel level, @Nullable ResourceKey<FishingSpotEvent> eventKey) {

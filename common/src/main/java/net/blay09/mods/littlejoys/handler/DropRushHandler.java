@@ -183,7 +183,7 @@ public class DropRushHandler {
                 .withBlockPos(pos)
                 .withBlockState(state)
                 .withItemStack(player.getMainHandItem());
-        return eventHolder.value().eventCondition().test(context);
+        return eventHolder.value().condition().test(context);
     }
 
 }

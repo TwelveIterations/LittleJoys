@@ -8,11 +8,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record FishingSpotEvent(ShogiEffect<?> eventCondition, ResourceKey<LootTable> lootTable,
+public record FishingSpotEvent(ShogiEffect<?> condition, ResourceKey<LootTable> lootTable,
                                int weight) {
 
     public static final Codec<FishingSpotEvent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("eventCondition").forGetter(FishingSpotEvent::eventCondition),
+            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("condition").forGetter(FishingSpotEvent::condition),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(FishingSpotEvent::lootTable),
             Codec.INT.fieldOf("weight").orElse(1).forGetter(FishingSpotEvent::weight)
     ).apply(instance, FishingSpotEvent::new));

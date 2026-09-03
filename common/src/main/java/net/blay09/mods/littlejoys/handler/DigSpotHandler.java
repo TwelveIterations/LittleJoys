@@ -157,7 +157,7 @@ public class DigSpotHandler {
                 .withBlockPos(pos)
                 .withBlockState(level.getBlockState(pos))
                 .withItemStack(player.getMainHandItem());
-        return eventHolder.value().eventCondition().test(context);
+        return eventHolder.value().condition().test(context);
     }
 
     public static Optional<DigSpotEvent> eventByKey(ServerLevel level, @Nullable ResourceKey<DigSpotEvent> eventKey) {
