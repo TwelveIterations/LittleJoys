@@ -17,7 +17,7 @@
       "modid": "alltheores"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

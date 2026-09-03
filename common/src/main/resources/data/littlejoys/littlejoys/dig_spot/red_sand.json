@@ -1,5 +1,5 @@
 {
-  "eventCondition": {
+  "condition": {
     "type": "shogi:below",
     "effect": {
       "type": "shogi:is_block",

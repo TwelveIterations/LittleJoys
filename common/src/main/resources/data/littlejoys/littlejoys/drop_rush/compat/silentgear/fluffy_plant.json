@@ -17,7 +17,7 @@
       "modid": "silentgear"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {

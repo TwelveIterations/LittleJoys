@@ -17,7 +17,7 @@
       "modid": "evilcraft"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

@@ -17,7 +17,7 @@
       "modid": "ars_nouveau"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {

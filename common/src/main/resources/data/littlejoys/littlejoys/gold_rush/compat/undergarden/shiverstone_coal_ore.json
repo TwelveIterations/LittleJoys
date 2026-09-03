@@ -17,7 +17,7 @@
       "modid": "undergarden"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

@@ -17,7 +17,7 @@
       "modid": "actuallyadditions"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "shogi:and",
     "conditions": [
       {

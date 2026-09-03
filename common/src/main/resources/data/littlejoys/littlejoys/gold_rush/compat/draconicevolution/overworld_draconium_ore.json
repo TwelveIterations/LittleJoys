@@ -17,7 +17,7 @@
       "modid": "draconicevolution"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

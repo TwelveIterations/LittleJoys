@@ -17,7 +17,7 @@
       "modid": "deeperdarker"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {

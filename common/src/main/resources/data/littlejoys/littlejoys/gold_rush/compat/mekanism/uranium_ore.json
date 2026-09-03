@@ -17,7 +17,7 @@
       "modid": "mekanism"
     }
   ],
-  "eventCondition": {
+  "condition": {
     "type": "and",
     "conditions": [
       {
