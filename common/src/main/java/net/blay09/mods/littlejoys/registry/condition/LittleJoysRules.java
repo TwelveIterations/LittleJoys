@@ -1,4 +1,4 @@
-package net.blay09.mods.littlejoys.recipe.condition;
+package net.blay09.mods.littlejoys.registry.condition;
 
 import net.blay09.mods.shogi.Shogi;
 import net.blay09.mods.shogi.scope.ShogiScope;

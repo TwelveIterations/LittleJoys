@@ -9,10 +9,9 @@ import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.advancement.ModAdvancements;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.blessing.StarOfFate;
-import net.blay09.mods.littlejoys.mixin.RecipeManagerAccessor;
 import net.blay09.mods.littlejoys.network.protocol.ClientboundGoldRushPacket;
-import net.blay09.mods.littlejoys.recipe.GoldRushRecipe;
-import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
+import net.blay09.mods.littlejoys.registry.GoldRushEvent;
+import net.blay09.mods.littlejoys.registry.ModDynamicRegistries;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.minecraft.core.BlockPos;
@@ -23,7 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
@@ -124,7 +123,7 @@ public class GoldRushHandler {
     }
 
     public static Optional<GoldRushInstance> rollForGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
-        return rollRecipe(level, pos, state, player, false).map(recipe -> startGoldRush(level, pos, state, player, recipe));
+        return rollEvent(level, pos, state, player, false).map(eventHolder -> startGoldRush(level, pos, state, player, eventHolder));
     }
 
     public static boolean isInGoldRush(ServerLevel level, BlockPos pos) {
@@ -132,17 +131,17 @@ public class GoldRushHandler {
     }
 
     public static Optional<GoldRushInstance> startGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
-        return rollRecipe(level, pos, state, player, true).map(recipe -> startGoldRush(level, pos, state, player, recipe));
+        return rollEvent(level, pos, state, player, true).map(eventHolder -> startGoldRush(level, pos, state, player, eventHolder));
     }
 
-    public static GoldRushInstance startGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, RecipeHolder<GoldRushRecipe> recipeHolder) {
+    public static GoldRushInstance startGoldRush(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, Holder.Reference<GoldRushEvent> eventHolder) {
         final var immutablePos = pos.immutable();
-        final var recipe = recipeHolder.value();
+        final var event = eventHolder.value();
         final var activeGoldRush = new GoldRushInstance(immutablePos,
                 state,
-                Optional.of(recipe.lootTable()),
-                (int) Math.floor(20 * recipe.seconds()),
-                recipe.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / recipe.maxDropsPerSecond()),
+                Optional.of(event.lootTable()),
+                (int) Math.floor(20 * event.seconds()),
+                event.maxDropsPerSecond() == -1 ? 0 : (int) Math.floor(20 / event.maxDropsPerSecond()),
                 player);
         player.awardStat(ModStats.goldRushesTriggered);
         ModAdvancements.awardGoldRush(player);
@@ -151,28 +150,26 @@ public class GoldRushHandler {
         return activeGoldRush;
     }
 
-    private static Optional<RecipeHolder<GoldRushRecipe>> rollRecipe(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, boolean force) {
-        final var recipeManager = level.getServer().getRecipeManager();
-        final var recipeMap = ((RecipeManagerAccessor) recipeManager).getRecipes();
-        final var recipes = recipeMap.byType(ModRecipeTypes.goldRush.type());
-        final var candidates = new ArrayList<RecipeHolder<GoldRushRecipe>>();
+    private static Optional<Holder.Reference<GoldRushEvent>> rollEvent(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player, boolean force) {
+        final var events = level.registryAccess().lookupOrThrow(ModDynamicRegistries.GOLD_RUSH);
+        final var candidates = new ArrayList<Holder.Reference<GoldRushEvent>>();
         final var baseChance = LittleJoysConfig.getActive().goldRush.baseChance;
         final var effectiveBaseChance = force ? baseChance : StarOfFate.applyChanceBonus(player, baseChance);
         final var roll = random.nextFloat();
-        for (final var recipeHolder : recipes) {
-            if (isValidRecipeFor(recipeHolder, level, pos, state, player) && (force || roll <= effectiveBaseChance * recipeHolder.value().chanceMultiplier())) {
-                candidates.add(recipeHolder);
+        for (final var eventHolder : events.listElements().toList()) {
+            if (isValidEventFor(eventHolder, level, pos, state, player) && (force || roll <= effectiveBaseChance * eventHolder.value().chanceMultiplier())) {
+                candidates.add(eventHolder);
             }
         }
         return WeightedRandom.getRandomItem(random, candidates, it -> it.value().weight());
     }
 
-    private static boolean isValidRecipeFor(RecipeHolder<GoldRushRecipe> recipe, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
+    private static boolean isValidEventFor(Holder.Reference<GoldRushEvent> eventHolder, ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
         final var context = MutableShogiContext.of(player)
                 .withLevel(level)
                 .withBlockPos(pos)
                 .withBlockState(state)
                 .withItemStack(player.getMainHandItem());
-        return recipe.value().eventCondition().test(context);
+        return eventHolder.value().eventCondition().test(context);
     }
 }

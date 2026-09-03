@@ -7,22 +7,21 @@ import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.blessing.BlessingManager;
 import net.blay09.mods.littlejoys.blessing.Blessings;
 import net.blay09.mods.littlejoys.handler.*;
-import net.blay09.mods.littlejoys.recipe.DigSpotRecipe;
-import net.blay09.mods.littlejoys.recipe.DropRushRecipe;
-import net.blay09.mods.littlejoys.recipe.FishingSpotRecipe;
-import net.blay09.mods.littlejoys.recipe.GoldRushRecipe;
+import net.blay09.mods.littlejoys.registry.DigSpotEvent;
+import net.blay09.mods.littlejoys.registry.DropRushEvent;
+import net.blay09.mods.littlejoys.registry.FishingSpotEvent;
+import net.blay09.mods.littlejoys.registry.GoldRushEvent;
+import net.blay09.mods.littlejoys.registry.ModDynamicRegistries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceKeyArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.permissions.Permissions;
-import net.minecraft.world.item.crafting.RecipeHolder;
 
 public class LittleJoysCommand {
 
@@ -33,7 +32,7 @@ public class LittleJoysCommand {
     private static final Identifier PERMISSION_LITTLEJOYS_FALLENSTAR = LittleJoys.id("command.littlejoys.fallenstar");
     private static final Identifier PERMISSION_LITTLEJOYS_BLESSING = LittleJoys.id("command.littlejoys.blessing");
 
-    private static final DynamicCommandExceptionType ERROR_UNKNOWN_RECIPE = new DynamicCommandExceptionType((arg) -> Component.translatable("recipe.notFound", arg));
+    private static final DynamicCommandExceptionType ERROR_UNKNOWN_EVENT = new DynamicCommandExceptionType((arg) -> Component.translatable("argument.resource.not_found", arg, "event"));
     private static final DynamicCommandExceptionType ERROR_UNKNOWN_BLESSING = new DynamicCommandExceptionType((arg) -> Component.translatable("argument.resource.not_found", arg, "blessing"));
 
     @SuppressWarnings("unchecked")
@@ -92,17 +91,15 @@ public class LittleJoysCommand {
                                     final var pos = BlockPosArgument.getBlockPos(context, "position");
                                     return DigSpotHandler.createDigSpot(level, pos, player) ? 1 : 0;
                                 })
-                                .then(Commands.argument("recipe", ResourceKeyArgument.key(Registries.RECIPE))
+                                .then(Commands.argument("event", ResourceKeyArgument.key(ModDynamicRegistries.DIG_SPOT))
                                         .executes(context -> {
                                             final var level = context.getSource().getLevel();
                                             final var pos = BlockPosArgument.getBlockPos(context, "position");
-                                            final var recipeHolder = ResourceKeyArgument.getRecipe(context, "recipe");
-                                            if (recipeHolder.value() instanceof DigSpotRecipe) {
-                                                DigSpotHandler.createDigSpot(level, pos, (RecipeHolder<DigSpotRecipe>) recipeHolder);
-                                                return 1;
-                                            } else {
-                                                throw ERROR_UNKNOWN_RECIPE.create(context.getArgument("recipe", ResourceKey.class));
-                                            }
+                                            final ResourceKey<DigSpotEvent> eventKey = context.getArgument("event", ResourceKey.class);
+                                            final var eventHolder = level.registryAccess().lookupOrThrow(ModDynamicRegistries.DIG_SPOT).get(eventKey)
+                                                    .orElseThrow(() -> ERROR_UNKNOWN_EVENT.create(eventKey));
+                                            DigSpotHandler.createDigSpot(level, pos, eventHolder);
+                                            return 1;
                                         }))))
                 .then(Commands.literal("fishingspot")
                         .requires(BalmCommands.requirePermission(PERMISSION_LITTLEJOYS_FISHINGSPOT))
@@ -113,17 +110,15 @@ public class LittleJoysCommand {
                                     final var pos = BlockPosArgument.getBlockPos(context, "position");
                                     return FishingSpotHandler.createFishingSpot(level, pos, player) ? 1 : 0;
                                 })
-                                .then(Commands.argument("recipe", ResourceKeyArgument.key(Registries.RECIPE))
+                                .then(Commands.argument("event", ResourceKeyArgument.key(ModDynamicRegistries.FISHING_SPOT))
                                         .executes(context -> {
                                             final var level = context.getSource().getLevel();
                                             final var pos = BlockPosArgument.getBlockPos(context, "position");
-                                            final var recipeHolder = ResourceKeyArgument.getRecipe(context, "recipe");
-                                            if (recipeHolder.value() instanceof FishingSpotRecipe) {
-                                                FishingSpotHandler.createFishingSpot(level, pos, (RecipeHolder<FishingSpotRecipe>) recipeHolder);
-                                                return 1;
-                                            } else {
-                                                throw ERROR_UNKNOWN_RECIPE.create(context.getArgument("recipe", ResourceKey.class));
-                                            }
+                                            final ResourceKey<FishingSpotEvent> eventKey = context.getArgument("event", ResourceKey.class);
+                                            final var eventHolder = level.registryAccess().lookupOrThrow(ModDynamicRegistries.FISHING_SPOT).get(eventKey)
+                                                    .orElseThrow(() -> ERROR_UNKNOWN_EVENT.create(eventKey));
+                                            FishingSpotHandler.createFishingSpot(level, pos, eventHolder);
+                                            return 1;
                                         }))))
                 .then(Commands.literal("goldrush")
                         .requires(BalmCommands.requirePermission(PERMISSION_LITTLEJOYS_GOLDRUSH))
@@ -135,18 +130,16 @@ public class LittleJoysCommand {
                                     GoldRushHandler.startGoldRush(level, pos, level.getBlockState(pos), player);
                                     return 1;
                                 })
-                                .then(Commands.argument("recipe", ResourceKeyArgument.key(Registries.RECIPE))
+                                .then(Commands.argument("event", ResourceKeyArgument.key(ModDynamicRegistries.GOLD_RUSH))
                                         .executes(context -> {
                                             final var level = context.getSource().getLevel();
                                             final var player = context.getSource().getPlayerOrException();
                                             final var pos = BlockPosArgument.getBlockPos(context, "position");
-                                            final var recipeHolder = ResourceKeyArgument.getRecipe(context, "recipe");
-                                            if (recipeHolder.value() instanceof GoldRushRecipe) {
-                                                GoldRushHandler.startGoldRush(level, pos, level.getBlockState(pos), player, (RecipeHolder<GoldRushRecipe>) recipeHolder);
-                                                return 1;
-                                            } else {
-                                                throw ERROR_UNKNOWN_RECIPE.create(context.getArgument("recipe", ResourceKey.class));
-                                            }
+                                            final ResourceKey<GoldRushEvent> eventKey = context.getArgument("event", ResourceKey.class);
+                                            final var eventHolder = level.registryAccess().lookupOrThrow(ModDynamicRegistries.GOLD_RUSH).get(eventKey)
+                                                    .orElseThrow(() -> ERROR_UNKNOWN_EVENT.create(eventKey));
+                                            GoldRushHandler.startGoldRush(level, pos, level.getBlockState(pos), player, eventHolder);
+                                            return 1;
                                         }))))
                 .then(Commands.literal("droprush")
                         .requires(BalmCommands.requirePermission(PERMISSION_LITTLEJOYS_DROPRUSH))
@@ -157,18 +150,16 @@ public class LittleJoysCommand {
                                     final var pos = BlockPosArgument.getBlockPos(context, "position");
                                     DropRushHandler.startDropRush(level, pos, level.getBlockState(pos), player);
                                     return 0;
-                                }).then(Commands.argument("recipe", ResourceKeyArgument.key(Registries.RECIPE))
+                                }).then(Commands.argument("event", ResourceKeyArgument.key(ModDynamicRegistries.DROP_RUSH))
                                         .executes(context -> {
                                             final var level = context.getSource().getLevel();
                                             final var player = context.getSource().getPlayerOrException();
                                             final var pos = BlockPosArgument.getBlockPos(context, "position");
-                                            final var recipeHolder = ResourceKeyArgument.getRecipe(context, "recipe");
-                                            if (recipeHolder.value() instanceof DropRushRecipe) {
-                                                DropRushHandler.startDropRush(level, pos, player, (RecipeHolder<DropRushRecipe>) recipeHolder);
-                                                return 1;
-                                            } else {
-                                                throw ERROR_UNKNOWN_RECIPE.create(context.getArgument("recipe", ResourceKey.class));
-                                            }
+                                            final ResourceKey<DropRushEvent> eventKey = context.getArgument("event", ResourceKey.class);
+                                            final var eventHolder = level.registryAccess().lookupOrThrow(ModDynamicRegistries.DROP_RUSH).get(eventKey)
+                                                    .orElseThrow(() -> ERROR_UNKNOWN_EVENT.create(eventKey));
+                                            DropRushHandler.startDropRush(level, pos, player, eventHolder);
+                                            return 1;
                                         }))))
         );
     }

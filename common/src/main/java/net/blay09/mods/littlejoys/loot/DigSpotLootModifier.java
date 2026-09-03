@@ -30,9 +30,9 @@ public class DigSpotLootModifier implements BalmLootModifier {
             return;
         }
 
-        DigSpotHandler.recipeById(level, digSpot.getRecipeId()).ifPresent(recipe -> {
-            final var recipeLootTableId = recipe.lootTable();
-            final var lootTable = level.getServer().reloadableRegistries().getLootTable(recipeLootTableId);
+        DigSpotHandler.eventByKey(level, digSpot.getEventKey()).ifPresent(event -> {
+            final var eventLootTableId = event.lootTable();
+            final var lootTable = level.getServer().reloadableRegistries().getLootTable(eventLootTableId);
             isApplyingLoot.set(true);
             try {
                 lootTable.getRandomItems(context, list::add);

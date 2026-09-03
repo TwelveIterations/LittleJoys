@@ -1,4 +1,4 @@
 @NullMarked
-package net.blay09.mods.littlejoys.recipe;
+package net.blay09.mods.littlejoys.registry.condition;
 
 import org.jspecify.annotations.NullMarked;

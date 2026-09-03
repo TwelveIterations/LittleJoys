@@ -21,8 +21,7 @@ import net.blay09.mods.littlejoys.loot.ModLoot;
 import net.blay09.mods.littlejoys.network.ModNetworking;
 import net.blay09.mods.littlejoys.particle.ModParticles;
 import net.blay09.mods.littlejoys.poi.ModPoiTypes;
-import net.blay09.mods.littlejoys.recipe.ModRecipeTypes;
-import net.blay09.mods.littlejoys.recipe.condition.LittleJoysRules;
+import net.blay09.mods.littlejoys.registry.ModDynamicRegistries;
 import net.blay09.mods.littlejoys.sound.ModSounds;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.minecraft.core.registries.Registries;
@@ -45,7 +44,7 @@ public class LittleJoys {
         registrars.blockEntityTypes(ModBlockEntities::initialize);
         registrars.entityTypes(ModEntities::initialize);
         ModLoot.initialize(Balm.lootModifiers());
-        registrars.recipeTypes(ModRecipeTypes::initialize);
+        ModDynamicRegistries.initialize(registrars.registrar());
         registrars.customStats(ModStats::initialize);
         ModNetworking.initialize(Balm.networking());
         Blessings.initialize(registrars.registrar());
