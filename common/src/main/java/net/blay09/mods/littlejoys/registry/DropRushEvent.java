@@ -8,11 +8,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record DropRushEvent(ShogiEffect<?> eventCondition, float chanceMultiplier, ResourceKey<LootTable> lootTable,
+public record DropRushEvent(ShogiEffect<?> condition, float chanceMultiplier, ResourceKey<LootTable> lootTable,
                             int rolls, float seconds, int range, int weight) {
 
     public static final Codec<DropRushEvent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("eventCondition").forGetter(DropRushEvent::eventCondition),
+            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("condition").forGetter(DropRushEvent::condition),
             Codec.FLOAT.fieldOf("chanceMultiplier").orElse(1f).forGetter(DropRushEvent::chanceMultiplier),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(DropRushEvent::lootTable),
             Codec.INT.fieldOf("rolls").orElse(8).forGetter(DropRushEvent::rolls),

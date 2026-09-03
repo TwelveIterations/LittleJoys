@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record GoldRushEvent(ShogiEffect<?> eventCondition,
+public record GoldRushEvent(ShogiEffect<?> condition,
                             float chanceMultiplier,
                             ResourceKey<LootTable> lootTable,
                             float seconds,
@@ -16,7 +16,7 @@ public record GoldRushEvent(ShogiEffect<?> eventCondition,
                             int weight) {
 
     public static final Codec<GoldRushEvent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("eventCondition").forGetter(GoldRushEvent::eventCondition),
+            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("condition").forGetter(GoldRushEvent::condition),
             Codec.FLOAT.fieldOf("chanceMultiplier").orElse(1f).forGetter(GoldRushEvent::chanceMultiplier),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(GoldRushEvent::lootTable),
             Codec.FLOAT.fieldOf("seconds").orElse(7f).forGetter(GoldRushEvent::seconds),

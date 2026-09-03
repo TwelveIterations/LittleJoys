@@ -8,11 +8,11 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
 
-public record DigSpotEvent(ShogiEffect<?> eventCondition, ResourceKey<LootTable> lootTable,
+public record DigSpotEvent(ShogiEffect<?> condition, ResourceKey<LootTable> lootTable,
                            int weight) {
 
     public static final Codec<DigSpotEvent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("eventCondition").forGetter(DigSpotEvent::eventCondition),
+            LittleJoysRules.SCOPE.getEffectCodec().fieldOf("condition").forGetter(DigSpotEvent::condition),
             ResourceKey.codec(Registries.LOOT_TABLE).fieldOf("lootTable").forGetter(DigSpotEvent::lootTable),
             Codec.INT.fieldOf("weight").orElse(1).forGetter(DigSpotEvent::weight)
     ).apply(instance, DigSpotEvent::new));
