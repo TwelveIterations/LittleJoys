@@ -63,12 +63,12 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
             return AbundanceSource.FISHING;
         }
 
-        final var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
+        final var state = context.getOptional(LootContextParams.BLOCK_STATE);
         if (state != null && state.is(ModBlockTags.STAR_OF_ABUNDANCE_BLOCKS)) {
             return AbundanceSource.BLOCK_DROP;
         }
 
-        final var entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        final var entity = context.getOptional(LootContextParams.THIS_ENTITY);
         if (entity != null && entity.is(ModEntityTags.STAR_OF_ABUNDANCE_MOBS)) {
             return AbundanceSource.MOB_DROP;
         }
@@ -77,17 +77,17 @@ public class StarOfAbundanceLootModifier implements BalmLootModifier {
     }
 
     private static @Nullable ServerPlayer getPlayer(LootContext context) {
-        final var lastDamagePlayer = context.getOptionalParameter(LootContextParams.LAST_DAMAGE_PLAYER);
+        final var lastDamagePlayer = context.getOptional(LootContextParams.LAST_DAMAGE_PLAYER);
         if (lastDamagePlayer instanceof ServerPlayer player) {
             return player;
         }
 
-        final var attackingEntity = context.getOptionalParameter(LootContextParams.ATTACKING_ENTITY);
+        final var attackingEntity = context.getOptional(LootContextParams.ATTACKING_ENTITY);
         if (attackingEntity instanceof ServerPlayer player) {
             return player;
         }
 
-        final var entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        final var entity = context.getOptional(LootContextParams.THIS_ENTITY);
         if (entity instanceof ServerPlayer player) {
             return player;
         }

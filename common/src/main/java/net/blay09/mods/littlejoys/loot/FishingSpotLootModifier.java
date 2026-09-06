@@ -25,8 +25,8 @@ public class FishingSpotLootModifier implements BalmLootModifier {
         }
 
         final var level = context.getLevel();
-        final var origin = context.getOptionalParameter(LootContextParams.ORIGIN);
-        final var entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        final var origin = context.getOptional(LootContextParams.ORIGIN);
+        final var entity = context.getOptional(LootContextParams.THIS_ENTITY);
         if (origin == null || !(entity instanceof FishingSpotHolder fishingSpotHolder) || !(fishingSpotHolder.littlejoys$getPlayerOwner() instanceof ServerPlayer player)) {
             return;
         }

@@ -23,9 +23,9 @@ public class DigSpotLootModifier implements BalmLootModifier {
         }
 
         final var level = context.getLevel();
-        final var vec = context.getOptionalParameter(LootContextParams.ORIGIN);
-        final var state = context.getOptionalParameter(LootContextParams.BLOCK_STATE);
-        final var blockEntity = context.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        final var vec = context.getOptional(LootContextParams.ORIGIN);
+        final var state = context.getOptional(LootContextParams.BLOCK_STATE);
+        final var blockEntity = context.getOptional(LootContextParams.BLOCK_ENTITY);
         if (state == null || vec == null || !(blockEntity instanceof DigSpotBlockEntity digSpot)) {
             return;
         }
