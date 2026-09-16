@@ -2,6 +2,8 @@ Little Joys adds small rewarding events with the goal of spreading occasional jo
 
 This mod requires [Balm](https://www.curseforge.com/minecraft/mc-mods/balm), which must be installed alongside the mod.
 
+On Minecraft 26.3 and above, it also requires [Shogi](https://www.curseforge.com/minecraft/mc-mods/shogi), which powers the highly configurable event definitions and many other rule-based configurations across my mods.
+
 ### ![Features](https://mods.twelveiterations.com/img/features-header.png)
 
 - Dig Spots holding small treasures
