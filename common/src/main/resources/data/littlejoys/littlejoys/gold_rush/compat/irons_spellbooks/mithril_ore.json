@@ -5,6 +5,13 @@
       "values": [
         "irons_spellbooks"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "irons_spellbooks:mithril_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "irons_spellbooks"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "irons_spellbooks:mithril_ore"
     }
   ],
   "condition": {

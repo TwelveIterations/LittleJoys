@@ -5,6 +5,13 @@
       "values": [
         "silentgems"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "silentgems:nether_ammolite_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "silentgems"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "silentgems:nether_ammolite_ore"
     }
   ],
   "condition": {

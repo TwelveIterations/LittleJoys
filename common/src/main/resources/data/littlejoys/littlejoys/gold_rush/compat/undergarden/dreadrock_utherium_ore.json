@@ -5,6 +5,13 @@
       "values": [
         "undergarden"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "undergarden:dreadrock_utherium_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "undergarden"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "undergarden:dreadrock_utherium_ore"
     }
   ],
   "condition": {

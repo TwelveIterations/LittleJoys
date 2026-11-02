@@ -5,6 +5,13 @@
       "values": [
         "farmersdelight"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "farmersdelight:tomatoes"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "farmersdelight"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "farmersdelight:tomatoes"
     }
   ],
   "condition": {

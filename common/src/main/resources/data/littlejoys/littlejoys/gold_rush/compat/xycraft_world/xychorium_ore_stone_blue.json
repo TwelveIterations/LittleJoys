@@ -5,6 +5,13 @@
       "values": [
         "xycraft_world"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "xycraft_world:xychorium_ore_stone_blue"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "xycraft_world"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "xycraft_world:xychorium_ore_stone_blue"
     }
   ],
   "condition": {

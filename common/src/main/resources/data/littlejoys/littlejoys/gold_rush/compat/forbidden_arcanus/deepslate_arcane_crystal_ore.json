@@ -5,6 +5,13 @@
       "values": [
         "forbidden_arcanus"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "forbidden_arcanus:deepslate_arcane_crystal_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "forbidden_arcanus"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "forbidden_arcanus:deepslate_arcane_crystal_ore"
     }
   ],
   "condition": {

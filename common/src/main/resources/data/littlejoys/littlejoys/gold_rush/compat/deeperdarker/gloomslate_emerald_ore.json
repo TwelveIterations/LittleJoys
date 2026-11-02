@@ -5,6 +5,13 @@
       "values": [
         "deeperdarker"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "deeperdarker:gloomslate_emerald_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "deeperdarker"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "deeperdarker:gloomslate_emerald_ore"
     }
   ],
   "condition": {

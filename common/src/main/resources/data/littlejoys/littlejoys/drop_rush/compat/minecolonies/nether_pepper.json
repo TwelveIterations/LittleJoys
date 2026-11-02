@@ -5,6 +5,13 @@
       "values": [
         "minecolonies"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "minecolonies:nether_pepper"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "minecolonies"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "minecolonies:nether_pepper"
     }
   ],
   "condition": {

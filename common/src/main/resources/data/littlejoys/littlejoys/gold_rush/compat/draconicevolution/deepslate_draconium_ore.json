@@ -5,6 +5,13 @@
       "values": [
         "draconicevolution"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "draconicevolution:deepslate_draconium_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "draconicevolution"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "draconicevolution:deepslate_draconium_ore"
     }
   ],
   "condition": {

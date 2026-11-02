@@ -5,6 +5,13 @@
       "values": [
         "actuallyadditions"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "actuallyadditions:canola"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "actuallyadditions"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "actuallyadditions:canola"
     }
   ],
   "condition": {

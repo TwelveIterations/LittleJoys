@@ -5,6 +5,13 @@
       "values": [
         "mysticalagriculture"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "mysticalagriculture:soulium_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "mysticalagriculture"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "mysticalagriculture:soulium_ore"
     }
   ],
   "condition": {

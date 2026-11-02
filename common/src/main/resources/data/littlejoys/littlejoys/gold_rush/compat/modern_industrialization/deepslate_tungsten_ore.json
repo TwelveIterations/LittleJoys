@@ -5,6 +5,13 @@
       "values": [
         "modern_industrialization"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "modern_industrialization:deepslate_tungsten_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "modern_industrialization"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "modern_industrialization:deepslate_tungsten_ore"
     }
   ],
   "condition": {

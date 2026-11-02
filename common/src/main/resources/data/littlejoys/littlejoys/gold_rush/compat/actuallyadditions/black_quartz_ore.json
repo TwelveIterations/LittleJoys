@@ -5,6 +5,13 @@
       "values": [
         "actuallyadditions"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "actuallyadditions:black_quartz_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "actuallyadditions"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "actuallyadditions:black_quartz_ore"
     }
   ],
   "condition": {

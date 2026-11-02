@@ -5,6 +5,13 @@
       "values": [
         "biomeswevegone"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "biomeswevegone:oddion_crop"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "biomeswevegone"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "biomeswevegone:oddion_crop"
     }
   ],
   "condition": {

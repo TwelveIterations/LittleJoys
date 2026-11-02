@@ -5,6 +5,13 @@
       "values": [
         "eternal_starlight"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "eternal_starlight:haze_ice_starcore_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "eternal_starlight"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "eternal_starlight:haze_ice_starcore_ore"
     }
   ],
   "condition": {

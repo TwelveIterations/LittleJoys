@@ -5,6 +5,13 @@
       "values": [
         "sushigocrafting"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "sushigocrafting:soy_crop"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "sushigocrafting"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "sushigocrafting:soy_crop"
     }
   ],
   "condition": {

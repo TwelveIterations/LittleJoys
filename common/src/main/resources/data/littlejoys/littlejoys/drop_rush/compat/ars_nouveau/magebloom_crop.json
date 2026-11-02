@@ -5,6 +5,13 @@
       "values": [
         "ars_nouveau"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "ars_nouveau:magebloom_crop"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "ars_nouveau"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "ars_nouveau:magebloom_crop"
     }
   ],
   "condition": {

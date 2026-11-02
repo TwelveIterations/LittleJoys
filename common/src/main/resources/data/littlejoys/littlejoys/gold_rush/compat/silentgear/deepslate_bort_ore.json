@@ -5,6 +5,13 @@
       "values": [
         "silentgear"
       ]
+    },
+    {
+      "condition": "fabric:registry_contains",
+      "registry": "minecraft:block",
+      "values": [
+        "silentgear:deepslate_bort_ore"
+      ]
     }
   ],
   "forge:condition": {
@@ -15,6 +22,11 @@
     {
       "type": "neoforge:mod_loaded",
       "modid": "silentgear"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:block",
+      "value": "silentgear:deepslate_bort_ore"
     }
   ],
   "condition": {
