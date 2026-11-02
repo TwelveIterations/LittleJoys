@@ -1,1 +1,1 @@
-- Updated to Minecraft 26.3
+- Fixed data pack load errors on events referencing third party items that no longer exist
