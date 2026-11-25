@@ -1,10 +1,7 @@
 {
   "condition": {
-    "type": "shogi:below",
-    "effect": {
-      "type": "shogi:is_block",
-      "block": "minecraft:podzol"
-    }
+    "type": "littlejoys:can_spawn_dig_spot",
+    "block": "minecraft:podzol"
   },
   "lootTable": "littlejoys:dig_spot/podzol"
 }

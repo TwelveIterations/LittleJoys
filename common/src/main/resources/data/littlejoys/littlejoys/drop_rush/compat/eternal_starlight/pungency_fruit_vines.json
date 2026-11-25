@@ -30,18 +30,11 @@
     }
   ],
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "eternal_starlight:pungency_fruit_vines"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "7"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "eternal_starlight:pungency_fruit_vines",
+    "properties": {
+      "age": "7"
+    }
   },
   "lootTable": "eternal_starlight:blocks/pungency_fruit_vines"
 }

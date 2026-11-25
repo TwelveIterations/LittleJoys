@@ -30,18 +30,11 @@
     }
   ],
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "farmersdelight:cabbages"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "7"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "farmersdelight:cabbages",
+    "properties": {
+      "age": "7"
+    }
   },
   "lootTable": "farmersdelight:blocks/cabbages"
 }

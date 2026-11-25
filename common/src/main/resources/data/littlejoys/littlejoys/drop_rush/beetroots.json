@@ -1,17 +1,10 @@
 {
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "minecraft:beetroots"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "3"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "minecraft:beetroots",
+    "properties": {
+      "age": "3"
+    }
   },
   "lootTable": "minecraft:blocks/beetroots"
 }

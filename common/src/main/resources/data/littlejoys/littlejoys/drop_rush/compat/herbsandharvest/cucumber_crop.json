@@ -30,18 +30,11 @@
     }
   ],
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "herbsandharvest:cucumber_crop"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "3"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "herbsandharvest:cucumber_crop",
+    "properties": {
+      "age": "3"
+    }
   },
   "lootTable": "herbsandharvest:blocks/cucumber_crop"
 }

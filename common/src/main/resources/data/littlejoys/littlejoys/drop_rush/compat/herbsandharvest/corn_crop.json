@@ -30,18 +30,11 @@
     }
   ],
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "herbsandharvest:corn_crop"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "12"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "herbsandharvest:corn_crop",
+    "properties": {
+      "age": "12"
+    }
   },
   "lootTable": "herbsandharvest:blocks/corn_crop"
 }

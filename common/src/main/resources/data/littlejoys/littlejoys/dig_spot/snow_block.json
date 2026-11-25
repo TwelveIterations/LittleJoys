@@ -1,10 +1,7 @@
 {
   "condition": {
-    "type": "shogi:below",
-    "effect": {
-      "type": "shogi:is_block",
-      "block": "minecraft:snow_block"
-    }
+    "type": "littlejoys:can_spawn_dig_spot",
+    "block": "minecraft:snow_block"
   },
   "lootTable": "littlejoys:dig_spot/snow_block"
 }

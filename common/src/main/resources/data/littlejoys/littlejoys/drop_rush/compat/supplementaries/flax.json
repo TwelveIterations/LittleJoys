@@ -30,18 +30,11 @@
     }
   ],
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "supplementaries:flax"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "7"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "supplementaries:flax",
+    "properties": {
+      "age": "7"
+    }
   },
   "lootTable": "supplementaries:blocks/flax"
 }

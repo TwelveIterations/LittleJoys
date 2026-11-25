@@ -30,18 +30,11 @@
     }
   ],
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "immersiveengineering:hemp"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "4"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "immersiveengineering:hemp",
+    "properties": {
+      "age": "4"
+    }
   },
   "lootTable": "immersiveengineering:blocks/hemp"
 }

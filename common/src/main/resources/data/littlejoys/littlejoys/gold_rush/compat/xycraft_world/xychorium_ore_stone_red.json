@@ -30,24 +30,8 @@
     }
   ],
   "condition": {
-    "type": "and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "xycraft_world:xychorium_ore_stone_red"
-      },
-      {
-        "type": "shogi:is_item",
-        "item": "#littlejoys:can_trigger_goldrush"
-      },
-      {
-        "type": "not",
-        "condition": {
-          "type": "shogi:is_item",
-          "item": "#littlejoys:cannot_trigger_goldrush"
-        }
-      }
-    ]
+    "type": "littlejoys:can_trigger_gold_rush",
+    "block": "xycraft_world:xychorium_ore_stone_red"
   },
   "lootTable": "xycraft_world:blocks/xychorium_ore_stone_red"
 }

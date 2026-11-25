@@ -1,17 +1,10 @@
 {
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "minecraft:wheat"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "7"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "minecraft:wheat",
+    "properties": {
+      "age": "7"
+    }
   },
   "lootTable": "minecraft:blocks/wheat"
 }

@@ -1,32 +1,7 @@
 {
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:below",
-        "effect": {
-          "type": "shogi:and",
-          "conditions": [
-            {
-              "type": "shogi:is_fluid",
-              "fluid": "minecraft:water"
-            },
-            {
-              "type": "shogi:is_fluid_source"
-            },
-            {
-              "type": "shogi:not",
-              "condition": {
-                "type": "shogi:is_waterlogged"
-              }
-            }
-          ]
-        }
-      },
-      {
-        "type": "shogi:can_see_sky"
-      }
-    ]
+    "type": "littlejoys:can_spawn_fishing_spot",
+    "fluid": "minecraft:water"
   },
   "lootTable": "littlejoys:fishing_spot/water"
 }

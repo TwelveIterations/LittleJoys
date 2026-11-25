@@ -30,18 +30,11 @@
     }
   ],
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "minecolonies:butternut_squash"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "6"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "minecolonies:butternut_squash",
+    "properties": {
+      "age": "6"
+    }
   },
   "lootTable": "minecolonies:blocks/butternut_squash"
 }

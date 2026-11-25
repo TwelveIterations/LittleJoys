@@ -30,24 +30,8 @@
     }
   ],
   "condition": {
-    "type": "and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "alltheores:nether_ruby_ore"
-      },
-      {
-        "type": "shogi:is_item",
-        "item": "#littlejoys:can_trigger_goldrush"
-      },
-      {
-        "type": "not",
-        "condition": {
-          "type": "shogi:is_item",
-          "item": "#littlejoys:cannot_trigger_goldrush"
-        }
-      }
-    ]
+    "type": "littlejoys:can_trigger_gold_rush",
+    "block": "alltheores:nether_ruby_ore"
   },
   "lootTable": "alltheores:blocks/nether_ruby_ore"
 }

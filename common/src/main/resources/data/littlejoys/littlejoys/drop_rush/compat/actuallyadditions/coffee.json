@@ -30,18 +30,11 @@
     }
   ],
   "condition": {
-    "type": "shogi:and",
-    "conditions": [
-      {
-        "type": "shogi:is_block",
-        "block": "actuallyadditions:coffee"
-      },
-      {
-        "type": "shogi:is_block_state_property",
-        "property": "age",
-        "value": "7"
-      }
-    ]
+    "type": "littlejoys:can_trigger_drop_rush",
+    "block": "actuallyadditions:coffee",
+    "properties": {
+      "age": "7"
+    }
   },
   "lootTable": "actuallyadditions:blocks/coffee"
 }
