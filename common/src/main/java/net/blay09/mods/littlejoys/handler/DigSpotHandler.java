@@ -3,6 +3,7 @@ package net.blay09.mods.littlejoys.handler;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.TickPhase;
 import net.blay09.mods.balm.api.event.TickType;
+import net.blay09.mods.balm.api.event.UseBlockEvent;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
 import net.blay09.mods.littlejoys.block.ModBlocks;
@@ -16,10 +17,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +39,33 @@ public class DigSpotHandler {
     private static final String DIG_SPOT_COOLDOWN = "digSpotCooldown";
 
     public static void initialize() {
+        Balm.getEvents().onEvent(UseBlockEvent.class, event -> {
+            final var player = event.getPlayer();
+            final var tool = player.getItemInHand(event.getHand());
+            if (!(tool.getItem() instanceof ShovelItem) || !player.mayBuild() || player.isSpectator()) {
+                return;
+            }
+
+            final var level = event.getLevel();
+            final var pos = event.getHitResult().getBlockPos();
+            final var digSpotPos = pos.above();
+            if (!level.getBlockState(pos).is(BlockTags.MINEABLE_WITH_SHOVEL)
+                    || !level.getBlockState(digSpotPos).is(ModBlocks.digSpot)
+                    || !level.mayInteract(player, pos)) {
+                return;
+            }
+
+            if (level instanceof ServerLevel) {
+                final var digSpotState = level.getBlockState(digSpotPos);
+                Block.dropResources(digSpotState, level, digSpotPos, level.getBlockEntity(digSpotPos), player, tool);
+                level.removeBlock(digSpotPos, false);
+                level.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1f, 1f);
+                tool.hurtAndBreak(1, player, it -> it.broadcastBreakEvent(event.getHand()));
+            }
+            event.setResult(InteractionResult.sidedSuccess(level.isClientSide));
+            event.setCanceled(!level.isClientSide);
+        });
+
         Balm.getEvents().onTickEvent(TickType.ServerPlayer, TickPhase.End, (player) -> {
             final var playerData = Balm.getHooks().getPersistentData(player);
             final var littleJoysData = playerData.getCompound(LittleJoys.MOD_ID);
