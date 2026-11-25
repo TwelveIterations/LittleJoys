@@ -17,6 +17,8 @@ import net.blay09.mods.littlejoys.tag.ModBlockTags;
 import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
 import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -62,6 +64,8 @@ public class DigSpotHandler {
                 final var digSpotState = level.getBlockState(digSpotPos);
                 Block.dropResources(digSpotState, serverLevel, digSpotPos, level.getBlockEntity(digSpotPos), player, tool);
                 level.removeBlock(digSpotPos, false);
+                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, level.getBlockState(pos)),
+                        pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 20, 0.25, 0.05, 0.25, 0.1);
                 level.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN.value(), SoundSource.BLOCKS, 1f, 1f);
                 tool.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
             }
