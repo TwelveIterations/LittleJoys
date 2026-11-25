@@ -3,6 +3,7 @@ package net.blay09.mods.littlejoys.handler;
 import net.blay09.mods.balm.Balm;
 import net.blay09.mods.balm.platform.event.EventPhases;
 import net.blay09.mods.balm.platform.event.callback.BlockCallback;
+import net.blay09.mods.balm.platform.event.callback.InteractionEventResult;
 import net.blay09.mods.balm.platform.event.callback.ServerTickCallback;
 import net.blay09.mods.littlejoys.LittleJoys;
 import net.blay09.mods.littlejoys.LittleJoysConfig;
@@ -11,19 +12,26 @@ import net.blay09.mods.littlejoys.block.ModBlocks;
 import net.blay09.mods.littlejoys.block.entity.DigSpotBlockEntity;
 import net.blay09.mods.littlejoys.registry.DigSpotEvent;
 import net.blay09.mods.littlejoys.registry.ModDynamicRegistries;
-import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
 import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
+import net.blay09.mods.shogi.context.MutableShogiContext;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.core.Holder;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jspecify.annotations.Nullable;
 
@@ -36,6 +44,30 @@ public class DigSpotHandler {
     private static final String DIG_SPOT_COOLDOWN = "digSpotCooldown";
 
     public static void initialize() {
+        BlockCallback.Use.EVENT.register((player, level, hand, hitResult) -> {
+            final var tool = player.getItemInHand(hand);
+            if (!tool.is(ItemTags.SHOVELS) || !player.mayBuild() || player.isSpectator()) {
+                return InteractionEventResult.DEFAULT;
+            }
+
+            final var pos = hitResult.getBlockPos();
+            final var digSpotPos = pos.above();
+            if (!level.getBlockState(pos).is(BlockTags.MINEABLE_WITH_SHOVEL)
+                    || !level.getBlockState(digSpotPos).is(ModBlocks.digSpot.asBlock())
+                    || !level.mayInteract(player, pos)) {
+                return InteractionEventResult.DEFAULT;
+            }
+
+            if (level instanceof ServerLevel serverLevel) {
+                final var digSpotState = level.getBlockState(digSpotPos);
+                Block.dropResources(digSpotState, serverLevel, digSpotPos, level.getBlockEntity(digSpotPos), player, tool);
+                level.removeBlock(digSpotPos, false);
+                level.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN.value(), SoundSource.BLOCKS, 1f, 1f);
+                tool.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+            }
+            return level.isClientSide() ? InteractionEventResult.SUCCESS : InteractionEventResult.CONSUME;
+        });
+
         BlockCallback.Break.Before.EVENT.register(EventPhases.LOWEST, (level, pos, state, blockEntity, player) -> {
             if (player != null && player.getAbilities().instabuild) {
                 return true;
