@@ -18,6 +18,8 @@ import net.blay09.mods.littlejoys.stats.ModStats;
 import net.blay09.mods.littlejoys.tag.ModBlockTags;
 import net.blay09.mods.littlejoys.tag.ModPoiTypeTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -61,10 +63,12 @@ public class DigSpotHandler {
                 return;
             }
 
-            if (level instanceof ServerLevel) {
+            if (level instanceof ServerLevel serverLevel) {
                 final var digSpotState = level.getBlockState(digSpotPos);
                 Block.dropResources(digSpotState, level, digSpotPos, level.getBlockEntity(digSpotPos), player, tool);
                 level.removeBlock(digSpotPos, false);
+                serverLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, level.getBlockState(pos)),
+                        pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 20, 0.25, 0.05, 0.25, 0.1);
                 level.playSound(null, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1f, 1f);
                 tool.hurtAndBreak(1, player, LivingEntity.getSlotForHand(event.getHand()));
             }
