@@ -38,8 +38,7 @@
     "minecraft": "${fabric_minecraft_version_range}",
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",
-    "balm-fabric": ">=${balm_version}",
-    "shogi": ">=${shogi_version}"
+    "balm-fabric": ">=${balm_version}"
   },
   "suggests": {
   },
