@@ -57,7 +57,7 @@ public class DigSpotHandler {
             final var pos = hitResult.getBlockPos();
             final var digSpotPos = pos.above();
             if (!level.getBlockState(pos).is(BlockTags.MINEABLE_WITH_SHOVEL)
-                    || !level.getBlockState(digSpotPos).is(ModBlocks.digSpot)
+                    || !level.getBlockState(digSpotPos).is(ModBlocks.digSpot.asResourceKey())
                     || !level.mayInteract(player, pos)) {
                 return InteractionEventResult.DEFAULT;
             }
